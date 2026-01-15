@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Education & Experience | Darsh Gupta</title>
+  <meta name="description" content="Education, internships, and technical skills." />
+  <link rel="stylesheet" href="assets/css/shared.css" />
+  <style>
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .skill-card {
+      background-color: rgba(15,23,42,0.95);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148,163,184,0.5);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .skill-card h3 {
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #e5e7eb;
+    }
+
+    .skill-card p {
+      font-size: 11px;
+      margin-bottom: 8px;
+      color: var(--color-text-secondary);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .skill-tag {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: rgba(226,232,240,0.95);
+    }
+
+    .timeline {
+      border-left: 1px solid rgba(148,163,184,0.5);
+      margin-top: 20px;
+      padding-left: 16px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline-item {
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -17px;
+      top: 3px;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #f97316, #facc15);
+      border: 1px solid rgba(15,23,42,0.9);
+      box-shadow: 0 0 0 4px rgba(249,115,22,0.25);
+    }
+
+    .timeline-heading {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: baseline;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    .timeline-heading span.where {
+      font-weight: var(--font-weight-medium);
+    }
+
+    .timeline-heading span.when {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    .timeline-tagline {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .timeline-bullets {
+      font-size: 11px;
+      color: rgba(209,213,219,0.95);
+      padding-left: 16px;
+      margin: 0;
+      display: grid;
+      gap: 4px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 960px) {
+      .skills-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-mark">
+        <div class="logo-badge" aria-hidden="true">
+          <span>D</span>
+        </div>
+        <div>
+          <div style="font-size:13px;color:rgba(226,232,240,0.9);font-weight:550;">Darsh Gupta</div>
+          <div style="font-size:11px;color:var(--color-text-secondary);">
+            Aerospace, RF & Embedded Systems • Grade 11
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <nav class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="projects.html">Projects</a>
+          <a href="education.html">Education</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <div class="theme-toggle-dot"></div>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="section-header" style="margin-bottom: 24px;">
+        <div>
+          <div class="section-title" style="margin-bottom: 8px;">
+            <span class="badge-num">02</span>
+            <span>Technical Stack</span>
+          </div>
+          <p class="section-subtitle">
+            Skills mapped directly to aerospace, RF, and embedded systems roles.
+          </p>
+        </div>
+      </div>
+
+      <div class="skills-grid">
+        <article class="skill-card">
+          <h3>Hardware & PCB Design</h3>
+          <p>Multi-layer mixed-signal boards, RF routing, power integrity, DFM practices.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Multi-layer PCB layout</span>
+            <span class="skill-tag">RF front-end matching</span>
+            <span class="skill-tag">Power distribution</span>
+            <span class="skill-tag">DFM documentation</span>
+          </div>
+        </article>
+
+        <article class="skill-card">
+          <h3>Embedded Systems & Firmware</h3>
+          <p>Real-time control, sensor fusion, low-level integration on MCUs and FPGAs.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">ESP32 / STM32 / Arduino</span>
+            <span class="skill-tag">RT C/C++ control</span>
+            <span class="skill-tag">Verilog RTL for DSP</span>
+            <span class="skill-tag">Firmware bring-up</span>
+          </div>
+        </article>
+
+        <article class="skill-card">
+          <h3>RF & Microwave Engineering</h3>
+          <p>Transmission lines, antennas, mixer architectures, ultra-wideband systems.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Impedance matching</span>
+            <span class="skill-tag">Antenna simulation</span>
+            <span class="skill-tag">Mixer & LO planning</span>
+            <span class="skill-tag">Signal integrity / EMI/EMC</span>
+          </div>
+        </article>
+
+        <article class="skill-card">
+          <h3>Aerospace & Aerodynamics</h3>
+          <p>Aircraft design, flight control, CFD simulation to validate concepts.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Airframe sizing</span>
+            <span class="skill-tag">Control surface design</span>
+            <span class="skill-tag">OpenFOAM CFD basics</span>
+            <span class="skill-tag">Airfoil optimization</span>
+          </div>
+        </article>
+
+        <article class="skill-card">
+          <h3>Programming & Tooling</h3>
+          <p>Production-style Python and C/C++ with strong Git discipline and numerical thinking.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Python • C/C++ • Verilog</span>
+            <span class="skill-tag">Data structures & algorithms</span>
+            <span class="skill-tag">Numerical methods</span>
+            <span class="skill-tag">Git / GitHub workflows</span>
+          </div>
+        </article>
+
+        <article class="skill-card">
+          <h3>Simulation & Analysis</h3>
+          <p>Using simulation to validate design decisions, not just generate plots.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">OpenFOAM</span>
+            <span class="skill-tag">MATLAB / Octave</span>
+            <span class="skill-tag">RF / mechanical CAD</span>
+            <span class="skill-tag">Result interpretation</span>
+          </div>
+        </article>
+      </div>
+
+      <div style="margin-top: 60px;">
+        <div class="section-header" style="margin-bottom: 24px;">
+          <div>
+            <div class="section-title" style="margin-bottom: 8px;">
+              <span class="badge-num">03</span>
+              <span>Experience & Recognition</span>
+            </div>
+            <p class="section-subtitle">
+              Internships, programs, and competitions demonstrating technical depth and teamwork.
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline">
+          <article class="timeline-item">
+            <div class="timeline-heading">
+              <span class="where">Minvayu FabLab, Pondicherry — Embedded & 3D Manufacturing Intern</span>
+              <span class="when">Apr 27 – May 25, 2025</span>
+            </div>
+            <p class="timeline-tagline">
+              Debugged and maintained mission-critical fabrication hardware in live lab environment.
+            </p>
+            <ul class="timeline-bullets">
+              <li>Restored Prusa i3 MK3S 3D printer (extruder hardware, firmware integration)</li>
+              <li>Solo responsibility for equipment used in science park workflows</li>
+              <li>Marlin & Klipper firmware, ESP32 and Arduino controller work</li>
+              <li>Tuned delta-kinematics clay printer system behavior</li>
+            </ul>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-heading">
+              <span class="where">Astro Space Camp — Genex Space</span>
+              <span class="when">2023 & 2024</span>
+            </div>
+            <p class="timeline-tagline">
+              Aerospace basics covering satellites and spacecraft.
+            </p>
+            <ul class="timeline-bullets">
+              <li>Satellite communications, spacecraft design, space systems</li>
+              <li>Anchored self-study in aerospace basics and mission work</li>
+            </ul>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-heading">
+              <span class="where">Competitions & Conferences</span>
+              <span class="when">2023 – 2024</span>
+            </div>
+            <p class="timeline-tagline">
+              National-level recognition for technical innovation and leadership.
+            </p>
+            <ul class="timeline-bullets">
+              <li>Skill Titans top-50 finalist (2000+ participants) for innovation and STEM</li>
+              <li>Active MUN participant: HMUN 2023 & 2024, Techfest MUN, 10+ others</li>
+              <li>Demonstrated drone systems at Harvard Techfest</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> Darsh Gupta • Built for GitHub Pages</span>
+      <div class="footer-links">
+        <a href="mailto:darshgu77@gmail.com">Email</a>
+        <a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
