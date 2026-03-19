@@ -39,31 +39,30 @@ const projectDetails = {
   'drone-v2': {
     title: 'Drone-v2: Autonomous Aircraft Platform',
     tag: 'Aerospace • RF • Embedded Systems',
-    status: 'In Active Development',
-    timeline: 'December 2024 – Q2 2026',
+    status: 'Active Development',
+    timeline: 'December 2024 – Present',
     github: 'https://github.com/iamdarshg/drone-v2',
-    overview: 'Complete autonomous aircraft development from PCB design through firmware validation. Multi-layer hardware with integrated RF frontend, sensor fusion, and real-time control systems.',
+    overview: 'High-performance autonomous aircraft platform featuring custom multi-layer PCB design and integrated RF systems. Research conducted at ASDL focused on trade studies and payload integration.',
     sections: [
       {
-        title: 'Technical Architecture',
+        title: 'ASDL Research & Architecture',
         content: `
           <ul>
-            <li><strong>Hardware Platform:</strong> Custom multi-layer PCB with integrated power distribution, RF frontend, and precision analog interfaces</li>
-            <li><strong>Sensor Integration:</strong> IMU (9-DOF), GPS module, barometric pressure sensor, all with dedicated signal conditioning</li>
-            <li><strong>RF Design:</strong> Antenna geometry optimized and tested for telemetry, impedance-matched transmission lines</li>
-            <li><strong>Power Management:</strong> Multi-rail regulation with protection circuitry and efficient switching converters</li>
+            <li><strong>Trade Studies:</strong> Conducted system-level trade studies for various VTOL and fixed-wing configurations</li>
+            <li><strong>Hardware Platform:</strong> Custom 4-layer PCB with integrated power distribution and RF frontends</li>
+            <li><strong>Sensor Fusion:</strong> Extended Kalman Filter (EKF) implementation for high-fidelity state estimation</li>
+            <li><strong>RF Design:</strong> Optimized antenna placement and impedance matching for long-range MAVLink telemetry</li>
           </ul>
         `
       },
       {
-        title: 'Firmware Development',
+        title: 'Firmware & Control',
         content: `
           <ul>
-            <li><strong>Real-time OS:</strong> Pure C implementation with minimal middleware for predictable timing</li>
-            <li><strong>Sensor Fusion:</strong> Kalman filter integration of IMU, GPS, and barometric data</li>
-            <li><strong>Control Loops:</strong> PID controllers for stabilization with tuning framework</li>
-            <li><strong>Telemetry System:</strong> Bidirectional communication protocol with ground station</li>
-            <li><strong>Safety Features:</strong> Watchdog timers, failsafe modes, geofencing</li>
+            <li><strong>Real-time Control:</strong> C implementation of nested PID loops for attitude and position control</li>
+            <li><strong>Communication:</strong> High-bandwidth MAVLink integration for real-time telemetry and command</li>
+            <li><strong>Payload System:</strong> Modular interface for secondary sensor arrays and onboard computing (Raspberry Pi/Jetson)</li>
+            <li><strong>Safety Systems:</strong> Multi-layer failsafe logic for battery, link loss, and geofence violations</li>
           </ul>
         `
       },
@@ -120,20 +119,28 @@ const projectDetails = {
   'code-sdr': {
     title: 'Code-SDR: Ultra-Wideband Software Defined Radio',
     tag: 'FPGA • RF • Digital Signal Processing',
-    status: 'Board Routing Stage',
-    timeline: 'November 2025 – Q1 2026',
+    status: 'Active Research',
+    timeline: 'November 2024 – Present',
     github: 'https://github.com/iamdarshg/Code-SDR',
-    overview: 'High-performance FPGA-accelerated SDR system covering 1 MHz to 10 GHz with real-time processing pipeline. Complete implementation from Verilog HDL through computer interface achieving 105 MSPS throughput with <10µs latency.',
+    overview: 'FPGA-accelerated SDR with real-time DSP pipeline. SSDL research project focusing on receiver architecture and satellite power system telemetry simulation.',
     sections: [
       {
-        title: 'FPGA Processing Pipeline',
+        title: 'MATLAB/Simulink Modeling',
         content: `
           <ul>
-            <li><strong>Platform:</strong> LIF-MD6000-6UMG64I FPGA with 100% logic utilization (16,000 LE)</li>
-            <li><strong>ADC Interface:</strong> AD9215BCPZ-105 (10-bit, 105 MSPS) with parallel data acquisition and overflow detection</li>
-            <li><strong>Digital Downconversion:</strong> NCO mixing with CIC decimation filters for flexible IF processing</li>
-            <li><strong>FFT Engine:</strong> 1024-point complex FFT with Hamming windowing for spectral analysis</li>
-            <li><strong>Clock Domains:</strong> 100 MHz processing, 105 MHz ADC, 125 MHz Ethernet with synchronized cross-domain transfers</li>
+            <li><strong>System Simulation:</strong> Modeled the entire receiver chain from RF frontend to baseband DSP in MATLAB/Simulink</li>
+            <li><strong>Signal Integrity:</strong> Analyzed noise figures and BER across various modulation schemes (BPSK, QPSK)</li>
+            <li><strong>SSDL Integration:</strong> Developed telemetry processing models for satellite power system monitoring</li>
+          </ul>
+        `
+      },
+      {
+        title: 'FPGA Implementation',
+        content: `
+          <ul>
+            <li><strong>RTL Design:</strong> Verilog HDL implementation of high-speed ADC interfaces and decimation filters</li>
+            <li><strong>DSP Pipeline:</strong> Real-time FFT and NCO mixing achieving 105 MSPS throughput</li>
+            <li><strong>Hardware:</strong> Lattice iCE40/LIF-MD6000 based processing board with custom RF frontend</li>
           </ul>
         `
       },
@@ -216,22 +223,31 @@ const projectDetails = {
       }
     ]
   },
-  'research-paper': {
-    title: 'Aircraft Diffusion CFD: Generative Aerodynamic Design',
-    tag: 'Research • AI/ML • Computational Fluid Dynamics',
-    status: 'Active Research',
-    timeline: 'December 2025 – Ongoing',
-    github: 'https://github.com/iamdarshg/research-paper',
-    overview: 'GPU-accelerated generative design system combining diffusion models with lattice Boltzmann CFD. Progressive training pipeline automatically generates and optimizes aircraft structures for aerodynamic efficiency with structural connectivity constraints.',
+  'custom-bms': {
+    title: 'Custom 6S Battery Management System (BMS)',
+    tag: 'Power Electronics • Embedded Systems • KiCAD',
+    status: 'Prototype Complete',
+    timeline: '2024',
+    github: 'https://github.com/iamdarshg',
+    overview: 'A high-performance 6S BMS designed for UAV applications, featuring precise cell balancing, over-current protection, and real-time state-of-charge (SoC) estimation.',
     sections: [
       {
-        title: 'Technical Approach',
+        title: 'Hardware Design (KiCAD)',
         content: `
           <ul>
-            <li><strong>Generative Model:</strong> Diffusion-based architecture with hierarchical representation for 3D volumetric structures</li>
-            <li><strong>CFD Integration:</strong> GPU-accelerated Lattice Boltzmann Method (LBM) for real-time aerodynamic evaluation</li>
-            <li><strong>Structural Constraints:</strong> Connectivity penalty ensures generated designs are physically viable and manufacturable</li>
-            <li><strong>Progressive Training:</strong> Multi-resolution approach (16³ → 24³ → 32³) balances quality and computational efficiency</li>
+            <li><strong>PCB Layout:</strong> Designed multi-layer PCB for 60A continuous current with optimized thermal paths</li>
+            <li><strong>Protection:</strong> Integrated hardware-level OVP, UVP, and short-circuit protection</li>
+            <li><strong>AFE:</strong> High-precision Analog Front-End (BQ76930) for cell-level monitoring</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Embedded Firmware',
+        content: `
+          <ul>
+            <li><strong>Microcontroller:</strong> STM32-based controller for system management and communication</li>
+            <li><strong>Algorithms:</strong> Real-time SoC estimation using Extended Kalman Filters (EKF)</li>
+            <li><strong>Communication:</strong> SMBus/I2C interface for telemetry data output to flight controllers</li>
           </ul>
         `
       },
@@ -240,75 +256,33 @@ const projectDetails = {
         content: `
           <div class="stats-grid">
             <div class="stat-item">
-              <div class="stat-label">Training Time</div>
-              <div class="stat-value">14-18 hrs</div>
+              <div class="stat-label">Max Current</div>
+              <div class="stat-value">60A Cont.</div>
             </div>
             <div class="stat-item">
-              <div class="stat-label">GPU Memory</div>
-              <div class="stat-value">8-13 GB</div>
+              <div class="stat-label">Voltage Accuracy</div>
+              <div class="stat-value">±10 mV</div>
             </div>
             <div class="stat-item">
-              <div class="stat-label">Grid Resolution</div>
-              <div class="stat-value">32³ voxels</div>
+              <div class="stat-label">Balancing Current</div>
+              <div class="stat-value">100 mA</div>
             </div>
             <div class="stat-item">
-              <div class="stat-label">CFD Simulation</div>
-              <div class="stat-value">&lt;100 µs/step</div>
+              <div class="stat-label">Sample Rate</div>
+              <div class="stat-value">1 kHz</div>
             </div>
           </div>
-          <p style="margin-top:16px;">
-            <strong>Hardware:</strong> RTX 3090 (24GB) or A100 (2-3x faster)<br>
-            <strong>Optimization:</strong> Gradient checkpointing, sparse grids, memory-efficient training
-          </p>
-        `
-      },
-      {
-        title: 'System Architecture',
-        content: `
-          <ul>
-            <li><strong>Encoder-Decoder:</strong> U-Net style architecture with skip connections and attention mechanisms</li>
-            <li><strong>Latent Space:</strong> 128-dimensional compressed representation for efficient generation</li>
-            <li><strong>Diffusion Process:</strong> 100 timesteps forward, 250 sampling steps with classifier-free guidance</li>
-            <li><strong>Loss Function:</strong> Combined reconstruction, connectivity penalty, and aerodynamic objective</li>
-            <li><strong>CFD Solver:</strong> D3Q27 lattice with cascaded collision operator for accuracy and stability</li>
-          </ul>
-        `
-      },
-      {
-        title: 'CLI Tool Features',
-        content: `
-          <ul>
-            <li><strong>Training:</strong> Resume-capable with TensorBoard logging, automatic checkpointing, hyperparameter control</li>
-            <li><strong>Generation:</strong> Batch design synthesis with configurable guidance scale and sampling resolution</li>
-            <li><strong>Evaluation:</strong> CFD analysis of drag, lift, structural metrics with JSON export</li>
-            <li><strong>Export:</strong> STL mesh generation with optional simplification for CAD/manufacturing</li>
-            <li><strong>Monitoring:</strong> Real-time loss curves, learning rate schedule, design previews via TensorBoard</li>
-          </ul>
-        `
-      },
-      {
-        title: 'Research Applications',
-        content: `
-          <ul>
-            <li><strong>Design Exploration:</strong> Rapidly generate diverse aircraft configurations for parameter studies</li>
-            <li><strong>Optimization:</strong> Automated search through design space for optimal aerodynamic performance</li>
-            <li><strong>Constraint Satisfaction:</strong> Balance between performance metrics and structural requirements</li>
-            <li><strong>Manufacturing Integration:</strong> Direct STL export enables rapid prototyping and wind tunnel testing</li>
-          </ul>
         `
       },
       {
         title: 'Technology Stack',
         content: `
           <div class="tech-stack">
-            <span class="tech-badge">PyTorch 2.0+</span>
-            <span class="tech-badge">CUDA</span>
-            <span class="tech-badge">NumPy/SciPy</span>
-            <span class="tech-badge">TensorBoard</span>
-            <span class="tech-badge">Trimesh</span>
-            <span class="tech-badge">Scikit-image</span>
-            <span class="tech-badge">CFD/LBM</span>
-            <span class="tech-badge">Diffusion Models</span>
+            <span class="tech-badge">KiCAD</span>
+            <span class="tech-badge">C++ (STM32)</span>
+            <span class="tech-badge">I2C/SMBus</span>
+            <span class="tech-badge">Power Electronics</span>
+            <span class="tech-badge">Kalman Filters</span>
           </div>
         `
       }
