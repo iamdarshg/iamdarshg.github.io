@@ -8,133 +8,100 @@
   <link rel="stylesheet" href="assets/css/shared.css" />
   <style>
     .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      gap: 32px;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      padding: 60px 0 40px;
+      justify-content: center;
+      padding: 100px 0 60px;
+      text-align: center;
     }
 
     .hero-title {
-      font-size: 36px;
-      margin-bottom: 16px;
+      font-size: 56px;
+      margin-bottom: 24px;
       color: var(--color-cream-50);
     }
 
     .hero-subtitle {
-      color: rgba(226,232,240,0.92);
-      font-size: 15px;
-      max-width: 520px;
-      margin-bottom: 24px;
-      line-height: 1.6;
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-size: 12px;
       color: var(--color-text-secondary);
-      margin-bottom: 24px;
-    }
-
-    .hero-meta span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.85);
-      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 20px;
+      max-width: 700px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+      font-family: var(--font-family-serif);
+      font-style: italic;
     }
 
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .hero-image {
-      position: relative;
-      display: flex;
-      align-items: center;
+      gap: 16px;
       justify-content: center;
     }
 
-    .hero-image img {
-      width: 100%;
-      max-width: 360px;
-      border-radius: 16px;
-      border: 1px solid rgba(148,163,184,0.3);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    }
-
-    .overview-grid {
+    .personal-note-section {
+      margin: 80px 0;
+      padding-top: 60px;
+      border-top: 1px solid var(--color-border);
       display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 16px;
-      margin-top: 32px;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
     }
 
-    .overview-card {
-      background-color: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.5);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      text-align: center;
-    }
-
-    .overview-card h3 {
-      font-size: 13px;
-      margin-bottom: 6px;
-      color: #e5e7eb;
-    }
-
-    .overview-card p {
-      font-size: 11px;
+    .note-content {
+      font-family: var(--font-family-serif);
+      font-size: 17px;
+      line-height: 1.8;
       color: var(--color-text-secondary);
-      margin-bottom: 0;
-      line-height: 1.5;
     }
 
-    .cta-section {
-      margin-top: 48px;
-      padding: 24px;
-      background: rgba(50,184,198,0.1);
-      border: 1px solid rgba(50,184,198,0.3);
-      border-radius: var(--radius-lg);
-      text-align: center;
+    .note-content p {
+      margin-bottom: 24px;
     }
 
-    .cta-section h2 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      color: var(--color-cream-50);
+    .focus-card {
+      background: rgba(var(--color-brown-600-rgb), 0.05);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--color-border);
     }
 
-    .cta-section p {
-      font-size: 13px;
+    .focus-card h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-primary);
+      margin-bottom: 24px;
+      font-family: var(--font-family-base);
+    }
+
+    .focus-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 24px;
+    }
+
+    .focus-item-title {
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .focus-item-desc {
+      font-size: 14px;
       color: var(--color-text-secondary);
-      max-width: 500px;
-      margin: 0 auto 16px;
     }
 
     @media (max-width: 880px) {
-      .hero {
+      .personal-note-section {
         grid-template-columns: 1fr;
+        gap: 40px;
       }
-      .overview-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-    }
-
-    @media (max-width: 640px) {
       .hero-title {
-        font-size: 28px;
-      }
-      .overview-grid {
-        grid-template-columns: 1fr;
+        font-size: 40px;
       }
     }
   </style>
@@ -142,7 +109,7 @@
 <body>
   <div class="container">
     <header>
-      <div class="logo-mark">
+      <a href="index.html" class="logo-mark" style="text-decoration: none;">
         <div class="logo-badge" aria-hidden="true">
           <span>D</span>
         </div>
@@ -152,11 +119,13 @@
             Aerospace, RF & Embedded Systems • Grade 11
           </div>
         </div>
-      </div>
+      </a>
       <div style="display: flex; gap: 16px; align-items: center;">
         <nav class="nav-links">
+          <a href="index.html">Home</a>
           <a href="projects.html">Projects</a>
           <a href="education.html">Education</a>
+          <a href="interests.html">Interests</a>
           <a href="contact.html">Contact</a>
         </nav>
         <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
@@ -167,55 +136,57 @@
 
     <main>
       <section class="hero" id="hero-section">
+        <h1 class="hero-title">
+          Hey there, I'm Darsh.
+        </h1>
+        <p class="hero-subtitle">
+          I design and build autonomous aircraft platforms, ultra-wideband RF systems, and physics simulation frameworks. I'm a builder at heart, fueled by curiosity and a bit too much coffee.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn--primary" href="projects.html">
+            <span>View my builds</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="btn btn--ghost" href="interests.html">
+            <span>Beyond the lab</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="personal-note-section">
         <div>
-          <h1 class="hero-title">
-            Full-stack hardware & firmware engineering
-          </h1>
-          <p class="hero-subtitle">
-            I design and build autonomous aircraft platforms, ultra-wideband RF systems, and physics simulation frameworks. Three main projects to see.
-          </p>
-
-          <div class="hero-meta">
-            <span><span style="width:8px;height:8px;border-radius:999px;background:#22c55e;"></span>Seeking internship • Jan–May 2026</span>
-            <span>Bengaluru, India</span>
-            <span>Aerospace • RF • Embedded Systems</span>
-          </div>
-
-          <div class="hero-actions">
-            <a class="btn btn--primary" href="projects.html">
-              <span>View projects</span>
-              <span aria-hidden="true">↗</span>
-            </a>
-            <a class="btn btn--ghost" href="contact.html">
-              <span>Get in touch</span>
-            </a>
+          <h2 style="font-size: 36px; margin-bottom: 32px;">A bit about me</h2>
+          <div class="note-content">
+            <p>
+              Welcome to my little corner of the internet. This isn't just a portfolio of schematics and code; it's a collection of things I'm genuinely passionate about.
+            </p>
+            <p>
+              Whether it's the thrill of seeing a custom PCB come to life, the early morning "push" at the gym, or the nostalgia of a <span class="minecraft-text">Minecraft</span> world built with friends, I love the process of learning and creating.
+            </p>
+            <p>
+              I'm currently a Grade 11 student in Bengaluru, diving deep into aerospace and embedded systems. When I'm not in front of a soldering iron or a terminal, you might find me in the pool or reminiscing about my days in the MUN circuit.
+            </p>
           </div>
         </div>
 
-        <div class="hero-image">
-          <img src="assets/images/hero-workspace.jpg" alt="Workspace with electronics and development boards" />
+        <div class="focus-card">
+          <h3>Current Focus</h3>
+          <ul class="focus-list">
+            <li>
+              <div class="focus-item-title">Drone-v2</div>
+              <div class="focus-item-desc">Autonomous aircraft platform with multi-layer PCB and custom RF frontend.</div>
+            </li>
+            <li>
+              <div class="focus-item-title">Code-SDR</div>
+              <div class="focus-item-desc">FPGA-based software defined radio hitting 105 MSPS throughput.</div>
+            </li>
+            <li>
+              <div class="focus-item-title">Self-Improvement</div>
+              <div class="focus-item-desc">Pushing limits at the gym and perfecting my freestyle stroke this summer.</div>
+            </li>
+          </ul>
         </div>
-      </section>
-
-      <section class="overview-grid">
-        <article class="overview-card">
-          <h3>Drone-v2</h3>
-          <p>Autonomous aircraft platform with multi-layer PCB, RF frontend, and production firmware.</p>
-        </article>
-        <article class="overview-card">
-          <h3>Code-SDR</h3>
-          <p>FPGA-based software defined radio, 1 MHz–10 GHz, with custom mixed-signal RF board.</p>
-        </article>
-        <article class="overview-card">
-          <h3>Physics Simulation</h3>
-          <p>Research-grade frameworks for quantum and nuclear system modeling in Python.</p>
-        </article>
-      </section>
-
-      <section class="cta-section">
-        <h2>Want the full details?</h2>
-        <p>Each project has schematics, firmware code, and technical breakdown on the projects page.</p>
-        <a class="btn btn--primary" href="projects.html">Browse flagship builds</a>
       </section>
     </main>
 
