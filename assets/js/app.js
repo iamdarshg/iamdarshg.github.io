@@ -33,6 +33,7 @@ window.addEventListener('DOMContentLoaded', function() {
   initTheme();
   setupSmoothScroll();
   document.getElementById('year').textContent = new Date().getFullYear();
+  setupEasterEggs();
 });
 
 const projectDetails = {
@@ -365,8 +366,10 @@ function closeProjectDetail(event) {
   if (event && event.target !== event.currentTarget) return;
   
   const modal = document.getElementById('detail-modal');
-  modal.classList.remove('active');
-  document.body.style.overflow = '';
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
 }
 
 document.addEventListener('keydown', function(event) {
@@ -374,3 +377,83 @@ document.addEventListener('keydown', function(event) {
     closeProjectDetail();
   }
 });
+
+function setupEasterEggs() {
+  const technoTrigger = document.getElementById('technoblade-trigger');
+  if (technoTrigger) {
+    technoTrigger.addEventListener('click', () => {
+      spawnCrownedPig();
+      localStorage.setItem('technoblade_unlocked', 'true');
+    });
+  }
+
+  const minecraftTrigger = document.getElementById('minecraft-trigger');
+  if (minecraftTrigger) {
+    minecraftTrigger.addEventListener('click', () => {
+      createConfetti();
+      localStorage.setItem('minecraft_unlocked', 'true');
+    });
+  }
+
+  // Check if eggs are unlocked and allow them on other pages
+  if (localStorage.getItem('technoblade_unlocked') === 'true') {
+    document.querySelectorAll('body:not(.interests-page) .technoblade-text').forEach(el => {
+        el.addEventListener('click', spawnCrownedPig);
+    });
+  }
+  if (localStorage.getItem('minecraft_unlocked') === 'true') {
+    document.querySelectorAll('body:not(.interests-page) .minecraft-text').forEach(el => {
+        el.addEventListener('click', createConfetti);
+    });
+  }
+}
+
+function spawnCrownedPig() {
+    const pig = document.createElement('div');
+    pig.innerHTML = '👑🐷';
+    pig.style.position = 'fixed';
+    pig.style.fontSize = '40px';
+    pig.style.bottom = '20%';
+    pig.style.left = '-100px';
+    pig.style.zIndex = '10000';
+    pig.style.transition = 'transform 4s linear';
+    pig.style.pointerEvents = 'none';
+
+    document.body.appendChild(pig);
+
+    // Force reflow
+    pig.offsetHeight;
+
+    pig.style.transform = `translateX(${window.innerWidth + 200}px)`;
+
+    setTimeout(() => {
+        pig.remove();
+    }, 4000);
+}
+
+function createConfetti() {
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'fixed';
+        confetti.style.width = '10px';
+        confetti.style.height = '10px';
+        confetti.style.backgroundColor = ['#77DD77', '#897451', '#3C2D22', '#BDB76B'][Math.floor(Math.random() * 4)];
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = '-10px';
+        confetti.style.zIndex = '10000';
+        confetti.style.opacity = Math.random();
+        confetti.style.pointerEvents = 'none';
+
+        document.body.appendChild(confetti);
+
+        const animation = confetti.animate([
+            { transform: 'translateY(0) rotate(0)', opacity: 1 },
+            { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ], {
+            duration: Math.random() * 2000 + 1000,
+            easing: 'cubic-bezier(0, .9, .6, 1)'
+        });
+
+        animation.onfinish = () => confetti.remove();
+    }
+}
