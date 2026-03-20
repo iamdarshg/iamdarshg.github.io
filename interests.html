@@ -29,6 +29,12 @@
       color: var(--color-primary);
     }
 
+    .interests-nav a.active {
+      color: var(--color-primary);
+      background: rgba(var(--color-brown-600-rgb), 0.1);
+      font-weight: 600;
+    }
+
     .interests-layout {
       display: grid;
       grid-template-columns: 200px 1fr;
@@ -39,15 +45,15 @@
     .blog-post {
       max-width: 700px;
       font-family: var(--font-family-serif);
-      font-size: 18px;
-      line-height: 1.8;
+      font-size: 15px; /* Dropped from 16px */
+      line-height: 1.7;
       color: var(--color-text-secondary);
     }
 
     .blog-section {
       margin-bottom: 80px;
-      padding: 40px;
-      border-radius: 24px;
+      padding: 32px;
+      border-radius: 20px;
       border: 1px solid var(--color-border);
       background: rgba(var(--color-brown-600-rgb), 0.02);
       transition: transform 0.3s ease, border-color 0.3s ease;
@@ -58,8 +64,8 @@
     }
 
     .blog-section h2 {
-      font-size: 32px;
-      margin-bottom: 24px;
+      font-size: 28px; /* Dropped from 32px */
+      margin-bottom: 20px;
       color: var(--color-text);
       font-family: var(--font-family-serif);
     }
@@ -158,45 +164,45 @@
 
         <div class="blog-post">
           <section id="gym" class="blog-section section-gym">
-            <h2>The "Push"</h2>
+            <h2>The "Push" — Biological Overclocking</h2>
             <p>
-              I started my fitness journey in early 2025. Like many, I began with an unnamed trainer, hoping for professional guidance. However, I soon found myself dissatisfied with the motivation and the "push" being provided. It felt too routine, too safe.
+              In early 2025, I realized my physical hardware was severely under-optimized for a 16-hour-a-day "staring at a monitor" schedule. I initially hired a trainer, but after three sessions, it felt like I was running a basic `while(true)` loop: repetitive, low-impact, and honestly, a bit boring.
             </p>
             <p>
-              I decided to take matters into my own hands. I started going to the <strong>gym</strong> by myself, researching my own routines, and pushing my own limits. Since then, the progress—both in the weights I'm moving and my overall physique—has been incredibly rewarding. There's something uniquely satisfying about being your own toughest coach.
+              So, I did what any engineer does: I became my own coach. I started researching hypertrophy, mechanical tension, and progressive overload with the same intensity I apply to PCB trace routing. Now, the <strong>gym</strong> is my favorite way to debug my own stress. There's something incredibly satisfying about hitting a PR—it's like finally getting a clean build on a complex project. 10/10, would recommend for any fellow code-monkeys.
             </p>
           </section>
 
           <section id="swimming" class="blog-section section-swimming">
-            <h2>Water Fascination</h2>
+            <h2>Hydrodynamics & Mental Health</h2>
             <p>
-              My love for the water started early. My family tells stories of a trip to <strong>Puri, Odisha</strong>, where I was practically obsessed. I'd constantly run towards <strong>Chilika Lake</strong>, fascinated by the vastness of it all.
+              My family often tells a story from a childhood trip to <strong>Puri, Odisha</strong>. Apparently, I didn't just walk toward <strong>Chilika Lake</strong>; I practically tried to merge with it. My obsession with water has always been... a little extreme.
             </p>
             <p>
-              That fascination turned into a skill. I learned to <strong>swim</strong> at a young age and it has stayed with me ever since. Now, every summer, you'll find me in the pool. It's my favorite form of recreational cardio—a way to clear my head while staying active.
+              Since then, I've turned that obsession into a decent freestyle stroke. <strong>Swimming</strong> is where I do my best thinking. When you're underwater, there are no Slack notifications, no compiler errors—just you and the fluid dynamics of a 25-meter pool. It's the ultimate low-latency environment for the brain. Plus, it's a great excuse to wear goggles and look slightly more like a cyborg.
             </p>
           </section>
 
           <section id="muns" class="blog-section section-mun">
-            <h2>The Art of Conversation</h2>
+            <h2>MUNs — Competitive Talking</h2>
             <p>
-              My MUNning career has been quite an adventure. I've had the privilege of attending <strong>Harvard MUN 2023</strong>, <strong>Harvard MUN 2024</strong>, and the <strong>IIT Techfest MUN 2023</strong>, along with at least ten other local inter-school conferences.
+              My MUN (Model United Nations) career is essentially a record of me learning how to sound like I know what I'm talking about. Between <strong>Harvard MUN</strong> (2023 & 2024) and <strong>IIT Techfest MUN</strong>, I've spent an embarrassing amount of time debating things I barely understood at first.
             </p>
             <p>
-              Looking back, these weren't just about debating international policy. For me, they were a way to hone my then-terrible conversational skills. Spending time with some of the smartest minds in Bangalore and across the world forced me to grow, listen, and articulate better. It's a chapter of my life I'm deeply grateful for.
+              But here's the secret: MUNs are just high-stakes verbal engineering. You have a problem, you have constraints (other countries' interests), and you have to architect a resolution that doesn't cause a global crash. It's where I learned that communication is just another interface to master. If you can explain nuclear non-proliferation to a room of sleep-deprived teenagers, explaining a Kalman filter to a peer is easy.
             </p>
           </section>
 
           <section id="gaming" class="blog-section section-gaming">
-            <h2>Digital Playgrounds</h2>
+            <h2>Digital Sandbox — The Legacy of a Legend</h2>
             <p>
-              Gaming has always been a significant part of my life. I have a deep love for <span class="easter-egg-trigger" id="minecraft-trigger">Minecraft</span>, a game that's more than just blocks to me. Back when he was with us, I loved watching <span class="easter-egg-trigger" id="technoblade-trigger">Technoblade</span> (may his soul rest in peace).
+              I firmly believe that <strong>Minecraft</strong> is the greatest engineering tool ever created for children (and adults who refuse to grow up). It's where I first learned about logic gates, resource management, and why "creeper" is synonymous with "unplanned hardware failure."
             </p>
             <p>
-              He was a huge motivation for me. Watching him navigate the "tools of the internet" to learn, create, and build a community during the COVID-19 lockdown changed how I saw the web. He showed me that the internet is a vast library of knowledge if you know how to use it.
+              A huge part of my digital worldview was shaped by <span class="easter-egg-trigger" id="technoblade-trigger">Technoblade</span>. He taught me that being "good" at something—even a block game—requires strategy, dedication, and a healthy amount of self-deprecating humor. He showed us that the internet is a tool for building community and telling stories. May his legend never die.
             </p>
             <p>
-              These days, when I'm looking for something a bit faster-paced, I'm usually playing <strong>Trackmania</strong> or <strong>Overwatch</strong> with friends. It's our way of staying connected and having a laugh after a long day.
+              When I'm not in a <span class="easter-egg-trigger" id="minecraft-trigger">Minecraft</span> world, you'll find me playing <strong>Trackmania</strong> (because who doesn't love pixel-perfect driving lines?) or <strong>Overwatch</strong> (because sometimes you just need to blow things up to relax).
             </p>
           </section>
         </div>
@@ -213,6 +219,7 @@
     </footer>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>
