@@ -37,10 +37,10 @@ window.addEventListener('DOMContentLoaded', function() {
   if (document.body.classList.contains('interests-page')) {
     setupInterestsScrollEffects();
   }
-  if (window.location.pathname.includes('education.html')) {
+  if (window.location.pathname.includes('education')) {
     setupEducationScrollEffects();
   }
-  if (window.location.pathname.includes('projects.html')) {
+  if (window.location.pathname.includes('projects')) {
     loadAllRepositories();
   }
 });
@@ -60,10 +60,27 @@ async function loadAllRepositories() {
     'iamdarshg/Nuclear_collision'
   ];
 
+  repoContainer.innerHTML = '';
+
+  // Use session storage to cache results and avoid rate limits
+  const cachedRepos = sessionStorage.getItem('github_repos_cache');
+  if (cachedRepos) {
+    try {
+      const results = JSON.parse(cachedRepos);
+      renderRepos(results, repoContainer);
+      return;
+    } catch (e) {
+      sessionStorage.removeItem('github_repos_cache');
+    }
+  }
+
   repoContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.6;">Initializing real-time repository feed...</p>';
 
-  try {
-    const repoDataPromises = repos.map(async (repoPath) => {
+  const results = [];
+
+  // Fetch sequentially or in small batches to be more reliable
+  for (const repoPath of repos) {
+    try {
       const [repoRes, readmeRes] = await Promise.all([
         fetch(`https://api.github.com/repos/${repoPath}`),
         fetch(`https://api.github.com/repos/${repoPath}/readme`, {
@@ -71,48 +88,63 @@ async function loadAllRepositories() {
         })
       ]);
 
+      if (!repoRes.ok) throw new Error(`Repo fetch failed: ${repoRes.status}`);
+
       const repo = await repoRes.json();
-      const readme = await readmeRes.text();
-      return { repo, readme, path: repoPath };
-    });
+      let readme = "No README available.";
+      if (readmeRes.ok) {
+        readme = await readmeRes.text();
+      }
 
-    const results = await Promise.all(repoDataPromises);
-    repoContainer.innerHTML = '';
+      results.push({ repo, readme, path: repoPath });
 
-    results.forEach(({ repo, readme, path }) => {
-      const card = document.createElement('article');
-      card.className = 'project-card';
-      card.onclick = () => openProjectDetail(path.split('/')[1]);
+      // Update UI incrementally
+      renderRepos(results, repoContainer);
+    } catch (error) {
+      console.error(`Error loading repo ${repoPath}:`, error);
+      // Continue to next repo even if one fails
+    }
+  }
 
-      const htmlReadme = marked.parse(readme);
+  if (results.length > 0) {
+    sessionStorage.setItem('github_repos_cache', JSON.stringify(results));
+  } else {
+    repoContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #f87171;">Failed to load repository data. Please try again later.</p>';
+  }
+}
 
-      card.innerHTML = `
-        <div class="project-content compact-content">
-          <div class="compact-header">
-            <h4>${repo.name}</h4>
-          </div>
-          <div class="project-meta">
-            <span>⭐ ${repo.stargazers_count}</span>
-            <span>🍴 ${repo.forks_count}</span>
-            <span>${repo.language || 'Documentation'}</span>
-          </div>
-          <div class="readme-preview-container" style="margin-top: 12px; max-height: 150px; overflow-y: auto; font-size: 11px; opacity: 0.8; border: 1px solid rgba(148,163,184,0.2); padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.1);">
-            <div class="readme-content-inner">${htmlReadme}</div>
-          </div>
-          <div class="project-footer" style="margin-top: 12px;">
-            <div class="project-links">
-               <img src="https://img.shields.io/github/stars/${path}?style=flat-square&color=teal" alt="stars">
-               <a href="${repo.html_url}" target="_blank" onclick="event.stopPropagation()">GitHub ↗</a>
-            </div>
+function renderRepos(results, container) {
+  container.innerHTML = '';
+  results.forEach(({ repo, readme, path }) => {
+    const card = document.createElement('article');
+    card.className = 'project-card';
+    card.onclick = () => openProjectDetail(path.split('/')[1]);
+
+    const htmlReadme = marked.parse(readme);
+
+    card.innerHTML = `
+      <div class="project-content compact-content">
+        <div class="compact-header">
+          <h4>${repo.name}</h4>
+        </div>
+        <div class="project-meta">
+          <span>⭐ ${repo.stargazers_count}</span>
+          <span>🍴 ${repo.forks_count}</span>
+          <span>${repo.language || 'Documentation'}</span>
+        </div>
+        <div class="readme-preview-container" style="margin-top: 12px; font-size: 11px; opacity: 0.8; border: 1px solid rgba(148,163,184,0.2); padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.1);">
+          <div class="readme-content-inner">${htmlReadme}</div>
+        </div>
+        <div class="project-footer" style="margin-top: 12px;">
+          <div class="project-links">
+             <img src="https://img.shields.io/github/stars/${path}?style=flat-square&color=teal" alt="stars">
+             <a href="${repo.html_url}" target="_blank" onclick="event.stopPropagation()">GitHub ↗</a>
           </div>
         </div>
-      `;
-      repoContainer.appendChild(card);
-    });
-  } catch (error) {
-    console.error('Error loading repos:', error);
-    repoContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #f87171;">Failed to load real-time repository data.</p>';
-  }
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
 
 function setupEducationScrollEffects() {
@@ -497,7 +529,7 @@ function openProjectDetail(projectId) {
 
       <div class="detail-section" id="readme-section">
         <h3>GitHub README</h3>
-        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; max-height: 400px; overflow-y: auto; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
           Loading repository data...
         </div>
       </div>
@@ -521,7 +553,7 @@ function openProjectDetail(projectId) {
       </div>
       <div class="detail-section" id="readme-section">
         <h3>GitHub README</h3>
-        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; max-height: 500px; overflow-y: auto; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
           Loading repository data...
         </div>
       </div>
@@ -593,22 +625,28 @@ function setupEasterEggs() {
   const minecraftTrigger = document.getElementById('minecraft-trigger');
   if (minecraftTrigger) {
     minecraftTrigger.addEventListener('click', () => {
-      createConfetti();
-      localStorage.setItem('minecraft_unlocked', 'true');
+      triggerMinecraftEffect();
     });
   }
 
   // Check if eggs are unlocked and allow them on other pages
   if (localStorage.getItem('technoblade_unlocked') === 'true') {
-    document.querySelectorAll('body:not(.interests-page) .technoblade-text').forEach(el => {
+    document.querySelectorAll('.technoblade-text').forEach(el => {
         el.addEventListener('click', spawnCrownedPig);
     });
   }
   if (localStorage.getItem('minecraft_unlocked') === 'true') {
-    document.querySelectorAll('body:not(.interests-page) .minecraft-text').forEach(el => {
-        el.addEventListener('click', createConfetti);
+    document.body.classList.add('minecraft-unlocked');
+    document.querySelectorAll('.minecraft-text').forEach(el => {
+        el.addEventListener('click', triggerMinecraftEffect);
     });
   }
+}
+
+function triggerMinecraftEffect() {
+  createConfetti();
+  document.body.classList.add('minecraft-unlocked');
+  localStorage.setItem('minecraft_unlocked', 'true');
 }
 
 function spawnCrownedPig() {
@@ -617,20 +655,20 @@ function spawnCrownedPig() {
     for (let i = 0; i < pigCount; i++) {
         setTimeout(() => {
             const pig = document.createElement('div');
-            pig.innerHTML = '👑🐷';
+            // Technoblade pig tribute gif
+            pig.innerHTML = `<img src="https://media.tenor.com/C7YIu5Aonj4AAAAM/technoblade-minecraft-movie.gif" style="width: 100px; height: auto;" alt="Techno Pig">`;
             pig.style.position = 'fixed';
-            pig.style.fontSize = (40 + Math.random() * 40) + 'px';
             pig.style.bottom = (10 + Math.random() * 80) + '%';
             pig.style.left = '-150px';
             pig.style.zIndex = '10000';
-            pig.style.transition = `transform ${3 + Math.random() * 2}s linear`;
+            pig.style.transition = `transform ${4 + Math.random() * 2}s linear`;
             pig.style.pointerEvents = 'none';
 
             document.body.appendChild(pig);
             pig.offsetHeight;
             pig.style.transform = `translateX(${window.innerWidth + 300}px) rotate(${Math.random() * 20 - 10}deg)`;
 
-            setTimeout(() => pig.remove(), 5000);
+            setTimeout(() => pig.remove(), 7000);
         }, i * 300);
     }
 }

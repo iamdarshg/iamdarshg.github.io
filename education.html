@@ -5,47 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Education & Experience | Darsh Gupta</title>
   <meta name="description" content="Education, internships, and technical skills." />
-  <link rel="stylesheet" href="assets/css/shared.css" />
+  <link rel="stylesheet" href="/assets/css/shared.css" />
   <style>
     .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 16px;
-      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 32px;
+      max-width: 800px;
     }
 
     .skill-card {
       background-color: rgba(15,23,42,0.95);
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(148,163,184,0.5);
-      padding: 14px 16px;
-      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(148,163,184,0.3);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.2s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateX(8px);
+      border-color: var(--color-primary);
     }
 
     .skill-card h3 {
-      font-size: 13px;
-      margin-bottom: 6px;
-      color: #e5e7eb;
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: var(--color-primary);
     }
 
     .skill-card p {
-      font-size: 11px;
-      margin-bottom: 8px;
+      font-size: 15px;
+      margin-bottom: 16px;
       color: var(--color-text-secondary);
+      line-height: 1.6;
     }
 
     .skill-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      font-size: 11px;
+      gap: 10px;
+      font-size: 13px;
     }
 
     .skill-tag {
-      padding: 3px 8px;
+      padding: 6px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      color: rgba(226,232,240,0.95);
+      border: 1px solid rgba(148,163,184,0.4);
+      color: rgba(226,232,240,0.9);
+      background: rgba(15,23,42,0.5);
     }
 
     .timeline {
@@ -164,7 +173,7 @@
 <body>
   <div class="container">
     <header>
-      <a href="index.html" class="logo-mark" style="text-decoration: none;">
+      <a href="/" class="logo-mark" style="text-decoration: none;">
         <div class="logo-badge" aria-hidden="true">
           <span>D</span>
         </div>
@@ -177,11 +186,11 @@
       </a>
       <div style="display: flex; gap: 16px; align-items: center;">
         <nav class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="projects.html">Projects</a>
-          <a href="education.html">Education</a>
-          <a href="interests.html">Interests</a>
-          <a href="contact.html">Contact</a>
+          <a href="/">Home</a>
+          <a href="/projects">Projects</a>
+          <a href="/education">Education</a>
+          <a href="/interests">Interests</a>
+          <a href="/contact">Contact</a>
         </nav>
         <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
           <div class="theme-toggle-dot"></div>
@@ -192,12 +201,12 @@
     <main>
       <div class="section-header" style="margin-bottom: 24px;">
         <div>
-          <div class="section-title" style="margin-bottom: 8px;">
-            <span class="badge-num">02</span>
+          <div class="section-title" style="margin-bottom: 12px; font-size: 28px;">
+            <span class="badge-num" style="font-size: 16px;">02</span>
             <span>Technical Stack</span>
           </div>
-          <p class="section-subtitle">
-            Skills mapped directly to aerospace, RF, and embedded systems roles.
+          <p class="section-subtitle" style="font-size: 16px; max-width: 600px;">
+            Core engineering competencies developed through hands-on projects and research.
           </p>
         </div>
       </div>
@@ -343,6 +352,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="/assets/js/app.js"></script>
 </body>
 </html>
