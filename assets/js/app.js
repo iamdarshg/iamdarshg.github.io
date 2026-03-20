@@ -34,7 +34,163 @@ window.addEventListener('DOMContentLoaded', function() {
   setupSmoothScroll();
   document.getElementById('year').textContent = new Date().getFullYear();
   setupEasterEggs();
+  if (document.body.classList.contains('interests-page')) {
+    setupInterestsScrollEffects();
+  }
+  if (window.location.pathname.includes('education.html')) {
+    setupEducationScrollEffects();
+  }
+  if (window.location.pathname.includes('projects.html')) {
+    loadAllRepositories();
+  }
 });
+
+async function loadAllRepositories() {
+  const repoContainer = document.querySelector('.all-projects-grid');
+  if (!repoContainer) return;
+
+  const repos = [
+    'iamdarshg/drone-v2',
+    'iamdarshg/Code-SDR',
+    'iamdarshg/research-paper',
+    'iamdarshg/quantum-sim-python',
+    'iamdarshg/Trading-Algo',
+    'iamdarshg/better-ai',
+    'iamdarshg/PyFoilOptimize',
+    'iamdarshg/Nuclear_collision'
+  ];
+
+  repoContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.6;">Initializing real-time repository feed...</p>';
+
+  try {
+    const repoDataPromises = repos.map(async (repoPath) => {
+      const [repoRes, readmeRes] = await Promise.all([
+        fetch(`https://api.github.com/repos/${repoPath}`),
+        fetch(`https://api.github.com/repos/${repoPath}/readme`, {
+          headers: { 'Accept': 'application/vnd.github.v3.raw' }
+        })
+      ]);
+
+      const repo = await repoRes.json();
+      const readme = await readmeRes.text();
+      return { repo, readme, path: repoPath };
+    });
+
+    const results = await Promise.all(repoDataPromises);
+    repoContainer.innerHTML = '';
+
+    results.forEach(({ repo, readme, path }) => {
+      const card = document.createElement('article');
+      card.className = 'project-card';
+      card.onclick = () => openProjectDetail(path.split('/')[1]);
+
+      const htmlReadme = marked.parse(readme);
+
+      card.innerHTML = `
+        <div class="project-content compact-content">
+          <div class="compact-header">
+            <h4>${repo.name}</h4>
+          </div>
+          <div class="project-meta">
+            <span>⭐ ${repo.stargazers_count}</span>
+            <span>🍴 ${repo.forks_count}</span>
+            <span>${repo.language || 'Documentation'}</span>
+          </div>
+          <div class="readme-preview-container" style="margin-top: 12px; max-height: 150px; overflow-y: auto; font-size: 11px; opacity: 0.8; border: 1px solid rgba(148,163,184,0.2); padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.1);">
+            <div class="readme-content-inner">${htmlReadme}</div>
+          </div>
+          <div class="project-footer" style="margin-top: 12px;">
+            <div class="project-links">
+               <img src="https://img.shields.io/github/stars/${path}?style=flat-square&color=teal" alt="stars">
+               <a href="${repo.html_url}" target="_blank" onclick="event.stopPropagation()">GitHub ↗</a>
+            </div>
+          </div>
+        </div>
+      `;
+      repoContainer.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error loading repos:', error);
+    repoContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #f87171;">Failed to load real-time repository data.</p>';
+  }
+}
+
+function setupEducationScrollEffects() {
+  const items = document.querySelectorAll('.timeline-item');
+  const observerOptions = {
+    threshold: 0.5,
+    rootMargin: "-10% 0% -10% 0%"
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      } else {
+        entry.target.classList.remove('active');
+      }
+    });
+  }, observerOptions);
+
+  items.forEach(item => observer.observe(item));
+}
+
+function setupInterestsScrollEffects() {
+  const sections = document.querySelectorAll('.blog-section');
+  const navLinks = document.querySelectorAll('.interests-nav a');
+
+  const observerOptions = {
+    threshold: 0.6
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        updateInterestsStyle(id);
+
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach(section => observer.observe(section));
+}
+
+function updateInterestsStyle(sectionId) {
+  const root = document.documentElement;
+  const styles = {
+    'gym': {
+      bg: '#1a0b0b',
+      text: '#f87171',
+      font: 'var(--font-family-base)'
+    },
+    'swimming': {
+      bg: '#081e26',
+      text: '#38bdf8',
+      font: 'var(--font-family-serif)'
+    },
+    'muns': {
+      bg: '#130d24',
+      text: '#a78bfa',
+      font: 'var(--font-family-serif)'
+    },
+    'gaming': {
+      bg: '#1a1408',
+      text: '#fbbf24',
+      font: 'var(--font-family-mono)'
+    }
+  };
+
+  const style = styles[sectionId];
+  if (style) {
+    root.style.setProperty('--color-background', style.bg);
+    root.style.setProperty('--color-primary', style.text);
+    document.querySelector('.blog-post').style.fontFamily = style.font;
+  }
+}
 
 const projectDetails = {
   'drone-v2': {
@@ -319,47 +475,94 @@ const projectDetails = {
 
 function openProjectDetail(projectId) {
   const details = projectDetails[projectId];
-  if (!details) return;
   
   const modal = document.getElementById('detail-modal');
   const body = document.getElementById('detail-body');
   
-  let sectionsHTML = '';
-  details.sections.forEach(section => {
-    sectionsHTML += `
+  if (details) {
+    body.innerHTML = `
+      <div class="detail-header">
+        <h2>${details.title}</h2>
+        <span class="project-tag">${details.tag}</span>
+        <div class="project-meta" style="margin-top:12px;">
+          <span>${details.timeline}</span>
+          <span class="badge-status badge-status--active">${details.status}</span>
+        </div>
+      </div>
+
       <div class="detail-section">
-        <h3>${section.title}</h3>
-        ${section.content}
+        <h3>Overview</h3>
+        <p id="llm-summary"><em>Generating technical summary...</em></p>
+      </div>
+
+      <div class="detail-section" id="readme-section">
+        <h3>GitHub README</h3>
+        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; max-height: 400px; overflow-y: auto; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+          Loading repository data...
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="project-links">
+          <a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub ↗</a>
+        </div>
       </div>
     `;
-  });
-  
-  body.innerHTML = `
-    <div class="detail-header">
-      <h2>${details.title}</h2>
-      <span class="project-tag">${details.tag}</span>
-      <div class="project-meta" style="margin-top:12px;">
-        <span>${details.timeline}</span>
-        <span class="badge-status badge-status--active">${details.status}</span>
+    fetchRepoData(details.github);
+  } else {
+    // For non-featured repos
+    body.innerHTML = `
+      <div class="detail-header">
+        <h2>${projectId}</h2>
       </div>
-    </div>
-    
-    <div class="detail-section">
-      <h3>Overview</h3>
-      <p>${details.overview}</p>
-    </div>
-    
-    ${sectionsHTML}
-    
-    <div class="detail-section">
-      <div class="project-links">
-        <a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub ↗</a>
+      <div class="detail-section">
+        <h3>Overview</h3>
+        <p id="llm-summary"><em>Generating technical summary...</em></p>
       </div>
-    </div>
-  `;
+      <div class="detail-section" id="readme-section">
+        <h3>GitHub README</h3>
+        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; max-height: 500px; overflow-y: auto; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+          Loading repository data...
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="project-links">
+          <a href="https://github.com/iamdarshg/${projectId}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub ↗</a>
+        </div>
+      </div>
+    `;
+    fetchRepoData(projectId);
+  }
   
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+async function fetchRepoData(githubUrlOrSlug) {
+  const repoPath = githubUrlOrSlug.includes('github.com')
+    ? githubUrlOrSlug.replace('https://github.com/', '')
+    : `iamdarshg/${githubUrlOrSlug}`;
+
+  const readmeContainer = document.getElementById('readme-content');
+  const summaryContainer = document.getElementById('llm-summary');
+
+  try {
+    const response = await fetch(`https://api.github.com/repos/${repoPath}/readme`, {
+      headers: { 'Accept': 'application/vnd.github.v3.raw' }
+    });
+    const readmeText = await response.text();
+    readmeContainer.innerHTML = marked.parse(readmeText);
+
+    // Call Pollinations AI for summary
+    const prompt = `Summarize this project README for a technical audience in 2-3 sentences. Be concise, punchy, and highlight the technical stack. README: ${readmeText.substring(0, 2000)}`;
+    const aiResponse = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
+    const summary = await aiResponse.text();
+    summaryContainer.innerText = summary;
+
+  } catch (error) {
+    readmeContainer.innerHTML = "<em>Error loading README. Please check the link.</em>";
+    summaryContainer.innerText = "Technical summary unavailable.";
+  }
 }
 
 function closeProjectDetail(event) {
@@ -409,49 +612,52 @@ function setupEasterEggs() {
 }
 
 function spawnCrownedPig() {
-    const pig = document.createElement('div');
-    pig.innerHTML = '👑🐷';
-    pig.style.position = 'fixed';
-    pig.style.fontSize = '40px';
-    pig.style.bottom = '20%';
-    pig.style.left = '-100px';
-    pig.style.zIndex = '10000';
-    pig.style.transition = 'transform 4s linear';
-    pig.style.pointerEvents = 'none';
+    console.log('Spawning pig...');
+    const pigCount = 5;
+    for (let i = 0; i < pigCount; i++) {
+        setTimeout(() => {
+            const pig = document.createElement('div');
+            pig.innerHTML = '👑🐷';
+            pig.style.position = 'fixed';
+            pig.style.fontSize = (40 + Math.random() * 40) + 'px';
+            pig.style.bottom = (10 + Math.random() * 80) + '%';
+            pig.style.left = '-150px';
+            pig.style.zIndex = '10000';
+            pig.style.transition = `transform ${3 + Math.random() * 2}s linear`;
+            pig.style.pointerEvents = 'none';
 
-    document.body.appendChild(pig);
+            document.body.appendChild(pig);
+            pig.offsetHeight;
+            pig.style.transform = `translateX(${window.innerWidth + 300}px) rotate(${Math.random() * 20 - 10}deg)`;
 
-    // Force reflow
-    pig.offsetHeight;
-
-    pig.style.transform = `translateX(${window.innerWidth + 200}px)`;
-
-    setTimeout(() => {
-        pig.remove();
-    }, 4000);
+            setTimeout(() => pig.remove(), 5000);
+        }, i * 300);
+    }
 }
 
 function createConfetti() {
-    for (let i = 0; i < 50; i++) {
+    console.log('Creating confetti...');
+    for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.style.position = 'fixed';
-        confetti.style.width = '10px';
-        confetti.style.height = '10px';
-        confetti.style.backgroundColor = ['#77DD77', '#897451', '#3C2D22', '#BDB76B'][Math.floor(Math.random() * 4)];
+        confetti.style.width = (Math.random() * 12 + 8) + 'px';
+        confetti.style.height = (Math.random() * 12 + 8) + 'px';
+        confetti.style.backgroundColor = ['#77DD77', '#897451', '#3C2D22', '#BDB76B', '#559955'][Math.floor(Math.random() * 5)];
         confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.top = '-10px';
+        confetti.style.top = '-20px';
         confetti.style.zIndex = '10000';
         confetti.style.opacity = Math.random();
         confetti.style.pointerEvents = 'none';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
 
         document.body.appendChild(confetti);
 
         const animation = confetti.animate([
             { transform: 'translateY(0) rotate(0)', opacity: 1 },
-            { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+            { transform: `translateY(100vh) translateX(${Math.random() * 100 - 50}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
         ], {
-            duration: Math.random() * 2000 + 1000,
-            easing: 'cubic-bezier(0, .9, .6, 1)'
+            duration: Math.random() * 3000 + 2000,
+            easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
         });
 
         animation.onfinish = () => confetti.remove();
