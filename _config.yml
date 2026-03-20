@@ -4,6 +4,7 @@ author: Darsh Gupta
 email: darshgu77@gmail.com
 url: https://iamdarshg.github.io
 baseurl: ""
+permalink: pretty
 
 exclude:
   - .git
