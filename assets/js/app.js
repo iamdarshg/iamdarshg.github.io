@@ -113,6 +113,19 @@ async function loadAllRepositories() {
   }
 }
 
+function truncateMarkdown(md, length = 200) {
+  if (md.length <= length) return md;
+
+  // Try to truncate at a space to avoid cutting words
+  let truncated = md.substring(0, length);
+  const lastSpace = truncated.lastIndexOf(' ');
+  if (lastSpace > length * 0.8) {
+    truncated = truncated.substring(0, lastSpace);
+  }
+
+  return truncated.trim() + '...';
+}
+
 function renderRepos(results, container) {
   container.innerHTML = '';
   results.forEach(({ repo, readme, path }) => {
@@ -120,7 +133,8 @@ function renderRepos(results, container) {
     card.className = 'project-card';
     card.onclick = () => openProjectDetail(path.split('/')[1]);
 
-    const htmlReadme = marked.parse(readme);
+    const truncatedReadme = truncateMarkdown(readme, 200);
+    const htmlReadme = marked.parse(truncatedReadme);
 
     card.innerHTML = `
       <div class="project-content compact-content">
@@ -132,7 +146,7 @@ function renderRepos(results, container) {
           <span>🍴 ${repo.forks_count}</span>
           <span>${repo.language || 'Documentation'}</span>
         </div>
-        <div class="readme-preview-container" style="margin-top: 12px; font-size: 11px; opacity: 0.8; border: 1px solid rgba(148,163,184,0.2); padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.1);">
+        <div class="readme-preview-container">
           <div class="readme-content-inner">${htmlReadme}</div>
         </div>
         <div class="project-footer" style="margin-top: 12px;">
