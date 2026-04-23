@@ -516,6 +516,95 @@ const projectDetails = {
         `
       }
     ]
+  },
+  'research-paper-2': {
+    title: 'ML-Based Rapid RCS Estimation for UAV Stealth',
+    tag: 'Research / ML Regression / Electromagnetic Simulation',
+    status: 'Drafted Research',
+    timeline: 'Research Paper - 2',
+    document: 'https://docs.google.com/document/d/1HaOFb65H8sa6XP68lDQqKQvD1LLnsXuSL4ejdr_u0k8',
+    overview: 'A research paper on using machine-learning regression models to estimate UAV radar cross-section from electromagnetic simulation data. The work positions ML as a rapid screening layer for stealth-design exploration, with full-wave simulation retained for final validation.',
+    sections: [
+      {
+        title: 'Research Focus',
+        content: `
+          <ul>
+            <li><strong>Core question:</strong> Can trained regressors estimate radar cross-section fast enough to support early-stage UAV stealth design?</li>
+            <li><strong>Engineering framing:</strong> The paper treats ML as a practical surrogate for design exploration, not as a replacement for electromagnetic solvers.</li>
+            <li><strong>RCS scope:</strong> Covers monostatic and bistatic RCS, aspect-angle effects, frequency dependence, polarization, geometry, and material influences.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Dataset Strategy',
+        content: `
+          <ul>
+            <li><strong>Geometry inputs:</strong> Fuselage length, wing span, wing sweep, nose radius, tail-fin angles, inlet geometry, and other 8-15 parameter design variables.</li>
+            <li><strong>Radar settings:</strong> Frequency sweeps from 1-40 GHz, azimuth coverage from 0-360 degrees, elevation from -30 to +30 degrees, and HH/VV/HV polarization states.</li>
+            <li><strong>Scale target:</strong> Minimum 5,000-10,000 samples for neural-network training, with larger simulation datasets improving generalization.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Modeling Approaches',
+        content: `
+          <ul>
+            <li><strong>Baselines:</strong> Support vector machines and random forests are discussed for smaller or medium-sized datasets.</li>
+            <li><strong>Neural models:</strong> Dense neural networks, volumetric CNNs, recurrent models for frequency sweeps, and hybrid CNN-transformer architectures are compared.</li>
+            <li><strong>Physics-informed direction:</strong> PINN-style losses are presented as a way to regularize predictions and improve sparse-data behavior when the physics residual is well matched.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Evaluation Plan',
+        content: `
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-label">Split</div>
+              <div class="stat-value">70/15/15</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Target RMSE</div>
+              <div class="stat-value">0.5-2 dB</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Speedup</div>
+              <div class="stat-value">50-100x</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Validation</div>
+              <div class="stat-value">Full-wave EM</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        title: 'Practical Roadmap',
+        content: `
+          <ul>
+            <li><strong>Weeks 1-4:</strong> Build a parametric geometry set and generate 3,000-5,000 EM simulations.</li>
+            <li><strong>Weeks 5-8:</strong> Train baseline DNNs, establish validation/test splits, and compare geometry-aware CNN variants if mesh or voxel inputs are available.</li>
+            <li><strong>Weeks 9-12:</strong> Tune hyperparameters, run multi-objective optimization, and validate the top candidates with full-wave simulation.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Tools Mentioned',
+        content: `
+          <div class="tech-stack">
+            <span class="tech-badge">PyTorch</span>
+            <span class="tech-badge">TensorFlow</span>
+            <span class="tech-badge">JAX</span>
+            <span class="tech-badge">CST Microwave Studio</span>
+            <span class="tech-badge">HFSS</span>
+            <span class="tech-badge">FEKO</span>
+            <span class="tech-badge">gprMax</span>
+            <span class="tech-badge">MEEP</span>
+            <span class="tech-badge">FEniCS</span>
+          </div>
+        `
+      }
+    ]
   }
 };
 
@@ -526,6 +615,27 @@ function openProjectDetail(projectId) {
   const body = document.getElementById('detail-body');
   
   if (details) {
+    const detailSections = (details.sections || []).map(section => `
+      <div class="detail-section">
+        <h3>${section.title}</h3>
+        ${section.content}
+      </div>
+    `).join('');
+
+    const readmeSection = details.github ? `
+      <div class="detail-section" id="readme-section">
+        <h3>GitHub README</h3>
+        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+          Loading repository data...
+        </div>
+      </div>
+    ` : '';
+
+    const links = [
+      details.github ? `<a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub -></a>` : '',
+      details.document ? `<a href="${details.document}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">Open source document -></a>` : ''
+    ].filter(Boolean).join('');
+
     body.innerHTML = `
       <div class="detail-header">
         <h2>${details.title}</h2>
@@ -538,15 +648,11 @@ function openProjectDetail(projectId) {
 
       <div class="detail-section">
         <h3>Overview</h3>
-        <p id="llm-summary"><em>Generating technical summary...</em></p>
+        <p id="llm-summary">${details.overview}</p>
       </div>
 
-      <div class="detail-section" id="readme-section">
-        <h3>GitHub README</h3>
-        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
-          Loading repository data...
-        </div>
-      </div>
+      ${detailSections}
+      ${readmeSection}
 
       <div class="detail-section">
         <div class="project-links">
@@ -554,7 +660,13 @@ function openProjectDetail(projectId) {
         </div>
       </div>
     `;
-    fetchRepoData(details.github);
+    const featuredLinks = body.querySelector('.detail-section .project-links');
+    if (featuredLinks) {
+      featuredLinks.innerHTML = links;
+    }
+    if (details.github) {
+      fetchRepoData(details.github, { preserveSummary: true });
+    }
   } else {
     // For non-featured repos
     body.innerHTML = `
@@ -584,7 +696,7 @@ function openProjectDetail(projectId) {
   document.body.style.overflow = 'hidden';
 }
 
-async function fetchRepoData(githubUrlOrSlug) {
+async function fetchRepoData(githubUrlOrSlug, options = {}) {
   const repoPath = githubUrlOrSlug.includes('github.com')
     ? githubUrlOrSlug.replace('https://github.com/', '')
     : `iamdarshg/${githubUrlOrSlug}`;
@@ -603,11 +715,15 @@ async function fetchRepoData(githubUrlOrSlug) {
     const prompt = `Summarize this project README for a technical audience in 2-3 sentences. Be concise, punchy, and highlight the technical stack. README: ${readmeText.substring(0, 2000)}`;
     const aiResponse = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
     const summary = await aiResponse.text();
-    summaryContainer.innerText = summary;
+    if (!options.preserveSummary) {
+      summaryContainer.innerText = summary;
+    }
 
   } catch (error) {
     readmeContainer.innerHTML = "<em>Error loading README. Please check the link.</em>";
-    summaryContainer.innerText = "Technical summary unavailable.";
+    if (!options.preserveSummary) {
+      summaryContainer.innerText = "Technical summary unavailable.";
+    }
   }
 }
 

@@ -13,7 +13,7 @@ Professional portfolio website built for GitHub Pages. Multi-page structure with
 
 ```
 ├── index.html              Landing page - quick overview
-├── projects.html           Showcase of three flagship projects
+├── projects.html           Showcase of featured projects
 ├── education.html          Technical skills and experience timeline
 ├── contact.html            Contact information and references
 ├── _config.yml            Jekyll configuration
