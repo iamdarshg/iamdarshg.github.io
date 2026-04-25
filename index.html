@@ -12,7 +12,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 100px 0 60px;
+      padding: 96px 0 72px;
       text-align: center;
     }
 
@@ -40,12 +40,12 @@
     }
 
     .personal-note-section {
-      margin: 80px 0;
-      padding-top: 60px;
+      margin: 72px 0 24px;
+      padding-top: 56px;
       border-top: 1px solid var(--color-border);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 60px;
+      gap: 44px;
       align-items: start;
     }
 
@@ -62,9 +62,11 @@
 
     .focus-card {
       background: rgba(var(--color-brown-600-rgb), 0.05);
-      padding: 40px;
+      padding: 32px;
       border-radius: 24px;
       border: 1px solid var(--color-border);
+      display: grid;
+      gap: 12px;
     }
 
     .focus-card h3 {
@@ -80,7 +82,7 @@
       list-style: none;
       padding: 0;
       display: grid;
-      gap: 24px;
+      gap: 20px;
     }
 
     .focus-item-title {
@@ -98,7 +100,7 @@
     @media (max-width: 880px) {
       .personal-note-section {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 28px;
       }
       .hero-title {
         font-size: 40px;
@@ -113,7 +115,7 @@
         <div class="logo-badge" aria-hidden="true">
           <span>D</span>
         </div>
-        <div>
+        <div class="page-copy">
           <div style="font-size:13px;color:rgba(226,232,240,0.9);font-weight:550;">Darsh Gupta</div>
           <div style="font-size:11px;color:var(--color-text-secondary);">
             Aerospace, RF & Embedded Systems • Grade 11
@@ -155,7 +157,7 @@
       </section>
 
       <section class="personal-note-section">
-        <div>
+        <div class="page-copy">
           <h2 style="font-size: 36px; margin-bottom: 32px;">A bit about me</h2>
           <div class="note-content">
             <p>
@@ -170,22 +172,42 @@
           </div>
         </div>
 
-        <div class="focus-card">
-          <h3>Current Focus</h3>
-          <ul class="focus-list">
-            <li>
-              <div class="focus-item-title">Drone-v2</div>
-              <div class="focus-item-desc">Autonomous aircraft platform with multi-layer PCB and custom RF frontend.</div>
-            </li>
-            <li>
-              <div class="focus-item-title">Code-SDR</div>
-              <div class="focus-item-desc">FPGA-based software defined radio hitting 105 MSPS throughput.</div>
-            </li>
-            <li>
-              <div class="focus-item-title">Physical Training</div>
-              <div class="focus-item-desc">Optimizing my own biological hardware at the gym. Results: Pending.</div>
-            </li>
-          </ul>
+        <div class="stack">
+          <div class="focus-card">
+            <h3>Current Focus</h3>
+            <ul class="focus-list">
+              <li>
+                <div class="focus-item-title">Drone-v2</div>
+                <div class="focus-item-desc">Autonomous aircraft platform with multi-layer PCB and custom RF frontend.</div>
+              </li>
+              <li>
+                <div class="focus-item-title">Code-SDR</div>
+                <div class="focus-item-desc">FPGA-based software defined radio hitting 105 MSPS throughput.</div>
+              </li>
+              <li>
+                <div class="focus-item-title">Physical Training</div>
+                <div class="focus-item-desc">Optimizing my own biological hardware at the gym. Results: Pending.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="focus-card">
+            <h3>Other Builds</h3>
+            <ul class="focus-list">
+              <li>
+                <div class="focus-item-title">Drone Arm</div>
+                <div class="focus-item-desc">A modular drone control stack with sensor loops and motor control work.</div>
+              </li>
+              <li>
+                <div class="focus-item-title">Outrunner Optimizer</div>
+                <div class="focus-item-desc">A physics-heavy motor design tool for checking if a BLDC idea is actually sane.</div>
+              </li>
+              <li>
+                <div class="focus-item-title">AttackSurfaceMapper</div>
+                <div class="focus-item-desc">A recon and OSINT tool I built to map what a target looks like from the outside.</div>
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
     </main>
