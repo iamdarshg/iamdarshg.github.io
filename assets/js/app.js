@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 async function loadAllRepositories() {
-  const repoContainer = document.querySelector('.all-projects-grid');
+  const repoContainer = document.getElementById('repo-feed');
   if (!repoContainer) return;
 
   const repos = [
@@ -109,50 +109,231 @@ async function loadAllRepositories() {
   if (results.length > 0) {
     sessionStorage.setItem('github_repos_cache', JSON.stringify(results));
   } else {
-    repoContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #f87171;">Failed to load repository data. Please try again later.</p>';
+    renderRepos(fallbackReposData, repoContainer);
   }
 }
 
-function truncateMarkdown(md, length = 200) {
-  if (md.length <= length) return md;
+const repoArtwork = {
+  'drone-v2': '/assets/images/project-drone.png',
+  'Code-SDR': '/assets/images/project-sdr.png',
+  'research-paper': '/assets/images/project-research.png',
+  'quantum-sim-python': '/assets/images/project-research.png',
+  'Trading-Algo': '/assets/images/landing-lab.png',
+  'better-ai': '/assets/images/landing-lab.png',
+  'PyFoilOptimize': '/assets/images/project-research.png',
+  'Nuclear_collision': '/assets/images/project-research.png'
+};
 
-  // Try to truncate at a space to avoid cutting words
-  let truncated = md.substring(0, length);
-  const lastSpace = truncated.lastIndexOf(' ');
-  if (lastSpace > length * 0.8) {
-    truncated = truncated.substring(0, lastSpace);
+const fallbackReposData = [
+  {
+    path: 'iamdarshg/drone-v2',
+    repo: {
+      name: 'drone-v2',
+      stargazers_count: 1,
+      forks_count: 0,
+      language: 'AGS Script',
+      html_url: 'https://github.com/iamdarshg/drone-v2',
+      description: 'Autonomous aircraft platform with custom PCB avionics, RF layout, and firmware bring-up.',
+      archived: false
+    },
+    readme: 'Autonomous aircraft platform with custom PCB avionics, RF layout, and firmware bring-up. Sensor fusion, telemetry, and real-world hardware iteration are the core threads. - Custom multi-layer PCB - Embedded control loops - RF front-end and telemetry'
+  },
+  {
+    path: 'iamdarshg/Code-SDR',
+    repo: {
+      name: 'Code-SDR',
+      stargazers_count: 1,
+      forks_count: 0,
+      language: 'Verilog',
+      html_url: 'https://github.com/iamdarshg/Code-SDR',
+      description: 'Wideband SDR system with FPGA DSP pipeline, ADC streaming, and desktop tooling.',
+      archived: false
+    },
+    readme: 'Wideband software-defined radio system with FPGA DSP, ADC capture, and desktop integration. Built around real throughput, calibration, and tooling constraints. - 105 MSPS processing - FPGA DSP chain - GNU Radio and ExtIO integration'
+  },
+  {
+    path: 'iamdarshg/research-paper',
+    repo: {
+      name: 'research-paper',
+      stargazers_count: 1,
+      forks_count: 0,
+      language: 'Python',
+      html_url: 'https://github.com/iamdarshg/research-paper',
+      description: 'Aircraft diffusion CFD project combining generative models with aerodynamic evaluation.',
+      archived: false
+    },
+    readme: 'Aircraft diffusion CFD project combining generative models with aerodynamic evaluation. The pipeline focuses on design generation, structural viability, and exportable outputs. - Diffusion model workflow - CFD evaluation loop - STL export path'
+  },
+  {
+    path: 'iamdarshg/quantum-sim-python',
+    repo: {
+      name: 'quantum-sim-python',
+      stargazers_count: 0,
+      forks_count: 0,
+      language: 'Python',
+      html_url: 'https://github.com/iamdarshg/quantum-sim-python',
+      description: 'Simulation-heavy physics work exploring nuclear collision and lattice behavior.',
+      archived: false
+    },
+    readme: 'Simulation-heavy physics work exploring nuclear collision and lattice behavior. Built as an analysis-first environment rather than a presentation repository. - Numerical simulation - Physics-oriented modeling - Python tooling'
+  },
+  {
+    path: 'iamdarshg/Trading-Algo',
+    repo: {
+      name: 'Trading-Algo',
+      stargazers_count: 0,
+      forks_count: 0,
+      language: 'Python',
+      html_url: 'https://github.com/iamdarshg/Trading-Algo',
+      description: 'Algorithmic trading experimentation with data pipelines and strategy logic.',
+      archived: false
+    },
+    readme: 'Algorithmic trading experimentation with data pipelines and strategy logic. Useful as a systems-thinking side project rather than a core portfolio piece. - Market data handling - Strategy iteration - Python analytics'
+  },
+  {
+    path: 'iamdarshg/better-ai',
+    repo: {
+      name: 'better-ai',
+      stargazers_count: 0,
+      forks_count: 0,
+      language: 'Python',
+      html_url: 'https://github.com/iamdarshg/better-ai',
+      description: 'General AI experimentation repo for models, prompts, and technical exploration.',
+      archived: false
+    },
+    readme: 'General AI experimentation repo for models, prompts, and technical exploration. The emphasis is on iteration and implementation rather than product polish. - Model experiments - Prompt and tooling work - Python prototypes'
   }
+];
 
-  return truncated.trim() + '...';
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getRepoArtwork(repoName) {
+  return repoArtwork[repoName] || '/assets/images/landing-lab.png';
+}
+
+function stripReadmeNoise(markdown) {
+  return markdown
+    .replace(/\r/g, '')
+    .replace(/^---[\s\S]*?---\n+/m, '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/\[!\[[^\]]*\]\([^)]*\)\]\([^)]*\)/g, '')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/<img[^>]*>/gi, '')
+    .replace(/<picture[\s\S]*?<\/picture>/gi, '')
+    .replace(/`{3}[\s\S]*?`{3}/g, '')
+    .replace(/^\s*\|.*\|\s*$/gm, '')
+    .replace(/https?:\/\/[^\s)]+/g, '')
+    .trim();
+}
+
+function cleanMarkdownLine(line) {
+  return line
+    .replace(/^#{1,6}\s*/, '')
+    .replace(/^\s*[-*+]\s+/, '')
+    .replace(/^\s*\d+\.\s+/, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[*_~`>#]/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/[^\x00-\x7F]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function truncateSentence(text, maxLength = 180) {
+  if (text.length <= maxLength) return text;
+
+  const slice = text.slice(0, maxLength);
+  const lastStop = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('; '));
+  const cutoff = lastStop > maxLength * 0.55 ? lastStop + 1 : slice.lastIndexOf(' ');
+
+  return `${slice.slice(0, cutoff > 0 ? cutoff : maxLength).trim()}...`;
+}
+
+function extractReadmeSnapshot(markdown, fallbackDescription = '') {
+  const cleaned = stripReadmeNoise(markdown);
+  const lines = cleaned.split('\n').map(cleanMarkdownLine).filter(Boolean);
+  const paragraphs = cleaned
+    .split(/\n\s*\n/)
+    .map(block => cleanMarkdownLine(block.replace(/\n/g, ' ')))
+    .filter(block => block.length > 35);
+  const bulletLines = cleaned
+    .split('\n')
+    .filter(line => /^\s*[-*+]\s+/.test(line) || /^\s*\d+\.\s+/.test(line))
+    .map(cleanMarkdownLine)
+    .filter(line => line.length > 22)
+    .slice(0, 3);
+
+  const summarySource = paragraphs[0] || lines.find(line => line.length > 50) || fallbackDescription || 'Repository notes available on GitHub.';
+
+  return {
+    summary: truncateSentence(summarySource, 190),
+    points: bulletLines.length
+      ? bulletLines
+      : paragraphs.slice(1, 3).map(point => truncateSentence(point, 110))
+  };
+}
+
+function prepareReadmeForDisplay(markdown) {
+  const cleaned = stripReadmeNoise(markdown)
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return cleaned || 'README preview unavailable.';
 }
 
 function renderRepos(results, container) {
   container.innerHTML = '';
   results.forEach(({ repo, readme, path }) => {
+    const repoName = path.split('/')[1];
     const card = document.createElement('article');
-    card.className = 'project-card';
-    card.onclick = () => openProjectDetail(path.split('/')[1]);
+    card.className = 'project-card repo-card';
+    card.onclick = () => openProjectDetail(repoName);
 
-    const truncatedReadme = truncateMarkdown(readme, 200);
-    const htmlReadme = marked.parse(truncatedReadme);
+    const snapshot = extractReadmeSnapshot(readme, repo.description || '');
+    const previewPoints = snapshot.points
+      .filter(Boolean)
+      .slice(0, 3)
+      .map(point => `<li>${escapeHtml(point)}</li>`)
+      .join('');
+    const statusClass = repo.archived ? 'badge-status--archived' : 'badge-status--active';
+    const statusLabel = repo.archived ? 'Archived' : 'Live repo';
 
     card.innerHTML = `
+      <figure class="repo-card-media">
+        <img src="${escapeHtml(getRepoArtwork(repo.name))}" alt="${escapeHtml(repo.name)} repository artwork" />
+        <figcaption>
+          <div>
+            <strong>${escapeHtml(repo.name)}</strong>
+            <span>${escapeHtml(repo.language || 'Documentation')}</span>
+          </div>
+          <span class="badge-status ${statusClass}">${statusLabel}</span>
+        </figcaption>
+      </figure>
       <div class="project-content compact-content">
         <div class="compact-header">
-          <h4>${repo.name}</h4>
+          <h4>${escapeHtml(repo.name)}</h4>
         </div>
         <div class="project-meta">
-          <span>⭐ ${repo.stargazers_count}</span>
-          <span>🍴 ${repo.forks_count}</span>
-          <span>${repo.language || 'Documentation'}</span>
+          <span>Stars: ${repo.stargazers_count}</span>
+          <span>Forks: ${repo.forks_count}</span>
+          <span>${escapeHtml(repo.language || 'Documentation')}</span>
         </div>
-        <div class="readme-preview-container">
-          <div class="readme-content-inner">${htmlReadme}</div>
+        <div class="readme-preview">
+          <span class="readme-kicker">README snapshot</span>
+          <p class="readme-summary">${escapeHtml(snapshot.summary)}</p>
+          ${previewPoints ? `<ul class="readme-points">${previewPoints}</ul>` : ''}
         </div>
         <div class="project-footer" style="margin-top: 12px;">
           <div class="project-links">
-             <img src="https://img.shields.io/github/stars/${path}?style=flat-square&color=teal" alt="stars">
-             <a href="${repo.html_url}" target="_blank" onclick="event.stopPropagation()">GitHub ↗</a>
+            <img src="https://img.shields.io/github/stars/${path}?style=flat-square&color=teal" alt="stars">
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub -></a>
           </div>
         </div>
       </div>
@@ -241,9 +422,9 @@ function updateInterestsStyle(sectionId) {
 const projectDetails = {
   'drone-v2': {
     title: 'Drone-v2: Autonomous Aircraft Platform',
-    tag: 'Aerospace • RF • Embedded Systems',
+    tag: 'Aerospace / RF / Embedded Systems',
     status: 'In Active Development',
-    timeline: 'December 2024 – Q2 2026',
+    timeline: 'December 2024 to Q2 2026',
     github: 'https://github.com/iamdarshg/drone-v2',
     overview: 'Complete autonomous aircraft development from PCB design through firmware validation. Multi-layer hardware with integrated RF frontend, sensor fusion, and real-time control systems.',
     sections: [
@@ -322,11 +503,11 @@ const projectDetails = {
   },
   'code-sdr': {
     title: 'Code-SDR: Ultra-Wideband Software Defined Radio',
-    tag: 'FPGA • RF • Digital Signal Processing',
+    tag: 'FPGA / RF / Digital Signal Processing',
     status: 'Board Routing Stage',
-    timeline: 'November 2025 – Q1 2026',
+    timeline: 'November 2025 to Q1 2026',
     github: 'https://github.com/iamdarshg/Code-SDR',
-    overview: 'High-performance FPGA-accelerated SDR system covering 1 MHz to 10 GHz with real-time processing pipeline. Complete implementation from Verilog HDL through computer interface achieving 105 MSPS throughput with <10µs latency.',
+    overview: 'High-performance FPGA-accelerated SDR system covering 1 MHz to 10 GHz with real-time processing pipeline. Complete implementation from Verilog HDL through computer interface achieving 105 MSPS throughput with under 10 microseconds latency.',
     sections: [
       {
         title: 'FPGA Processing Pipeline',
@@ -350,7 +531,7 @@ const projectDetails = {
             </div>
             <div class="stat-item">
               <div class="stat-label">Processing Latency</div>
-              <div class="stat-value">&lt;10 µs</div>
+              <div class="stat-value">&lt;10 microseconds</div>
             </div>
             <div class="stat-item">
               <div class="stat-label">Ethernet Throughput</div>
@@ -421,9 +602,9 @@ const projectDetails = {
   },
   'research-paper': {
     title: 'Aircraft Diffusion CFD: Generative Aerodynamic Design',
-    tag: 'Research • AI/ML • Computational Fluid Dynamics',
+    tag: 'Research / AI-ML / Computational Fluid Dynamics',
     status: 'Active Research',
-    timeline: 'December 2025 – Ongoing',
+    timeline: 'December 2025 to ongoing',
     github: 'https://github.com/iamdarshg/research-paper',
     overview: 'GPU-accelerated generative design system combining diffusion models with lattice Boltzmann CFD. Progressive training pipeline automatically generates and optimizes aircraft structures for aerodynamic efficiency with structural connectivity constraints.',
     sections: [
@@ -434,7 +615,7 @@ const projectDetails = {
             <li><strong>Generative Model:</strong> Diffusion-based architecture with hierarchical representation for 3D volumetric structures</li>
             <li><strong>CFD Integration:</strong> GPU-accelerated Lattice Boltzmann Method (LBM) for real-time aerodynamic evaluation</li>
             <li><strong>Structural Constraints:</strong> Connectivity penalty ensures generated designs are physically viable and manufacturable</li>
-            <li><strong>Progressive Training:</strong> Multi-resolution approach (16³ → 24³ → 32³) balances quality and computational efficiency</li>
+            <li><strong>Progressive Training:</strong> Multi-resolution approach from 16 cubed to 24 cubed to 32 cubed balances quality and computational efficiency</li>
           </ul>
         `
       },
@@ -448,15 +629,15 @@ const projectDetails = {
             </div>
             <div class="stat-item">
               <div class="stat-label">GPU Memory</div>
-              <div class="stat-value">8-13 GB</div>
+              <div class="stat-value">8 to 13 GB</div>
             </div>
             <div class="stat-item">
               <div class="stat-label">Grid Resolution</div>
-              <div class="stat-value">32³ voxels</div>
+              <div class="stat-value">32 cubed voxels</div>
             </div>
             <div class="stat-item">
               <div class="stat-label">CFD Simulation</div>
-              <div class="stat-value">&lt;100 µs/step</div>
+              <div class="stat-value">under 100 microseconds per step</div>
             </div>
           </div>
           <p style="margin-top:16px;">
@@ -625,7 +806,7 @@ function openProjectDetail(projectId) {
     const readmeSection = details.github ? `
       <div class="detail-section" id="readme-section">
         <h3>GitHub README</h3>
-        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--line); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
           Loading repository data...
         </div>
       </div>
@@ -656,7 +837,7 @@ function openProjectDetail(projectId) {
 
       <div class="detail-section">
         <div class="project-links">
-          <a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub ↗</a>
+          <a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub -></a>
         </div>
       </div>
     `;
@@ -679,13 +860,13 @@ function openProjectDetail(projectId) {
       </div>
       <div class="detail-section" id="readme-section">
         <h3>GitHub README</h3>
-        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--color-border); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
+        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--line); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
           Loading repository data...
         </div>
       </div>
       <div class="detail-section">
         <div class="project-links">
-          <a href="https://github.com/iamdarshg/${projectId}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub ↗</a>
+          <a href="https://github.com/iamdarshg/${projectId}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub -></a>
         </div>
       </div>
     `;
@@ -708,21 +889,22 @@ async function fetchRepoData(githubUrlOrSlug, options = {}) {
     const response = await fetch(`https://api.github.com/repos/${repoPath}/readme`, {
       headers: { 'Accept': 'application/vnd.github.v3.raw' }
     });
-    const readmeText = await response.text();
-    readmeContainer.innerHTML = marked.parse(readmeText);
 
-    // Call Pollinations AI for summary
-    const prompt = `Summarize this project README for a technical audience in 2-3 sentences. Be concise, punchy, and highlight the technical stack. README: ${readmeText.substring(0, 2000)}`;
-    const aiResponse = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-    const summary = await aiResponse.text();
-    if (!options.preserveSummary) {
-      summaryContainer.innerText = summary;
+    if (!response.ok) {
+      throw new Error(`README fetch failed: ${response.status}`);
     }
 
+    const readmeText = await response.text();
+    readmeContainer.innerHTML = marked.parse(prepareReadmeForDisplay(readmeText));
+
+    if (!options.preserveSummary && summaryContainer) {
+      const snapshot = extractReadmeSnapshot(readmeText);
+      summaryContainer.innerText = snapshot.summary;
+    }
   } catch (error) {
-    readmeContainer.innerHTML = "<em>Error loading README. Please check the link.</em>";
-    if (!options.preserveSummary) {
-      summaryContainer.innerText = "Technical summary unavailable.";
+    readmeContainer.innerHTML = '<em>Error loading README. Please check the link.</em>';
+    if (!options.preserveSummary && summaryContainer) {
+      summaryContainer.innerText = 'Technical summary unavailable.';
     }
   }
 }

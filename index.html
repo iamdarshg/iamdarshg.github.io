@@ -62,6 +62,75 @@
       font: 500 11px var(--font-mono);
     }
 
+    .hero-visual {
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero-shot,
+    .hero-detail {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-shot::after,
+    .hero-detail::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 42%, rgba(7, 11, 18, 0.72));
+      pointer-events: none;
+    }
+
+    .hero-shot img,
+    .hero-detail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-shot {
+      aspect-ratio: 1.16;
+      min-height: 360px;
+    }
+
+    .hero-shot figcaption,
+    .hero-detail figcaption {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      z-index: 1;
+      display: grid;
+      gap: 4px;
+    }
+
+    .hero-shot figcaption strong,
+    .hero-detail figcaption strong {
+      font: 650 14px var(--font-serif);
+    }
+
+    .hero-shot figcaption span,
+    .hero-detail figcaption span {
+      color: rgba(237, 245, 255, 0.76);
+      font: 500 11px/1.45 var(--font-mono);
+    }
+
+    .hero-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .hero-detail {
+      aspect-ratio: 1.08;
+      min-height: 180px;
+    }
+
     .console {
       position: relative;
       overflow: hidden;
@@ -185,7 +254,7 @@
 
     .research-item {
       display: grid;
-      grid-template-columns: 110px minmax(0, 1fr);
+      grid-template-columns: 110px minmax(0, 190px) minmax(0, 1fr);
       gap: 18px;
       padding: 18px;
       border: 1px solid var(--line);
@@ -207,6 +276,21 @@
       color: var(--muted);
     }
 
+    .research-item figure {
+      position: relative;
+      overflow: hidden;
+      min-height: 132px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .research-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .safe-note {
       padding: 16px;
       border: 1px dashed var(--line-strong);
@@ -220,6 +304,10 @@
       .hero,
       .pipeline {
         grid-template-columns: 1fr;
+      }
+
+      .hero-shot {
+        min-height: 300px;
       }
 
       .signal-row {
@@ -238,6 +326,10 @@
 
       .build-row,
       .research-item {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-detail-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -286,43 +378,70 @@
           </div>
         </div>
 
-        <aside class="console" aria-label="Current work snapshot">
-          <div class="console-top">
-            <span>darsh.workspace</span>
-            <span>live public snapshot</span>
+        <aside class="hero-visual" aria-label="Current work snapshot">
+          <figure class="hero-shot">
+            <img src="/assets/images/landing-lab.png" alt="Aerospace workbench with drone hardware, avionics electronics, SDR display, and aircraft blueprint sketches" />
+            <figcaption>
+              <strong>Night-lab snapshot</strong>
+              <span>Hardware, RF instrumentation, and design notes sharing the same bench.</span>
+            </figcaption>
+          </figure>
+
+          <div class="hero-detail-grid">
+            <figure class="hero-detail">
+              <img src="/assets/images/project-drone.png" alt="Custom drone prototype on a workbench" />
+              <figcaption>
+                <strong>Drone-v2</strong>
+                <span>Airframe + avionics integration</span>
+              </figcaption>
+            </figure>
+            <figure class="hero-detail">
+              <img src="/assets/images/project-sdr.png" alt="Software-defined radio hardware with lab measurement equipment" />
+              <figcaption>
+                <strong>Code-SDR</strong>
+                <span>FPGA and RF signal pipeline</span>
+              </figcaption>
+            </figure>
           </div>
-          <div class="console-body">
-            <div class="build-row">
-              <span class="code">DRONE_V2</span>
-              <div>
-                <h3>Autonomous aircraft platform</h3>
-                <p>Custom PCB, RF front-end, firmware, assembly underway.</p>
-              </div>
-              <span class="status-dot" aria-hidden="true"></span>
+
+          <div class="console">
+            <div class="console-top">
+              <span>darsh.workspace</span>
+              <span>live public snapshot</span>
             </div>
-            <div class="build-row">
-              <span class="code">CODE_SDR</span>
-              <div>
-                <h3>Ultra-wideband SDR</h3>
-                <p>FPGA DSP pipeline, 105 MSPS target, board routing and assembly.</p>
+            <div class="console-body">
+              <div class="build-row">
+                <span class="code">DRONE_V2</span>
+                <div>
+                  <h3>Autonomous aircraft platform</h3>
+                  <p>Custom PCB, RF front-end, firmware, assembly underway.</p>
+                </div>
+                <span class="status-dot" aria-hidden="true"></span>
               </div>
-              <span class="status-dot" aria-hidden="true"></span>
-            </div>
-            <div class="build-row">
-              <span class="code">RCS_ML</span>
-              <div>
-                <h3>UAV stealth surrogate research</h3>
-                <p>Regression models trained on EM simulation data for fast screening.</p>
+              <div class="build-row">
+                <span class="code">CODE_SDR</span>
+                <div>
+                  <h3>Ultra-wideband SDR</h3>
+                  <p>FPGA DSP pipeline, 105 MSPS target, board routing and assembly.</p>
+                </div>
+                <span class="status-dot" aria-hidden="true"></span>
               </div>
-              <span class="status-dot" aria-hidden="true"></span>
-            </div>
-            <div class="build-row">
-              <span class="code">SSERD</span>
-              <div>
-                <h3>Genex Space rover work</h3>
-                <p>Internship thread moving from satellite documentation to rover systems.</p>
+              <div class="build-row">
+                <span class="code">RCS_ML</span>
+                <div>
+                  <h3>UAV stealth surrogate research</h3>
+                  <p>Regression models trained on EM simulation data for fast screening.</p>
+                </div>
+                <span class="status-dot" aria-hidden="true"></span>
               </div>
-              <span class="status-dot" aria-hidden="true"></span>
+              <div class="build-row">
+                <span class="code">SSERD</span>
+                <div>
+                  <h3>Genex Space rover work</h3>
+                  <p>Internship thread moving from satellite documentation to rover systems.</p>
+                </div>
+                <span class="status-dot" aria-hidden="true"></span>
+              </div>
             </div>
           </div>
         </aside>
@@ -414,6 +533,9 @@
         <div class="research-list">
           <article class="research-item">
             <div class="date">completed draft</div>
+            <figure>
+              <img src="/assets/images/project-research.png" alt="Aerospace CFD and machine-learning research visualization" />
+            </figure>
             <div>
               <h3>ML-Based Rapid RCS Estimation for UAV Stealth</h3>
               <p>Machine-learning surrogate models for estimating radar cross-section from EM simulation data, including dense nets, volumetric CNNs, transformers, PINN-style constraints, uncertainty, and full-wave validation strategy.</p>
@@ -421,6 +543,9 @@
           </article>
           <article class="research-item">
             <div class="date">active / archived lessons</div>
+            <figure>
+              <img src="/assets/images/landing-lab.png" alt="Engineering workspace with aircraft blueprint and RF instrumentation" />
+            </figure>
             <div>
               <h3>AI-Based Fuselage Optimization</h3>
               <p>Generative aircraft design and CFD exploration. The plan notes also capture the honest engineering reality: some debugging paths get closed when the system stops being tractable.</p>
@@ -428,6 +553,9 @@
           </article>
           <article class="research-item">
             <div class="date">next rough draft</div>
+            <figure>
+              <img src="/assets/images/project-drone.png" alt="Prototype aerospace hardware on a technical workbench" />
+            </figure>
             <div>
               <h3>Hybrid-Electric Propulsion Sizing</h3>
               <p>Multi-objective evolutionary algorithms for balancing mass, efficiency, and emissions in aircraft propulsion design.</p>
