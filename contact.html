@@ -4,137 +4,107 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact | Darsh Gupta</title>
-  <meta name="description" content="Get in touch. Seeking aerospace, RF, and embedded systems internship opportunities." />
+  <meta name="description" content="Contact Darsh Gupta for aerospace, RF, embedded systems, UAV, and research opportunities." />
   <link rel="stylesheet" href="/assets/css/shared.css" />
   <style>
+    .contact-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.8fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .contact-hero h1 {
+      font-size: clamp(36px, 5.2vw, 64px);
+      margin-bottom: 20px;
+    }
+
+    .contact-hero p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 720px;
+    }
+
     .contact-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1.5fr;
-      gap: 32px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+      gap: 20px;
+      margin-top: 34px;
       align-items: start;
-      margin-top: 32px;
     }
 
-    .contact-section h3 {
-      font-size: 14px;
-      margin-bottom: 12px;
-      color: #e5e7eb;
-    }
-
-    .contact-section p {
-      font-size: 13px;
-      color: var(--color-text-secondary);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    .contact-methods {
-      display: grid;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .contact-method {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(15,23,42,0.85);
-      border: 1px solid rgba(148,163,184,0.3);
-      border-radius: var(--radius-md);
-    }
-
-    .contact-method-label {
-      font-size: 11px;
-      color: var(--color-text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .contact-method-value {
-      font-size: 13px;
-      color: #e5e7eb;
-    }
-
-    .contact-method a {
-      color: var(--color-primary);
-    }
-
-    .interests-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .interest-chip {
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.6);
-      color: rgba(226,232,240,0.95);
-      font-size: 12px;
-    }
-
+    .vision-box,
     .references-box {
-      background: rgba(50,184,198,0.1);
-      border: 1px solid rgba(50,184,198,0.3);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-    }
-
-    .references-box h4 {
-      font-size: 12px;
-      margin: 0 0 8px 0;
-      color: #e5e7eb;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .reference {
-      margin-bottom: 10px;
-      font-size: 11px;
-    }
-
-    .reference strong {
-      color: #e5e7eb;
-    }
-
-    .reference span {
-      color: var(--color-text-secondary);
-    }
-
-    .vision-box {
-      background: rgba(129,140,248,0.1);
-      border: 1px solid rgba(129,140,248,0.3);
-      border-radius: var(--radius-lg);
       padding: 20px;
-      margin-bottom: 20px;
     }
 
-    .vision-box h4 {
-      font-size: 13px;
-      margin: 0 0 8px 0;
-      color: #e5e7eb;
-    }
-
-    .vision-box p {
-      font-size: 12px;
-      margin-bottom: 8px;
+    .vision-box h3,
+    .references-box h3 {
+      font: 650 20px var(--font-serif);
+      margin-bottom: 12px;
     }
 
     .vision-box ul {
       margin: 0;
       padding-left: 18px;
-      font-size: 12px;
-      color: var(--color-text-secondary);
       display: grid;
-      gap: 4px;
+      gap: 10px;
+      color: var(--muted);
     }
 
-    @media (max-width: 880px) {
+    .contact-methods {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-method {
+      padding: 14px;
+      box-shadow: none;
+    }
+
+    .contact-method-label {
+      color: var(--muted);
+      font: 600 11px var(--font-mono);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .contact-method-value {
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    .reference {
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .reference:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .reference strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 900px) {
+      .contact-hero,
       .contact-grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .contact-hero h1 {
+        font-size: 30px;
+      }
+
+      .contact-hero p {
+        font-size: 14px;
       }
     }
   </style>
@@ -142,142 +112,111 @@
 <body>
   <div id="top" class="container">
     <header>
-      <a href="/" class="logo-mark" style="text-decoration: none;">
-        <div class="logo-badge" aria-hidden="true">
-          <span>D</span>
-        </div>
+      <a href="/" class="logo-mark" style="text-decoration:none;">
+        <div class="logo-badge" aria-hidden="true"><span>D</span></div>
         <div>
-          <div style="font-size:13px;color:rgba(226,232,240,0.9);font-weight:550;">Darsh Gupta</div>
-          <div style="font-size:11px;color:var(--color-text-secondary);">
-            Aerospace, RF & Embedded Systems • Grade 11
-          </div>
+          <div style="font-size:13px;font-weight:650;">Darsh Gupta</div>
+          <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);">Aerospace / RF / Embedded</div>
         </div>
       </a>
-      <div style="display: flex; gap: 16px; align-items: center;">
+      <div style="display:flex;gap:16px;align-items:center;">
         <nav class="nav-links">
           <a href="/">Home</a>
-          <a href="/projects">Projects</a>
-          <a href="/education">Education</a>
-          <a href="/interests">Interests</a>
-          <a href="/contact">Contact</a>
+          <a href="/projects.html">Projects</a>
+          <a href="/education.html">Education</a>
+          <a href="/interests.html">Interests</a>
+          <a href="/contact.html">Contact</a>
         </nav>
-        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-          <div class="theme-toggle-dot"></div>
-        </button>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><div class="theme-toggle-dot"></div></button>
       </div>
     </header>
 
     <main>
-      <div class="section-header" style="margin-bottom: 12px;">
+      <section class="contact-hero">
         <div>
-          <div class="section-title" style="margin-bottom: 8px;">
-            <span class="badge-num">04</span>
-            <span>Get in Touch</span>
-          </div>
-          <p class="section-subtitle">
-            Open to hardware teams, research labs, and startups working on aerospace, RF, or UAV systems.
+          <h1>Build something hard? I am listening.</h1>
+          <p>
+            I am looking for hands-on aerospace, RF, embedded systems, UAV, rover, SDR, or research opportunities where physics, design, firmware, and testing all matter.
           </p>
         </div>
-      </div>
+        <aside class="card">
+          <h3>Best fit</h3>
+          <div class="chips">
+            <span class="chip">Hardware bring-up</span>
+            <span class="chip">UAV systems</span>
+            <span class="chip">RF front-ends</span>
+            <span class="chip">FPGA / DSP</span>
+            <span class="chip">Flight control</span>
+            <span class="chip">Simulation research</span>
+          </div>
+        </aside>
+      </section>
 
-      <div class="contact-grid">
-        <div>
+      <section class="contact-grid">
+        <div class="stack">
           <div class="vision-box">
-            <h4>What I'm seeking</h4>
+            <h3>What I bring</h3>
             <ul>
-              <li>Hands-on internship in aerospace, RF, or embedded systems (Jan–May 2026)</li>
-              <li>Teams shipping real hardware and doing production-grade firmware</li>
-              <li>Projects where physics, design, and testing converge</li>
-              <li>Mentorship in flight control, SDR architectures, or hardware-software integration</li>
+              <li>Original hardware projects with schematics, firmware, board routing, and bring-up thinking.</li>
+              <li>Comfort with messy interfaces: sensors, RF, ADCs, control loops, and real-time constraints.</li>
+              <li>Research discipline across ML surrogate modeling, CFD, electromagnetic simulation, and optimization.</li>
+              <li>Strong documentation habits from GitHub, papers, MUNs, and technical planning.</li>
             </ul>
           </div>
-
           <div class="vision-box">
-            <h4>What I bring</h4>
+            <h3>What I am seeking</h3>
             <ul>
-              <li>Three complete projects with schematics, firmware, and test results</li>
-              <li>Comfort with messy hardware problems and systematic debugging</li>
-              <li>Strong documentation and Git discipline</li>
-              <li>Willingness to learn and adapt to your team's stack</li>
+              <li>Mentorship-heavy internships or research roles during 2026.</li>
+              <li>Teams shipping real hardware, not just slides about hardware.</li>
+              <li>Work around aerospace, RF systems, robotics, rover platforms, or embedded autonomy.</li>
+              <li>Room to learn the team stack and contribute to useful testable artifacts.</li>
             </ul>
-          </div>
-
-          <div class="contact-methods">
-            <div class="contact-method">
-              <div>
-                <div class="contact-method-label">Email</div>
-                <div class="contact-method-value"><a href="mailto:darshgu77@gmail.com">darshgu77@gmail.com</a></div>
-              </div>
-            </div>
-            <div class="contact-method">
-              <div>
-                <div class="contact-method-label">Phone</div>
-                <div class="contact-method-value"><a href="tel:+916364161667">+91 6364 161667</a></div>
-              </div>
-            </div>
-            <div class="contact-method">
-              <div>
-                <div class="contact-method-label">GitHub</div>
-                <div class="contact-method-value"><a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">@iamdarshg</a></div>
-              </div>
-            </div>
-            <div class="contact-method">
-              <div>
-                <div class="contact-method-label">Location</div>
-                <div class="contact-method-value">Bengaluru, India</div>
-              </div>
-            </div>
           </div>
         </div>
 
-        <div>
-          <div class="contact-section">
-            <h3>Interested areas</h3>
-            <div class="interests-chips">
-              <span class="interest-chip">UAV / autonomous aircraft</span>
-              <span class="interest-chip">RF front-ends & SDR</span>
-              <span class="interest-chip">Flight control firmware</span>
-              <span class="interest-chip">Physics-informed simulation</span>
-              <span class="interest-chip">Early-stage R&D in aerospace</span>
-              <span class="interest-chip">Hardware bring-up & debugging</span>
+        <aside class="stack">
+          <div class="contact-methods">
+            <div class="contact-method">
+              <div class="contact-method-label">Email</div>
+              <div class="contact-method-value"><a href="mailto:darshgu77@gmail.com">darshgu77@gmail.com</a></div>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">GitHub</div>
+              <div class="contact-method-value"><a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">@iamdarshg</a></div>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Location</div>
+              <div class="contact-method-value">Bengaluru, India</div>
             </div>
           </div>
 
           <div class="references-box">
-            <h4>References</h4>
+            <h3>References</h3>
             <div class="reference">
-              <strong>Sujay Sreedhar</strong><br/>
-              <span>Co-Founder & CEO, Genex Space</span><br/>
-              <span>Aerospace education mentor & project advisor</span>
+              <strong>Sujay Sreedhar</strong><br />
+              <span>Co-Founder & CEO, Genex Space</span><br />
+              <span>Aerospace education mentor and project advisor.</span>
             </div>
             <div class="reference">
-              <strong>Jorge Ayarza</strong><br/>
-              <span>Founder, Minvayu FabLab</span><br/>
-              <span>Internship supervisor & embedded systems reference</span>
+              <strong>Jorge Ayarza</strong><br />
+              <span>Founder, Minvayu FabLab</span><br />
+              <span>Internship supervisor and embedded systems reference.</span>
             </div>
             <div class="reference">
-              <strong>School references</strong><br/>
-              <span>Available on request from National Public School</span>
+              <strong>School references</strong><br />
+              <span>Available on request from National Public School.</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div style="margin-top: 60px; padding: 24px; background: rgba(50,184,198,0.1); border: 1px solid rgba(50,184,198,0.3); border-radius: var(--radius-lg); text-align: center;">
-        <h2 style="font-size: 20px; margin-bottom: 12px; color: var(--color-cream-50);">Next steps</h2>
-        <p style="font-size: 13px; color: var(--color-text-secondary); max-width: 500px; margin: 0 auto 16px;">
-          Email to discuss your project or team. I'm happy to walk through hardware architecture, firmware design, or simulation results over video call.
-        </p>
-        <a class="btn btn--primary" href="mailto:darshgu77@gmail.com">Start a conversation</a>
-      </div>
+        </aside>
+      </section>
     </main>
 
     <footer>
-      <span>© <span id="year"></span> Darsh Gupta • Built for GitHub Pages</span>
+      <span>Copyright <span id="year"></span> Darsh Gupta. Built for GitHub Pages.</span>
       <div class="footer-links">
         <a href="mailto:darshgu77@gmail.com">Email</a>
         <a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="#top">Back to top ↑</a>
+        <a href="#top">Back to top</a>
       </div>
     </footer>
   </div>
