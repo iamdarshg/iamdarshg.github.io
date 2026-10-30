@@ -1,3 +1,10 @@
+/* ============================================================
+   Darsh Gupta — portfolio app.js
+   Theme, smooth scroll, live GitHub repo feed, project modal,
+   scroll reveals, easter eggs.
+   ============================================================ */
+
+/* ---------------- theme ---------------- */
 function initTheme() {
   const htmlElement = document.documentElement;
   const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -12,6 +19,7 @@ function toggleTheme() {
   localStorage.setItem('theme', newTheme);
 }
 
+/* ---------------- smooth scroll ---------------- */
 function setupSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
@@ -29,9 +37,39 @@ function setupSmoothScroll() {
   });
 }
 
+/* ---------------- scroll reveal ---------------- */
+function setupReveals() {
+  const automaticTargets = document.querySelectorAll(
+    'main > section:not(.hero):not(.launch-scene):not(.projects-hero):not(.flight-story):not(.project-film), .blog-section, .timeline-row, .paper-row, .track-card, .contact-method, .vision-box, .references-box'
+  );
+  automaticTargets.forEach((element, index) => {
+    element.classList.add('reveal');
+    element.style.setProperty('--reveal-delay', `${Math.min(index % 5, 4) * 55}ms`);
+  });
+  const items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  items.forEach(el => observer.observe(el));
+}
+
+/* ---------------- boot ---------------- */
 window.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('is-loaded');
   initTheme();
   setupSmoothScroll();
+  setupReveals();
+  setupScrollMotion();
+  setupCardTilt();
   document.getElementById('year').textContent = new Date().getFullYear();
   setupEasterEggs();
   if (document.body.classList.contains('interests-page')) {
@@ -44,167 +82,209 @@ window.addEventListener('DOMContentLoaded', function() {
     loadAllRepositories();
   }
 });
+/* ---------------- surf-through motion ---------------- */
+function setupScrollMotion() {
+  const root = document.documentElement;
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let reduce = motionPreference.matches;
+  const launch = document.querySelector('.launch-scene');
+  const story = document.querySelector('.flight-story');
+  const film = document.querySelector('.project-film');
+  const beats = [...document.querySelectorAll('.story-beat, .film-step')];
+  let ticking = false;
 
-async function loadAllRepositories() {
-  const repoContainer = document.getElementById('repo-feed');
-  if (!repoContainer) return;
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const update = () => {
+    ticking = false;
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+    root.style.setProperty('--scroll-progress', `${(progress * 100).toFixed(2)}%`);
 
-  const repos = [
-    'iamdarshg/drone-v2',
-    'iamdarshg/Code-SDR',
-    'iamdarshg/research-paper',
-    'iamdarshg/quantum-sim-python',
-    'iamdarshg/Trading-Algo',
-    'iamdarshg/better-ai',
-    'iamdarshg/PyFoilOptimize',
-    'iamdarshg/Nuclear_collision'
-  ];
-
-  repoContainer.innerHTML = '';
-
-  // Use session storage to cache results and avoid rate limits
-  const cachedRepos = sessionStorage.getItem('github_repos_cache');
-  if (cachedRepos) {
-    try {
-      const results = JSON.parse(cachedRepos);
-      renderRepos(results, repoContainer);
+    if (reduce) {
+      // Keep the narrative legible when motion is reduced; the page itself
+      // remains scrollable and no content is hidden behind animated states.
+      [launch, story, film].filter(Boolean).forEach(scene => {
+        scene.querySelectorAll('.launch-object, .launch-copy--top, .launch-copy--bottom, .flight-frame, .film-visual')
+          .forEach(element => {
+            element.style.opacity = '1';
+            element.style.transform = '';
+          });
+      });
+      beats.forEach(beat => { beat.style.opacity = '1'; });
       return;
-    } catch (e) {
-      sessionStorage.removeItem('github_repos_cache');
     }
-  }
 
-  repoContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.6;">Initializing real-time repository feed...</p>';
-
-  const results = [];
-
-  // Fetch sequentially or in small batches to be more reliable
-  for (const repoPath of repos) {
-    try {
-      const [repoRes, readmeRes] = await Promise.all([
-        fetch(`https://api.github.com/repos/${repoPath}`),
-        fetch(`https://api.github.com/repos/${repoPath}/readme`, {
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        })
-      ]);
-
-      if (!repoRes.ok) throw new Error(`Repo fetch failed: ${repoRes.status}`);
-
-      const repo = await repoRes.json();
-      let readme = "No README available.";
-      if (readmeRes.ok) {
-        readme = await readmeRes.text();
+    if (launch) {
+      const rect = launch.getBoundingClientRect();
+      const span = Math.max(1, launch.offsetHeight - window.innerHeight);
+      const t = clamp(-rect.top / span, 0, 1);
+      const object = launch.querySelector('.launch-object');
+      const topCopy = launch.querySelector('.launch-copy--top');
+      const bottomCopy = launch.querySelector('.launch-copy--bottom');
+      if (object) {
+        const objectProgress = clamp(t * 1.35, 0, 1);
+        const x = 14 - objectProgress * 14;
+        const y = 18 - objectProgress * 28;
+        const scale = .52 + objectProgress * .66;
+        const rotate = -7 + objectProgress * 6;
+        object.style.transform = `translateX(calc(-50% + ${x}vw)) translateY(${y}vh) scale(${scale.toFixed(3)}) rotate(${rotate.toFixed(2)}deg)`;
+        object.style.opacity = String(.25 + objectProgress * .75);
       }
-
-      results.push({ repo, readme, path: repoPath });
-
-      // Update UI incrementally
-      renderRepos(results, repoContainer);
-    } catch (error) {
-      console.error(`Error loading repo ${repoPath}:`, error);
-      // Continue to next repo even if one fails
+      if (topCopy) {
+        const copyProgress = clamp(t * 1.6, 0, 1);
+        topCopy.style.transform = `translateY(${-copyProgress * 16}vh)`;
+        topCopy.style.opacity = String(1 - copyProgress);
+      }
+      if (bottomCopy) {
+        const bottomProgress = clamp(t * 2.2, 0, 1);
+        bottomCopy.style.transform = `translateY(${bottomProgress * 22}px)`;
+        bottomCopy.style.opacity = String(1 - bottomProgress);
+      }
+      launch.style.setProperty('--launch-progress', t.toFixed(4));
     }
-  }
 
-  if (results.length > 0) {
-    sessionStorage.setItem('github_repos_cache', JSON.stringify(results));
-  } else {
-    renderRepos(fallbackReposData, repoContainer);
-  }
+    if (story) {
+      const rect = story.getBoundingClientRect();
+      const span = Math.max(1, story.offsetHeight - window.innerHeight);
+      const t = clamp(-rect.top / span, 0, 1);
+      const main = story.querySelector('.flight-frame--main');
+      const detail = story.querySelector('.flight-frame--detail');
+      if (main) {
+        const stage = clamp(t * 1.2, 0, 1);
+        main.style.transform = `translateY(${(18 - stage * 18).toFixed(1)}px) rotate(${(-7 + stage * 7).toFixed(2)}deg) scale(${(.72 + stage * .32).toFixed(3)})`;
+        main.style.opacity = String(.35 + stage * .65);
+      }
+      if (detail) {
+        const stage = clamp(t * 1.4, 0, 1);
+        detail.style.transform = `translate(${(26 - stage * 26).toFixed(1)}%, ${(18 - stage * 18).toFixed(1)}%) rotate(${(14 - stage * 9).toFixed(2)}deg) scale(${(.48 + stage * .52).toFixed(3)})`;
+        detail.style.opacity = String(.1 + stage * .9);
+      }
+    }
+
+    if (film) {
+      const rect = film.getBoundingClientRect();
+      const span = Math.max(1, film.offsetHeight - window.innerHeight);
+      const t = clamp(-rect.top / span, 0, 1);
+      const visuals = [...film.querySelectorAll('.film-visual')];
+      const count = Math.max(1, visuals.length - 1);
+      visuals.forEach((visual, index) => {
+        const focus = clamp(1 - Math.abs(t * count - index) * 1.15, 0, 1);
+        visual.style.opacity = String(0.08 + focus * 0.92);
+        visual.style.transform = `translateY(${((index - t * count) * 3).toFixed(1)}%) rotate(${([-5, 3, -2][index] ?? 0)}deg) scale(${(.84 + focus * .16).toFixed(3)})`;
+        visual.style.zIndex = String(Math.round(focus * 10) + 1);
+      });
+    }
+
+    beats.forEach((beat) => {
+      const rect = beat.getBoundingClientRect();
+      const focus = clamp(1 - Math.abs((rect.top + rect.height / 2) - window.innerHeight * .52) / (window.innerHeight * .48), 0, 1);
+      beat.style.opacity = reduce ? '1' : String(.25 + focus * .75);
+      beat.style.setProperty('--focus', focus.toFixed(3));
+    });
+  };
+
+  const requestUpdate = () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  };
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  motionPreference.addEventListener?.('change', event => {
+    reduce = event.matches;
+    requestUpdate();
+  });
+  requestUpdate();
 }
 
-const repoArtwork = {
-  'drone-v2': '/assets/images/project-drone.png',
-  'Code-SDR': '/assets/images/project-sdr.png',
-  'research-paper': '/assets/images/project-research.png',
-  'quantum-sim-python': '/assets/images/project-research.png',
-  'Trading-Algo': '/assets/images/landing-lab.png',
-  'better-ai': '/assets/images/landing-lab.png',
-  'PyFoilOptimize': '/assets/images/project-research.png',
-  'Nuclear_collision': '/assets/images/project-research.png'
+function setupCardTilt() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(pointer: coarse)').matches) return;
+  document.querySelectorAll('.project-card, .pipeline-card, .card').forEach(card => {
+    card.addEventListener('pointermove', event => {
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - .5;
+      const y = (event.clientY - rect.top) / rect.height - .5;
+      card.style.transform = `perspective(900px) rotateX(${(-y * 1.8).toFixed(2)}deg) rotateY(${(x * 2.2).toFixed(2)}deg) translateY(-3px)`;
+    });
+    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+  });
+}
+
+/* ============================================================
+   LIVE GITHUB REPO FEED
+   ============================================================ */
+
+const GITHUB_USER = 'iamdarshg';
+
+/* GitHub linguist colors — subset for this profile */
+const langColors = {
+  'Python': '#3572A5',
+  'C++': '#f34b7d',
+  'C': '#555555',
+  'Verilog': '#b2b7f8',
+  'Rust': '#dea584',
+  'TypeScript': '#3178c6',
+  'HTML': '#e34c26',
+  'Kotlin': '#A97BFF',
+  'Prolog': '#74283c',
+  'AGS Script': '#B9D9FF',
+  'JavaScript': '#f1e05a',
+  'CSS': '#563d7c',
+  'Jupyter Notebook': '#DA5B0B',
+  'Shell': '#89e051',
+  'TeX': '#3D6117'
 };
 
-const fallbackReposData = [
-  {
-    path: 'iamdarshg/drone-v2',
-    repo: {
-      name: 'drone-v2',
-      stargazers_count: 1,
-      forks_count: 0,
-      language: 'AGS Script',
-      html_url: 'https://github.com/iamdarshg/drone-v2',
-      description: 'Autonomous aircraft platform with custom PCB avionics, RF layout, and firmware bring-up.',
-      archived: false
-    },
-    readme: 'Autonomous aircraft platform with custom PCB avionics, RF layout, and firmware bring-up. Sensor fusion, telemetry, and real-world hardware iteration are the core threads. - Custom multi-layer PCB - Embedded control loops - RF front-end and telemetry'
-  },
-  {
-    path: 'iamdarshg/Code-SDR',
-    repo: {
-      name: 'Code-SDR',
-      stargazers_count: 1,
-      forks_count: 0,
-      language: 'Verilog',
-      html_url: 'https://github.com/iamdarshg/Code-SDR',
-      description: 'Wideband SDR system with FPGA DSP pipeline, ADC streaming, and desktop tooling.',
-      archived: false
-    },
-    readme: 'Wideband software-defined radio system with FPGA DSP, ADC capture, and desktop integration. Built around real throughput, calibration, and tooling constraints. - 105 MSPS processing - FPGA DSP chain - GNU Radio and ExtIO integration'
-  },
-  {
-    path: 'iamdarshg/research-paper',
-    repo: {
-      name: 'research-paper',
-      stargazers_count: 1,
-      forks_count: 0,
-      language: 'Python',
-      html_url: 'https://github.com/iamdarshg/research-paper',
-      description: 'Aircraft diffusion CFD project combining generative models with aerodynamic evaluation.',
-      archived: false
-    },
-    readme: 'Aircraft diffusion CFD project combining generative models with aerodynamic evaluation. The pipeline focuses on design generation, structural viability, and exportable outputs. - Diffusion model workflow - CFD evaluation loop - STL export path'
-  },
-  {
-    path: 'iamdarshg/quantum-sim-python',
-    repo: {
-      name: 'quantum-sim-python',
-      stargazers_count: 0,
-      forks_count: 0,
-      language: 'Python',
-      html_url: 'https://github.com/iamdarshg/quantum-sim-python',
-      description: 'Simulation-heavy physics work exploring nuclear collision and lattice behavior.',
-      archived: false
-    },
-    readme: 'Simulation-heavy physics work exploring nuclear collision and lattice behavior. Built as an analysis-first environment rather than a presentation repository. - Numerical simulation - Physics-oriented modeling - Python tooling'
-  },
-  {
-    path: 'iamdarshg/Trading-Algo',
-    repo: {
-      name: 'Trading-Algo',
-      stargazers_count: 0,
-      forks_count: 0,
-      language: 'Python',
-      html_url: 'https://github.com/iamdarshg/Trading-Algo',
-      description: 'Algorithmic trading experimentation with data pipelines and strategy logic.',
-      archived: false
-    },
-    readme: 'Algorithmic trading experimentation with data pipelines and strategy logic. Useful as a systems-thinking side project rather than a core portfolio piece. - Market data handling - Strategy iteration - Python analytics'
-  },
-  {
-    path: 'iamdarshg/better-ai',
-    repo: {
-      name: 'better-ai',
-      stargazers_count: 0,
-      forks_count: 0,
-      language: 'Python',
-      html_url: 'https://github.com/iamdarshg/better-ai',
-      description: 'General AI experimentation repo for models, prompts, and technical exploration.',
-      archived: false
-    },
-    readme: 'General AI experimentation repo for models, prompts, and technical exploration. The emphasis is on iteration and implementation rather than product polish. - Model experiments - Prompt and tooling work - Python prototypes'
-  }
-];
+function langColor(lang) {
+  return langColors[lang] || '#8b949e';
+}
 
+/* artwork keyed by repo name — falls back to a generic lab shot */
+const repoArtwork = {
+  'wing3d': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'copperline': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'aero-multiphysics-workbench': '/assets/images/field/smoke_cp.png',
+  'Code-SDR': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'drone-v2': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
+  'drone-arm': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
+  'drone_main': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
+  'research-paper': '/assets/images/field/smoke_cp.png',
+  'quantum-sim-python': '/assets/images/field/smoke_cp.png',
+  'quantum-atoms': '/assets/images/field/smoke_cp.png',
+  'Nuclear_collision': '/assets/images/field/smoke_cp.png',
+  'PyFoilOptimize': '/assets/images/field/smoke_cp.png',
+  'esp-radar': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'edf-esc': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'KestrelVL-7B': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'llm-schmeatic': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'pcb-skill': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'dev-board': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'planets-hubble': '/assets/images/field/smoke_cp.png',
+  'rustymd': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'Epilepscreen': '/assets/images/field/smoke_cp.png',
+  'whatsapp-reader': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'better-ai': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'Trading-Algo': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'outrunner-motor-optimizer': '/assets/images/field/smoke_cp.png',
+  'tcs-quiz': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'Game-1': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'FIS-Interstellar': '/assets/images/field/smoke_cp.png',
+  'oxford-hack-NPSHSR': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
+  'college-essay-corpus': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg'
+};
+
+const fallbackRepoData = [
+  { name: 'wing3d', description: 'Transonic small-disturbance (TSD) wing solver benchmark program — target: OpenFOAM-matched accuracy at 3-5x lower runtime.', language: 'Python', updated_at: '2026-10-28', html_url: 'https://github.com/iamdarshg/wing3d', archived: false },
+  { name: 'copperline', description: 'Headless C++20 PCB autorouter for agents. CLI-only, JSON-first.', language: 'C++', updated_at: '2026-10-28', html_url: 'https://github.com/iamdarshg/copperline', archived: false },
+  { name: 'aero-multiphysics-workbench', description: 'Local-first strongly coupled multiphysics engineering workbench.', language: 'Python', updated_at: '2026-09-25', html_url: 'https://github.com/iamdarshg/aero-multiphysics-workbench', archived: false },
+  { name: 'Code-SDR', description: 'FPGA-based ultra-wideband software defined radio — hardware and software implementations.', language: 'Verilog', updated_at: '2026-09-19', html_url: 'https://github.com/iamdarshg/Code-SDR', archived: false },
+  { name: 'esp-radar', description: 'Compact 2.4 GHz WiFi CSI motion radar — three fixed ESP32s (TX AP + fusion, two CSI RX stations).', language: 'Rust', updated_at: '2026-08-17', html_url: 'https://github.com/iamdarshg/esp-radar', archived: false },
+  { name: 'rustymd', description: 'Ultra-lightweight native Windows Markdown viewer — raw Win32/GDI, ~15-40MB RAM, no Electron.', language: 'Rust', updated_at: '2026-07-21', html_url: 'https://github.com/iamdarshg/rustymd', archived: false },
+  { name: 'research-paper', description: 'Hybrid diffusion networks applied to aircraft design optimization.', language: 'Python', updated_at: '2026-09-03', html_url: 'https://github.com/iamdarshg/research-paper', archived: false },
+  { name: 'drone-v2', description: 'Newer hardware-software stack for a general purpose avionics control board.', language: 'AGS Script', updated_at: '2026-01-15', html_url: 'https://github.com/iamdarshg/drone-v2', archived: false }
+];
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -215,7 +295,19 @@ function escapeHtml(value) {
 }
 
 function getRepoArtwork(repoName) {
-  return repoArtwork[repoName] || '/assets/images/landing-lab.png';
+  return repoArtwork[repoName] || '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg';
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const now = new Date();
+  const days = Math.floor((now - d) / 86400000);
+  if (days < 1) return 'updated today';
+  if (days < 7) return days + 'd ago';
+  if (days < 30) return Math.floor(days / 7) + 'w ago';
+  if (days < 365) return Math.floor(days / 30) + 'mo ago';
+  return d.getFullYear();
 }
 
 function stripReadmeNoise(markdown) {
@@ -248,11 +340,9 @@ function cleanMarkdownLine(line) {
 
 function truncateSentence(text, maxLength = 180) {
   if (text.length <= maxLength) return text;
-
   const slice = text.slice(0, maxLength);
   const lastStop = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('; '));
   const cutoff = lastStop > maxLength * 0.55 ? lastStop + 1 : slice.lastIndexOf(' ');
-
   return `${slice.slice(0, cutoff > 0 ? cutoff : maxLength).trim()}...`;
 }
 
@@ -284,56 +374,116 @@ function prepareReadmeForDisplay(markdown) {
   const cleaned = stripReadmeNoise(markdown)
     .replace(/\n{3,}/g, '\n\n')
     .trim();
-
   return cleaned || 'README preview unavailable.';
+}
+/* ---------------- live repo feed ---------------- */
+async function loadAllRepositories() {
+  const repoContainer = document.getElementById('repo-feed');
+  if (!repoContainer) return;
+
+  repoContainer.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--faint);font-family:var(--font-mono);font-size:12px;">Loading live repository feed from GitHub…</p>';
+
+  /* cached in session to dodge rate limits */
+  const cached = sessionStorage.getItem('github_repos_cache');
+  if (cached) {
+    try {
+      const results = JSON.parse(cached);
+      renderRepos(results, repoContainer);
+      return;
+    } catch (e) {
+      sessionStorage.removeItem('github_repos_cache');
+    }
+  }
+
+  try {
+    const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100&type=owner`);
+    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+    const repos = await res.json();
+
+    /* filter out the portfolio repo itself and forks */
+    const filtered = repos
+      .filter(r => !r.fork)
+      .filter(r => r.name !== 'iamdarshg.github.io')
+      .slice(0, 24);
+
+    const results = [];
+    for (const repo of filtered) {
+      results.push({ repo, readme: '' });
+    }
+
+    sessionStorage.setItem('github_repos_cache', JSON.stringify(results));
+    renderRepos(results, repoContainer);
+
+    /* fetch readmes in background, render again when ready */
+    for (let i = 0; i < results.length; i++) {
+      try {
+        const readmeRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${results[i].repo.name}/readme`, {
+          headers: { 'Accept': 'application/vnd.github.v3.raw' }
+        });
+        if (readmeRes.ok) {
+          results[i].readme = await readmeRes.text();
+          sessionStorage.setItem('github_repos_cache', JSON.stringify(results));
+        }
+      } catch (err) {
+        /* keep going */
+      }
+      if (i === results.length - 1 || i % 4 === 3) renderRepos(results, repoContainer);
+    }
+  } catch (error) {
+    console.error('Repo feed failed, using fallback:', error);
+    renderRepos(fallbackRepoData.map(r => ({ repo: r, readme: '' })), repoContainer);
+  }
 }
 
 function renderRepos(results, container) {
+  if (!container) return;
   container.innerHTML = '';
-  results.forEach(({ repo, readme, path }) => {
-    const repoName = path.split('/')[1];
+  results.forEach(({ repo, readme }) => {
+    const repoName = repo.name;
     const card = document.createElement('article');
     card.className = 'project-card repo-card';
     card.onclick = () => openProjectDetail(repoName);
 
-    const snapshot = extractReadmeSnapshot(readme, repo.description || '');
+    const snapshot = extractReadmeSnapshot(readme || '', repo.description || '');
     const previewPoints = snapshot.points
       .filter(Boolean)
-      .slice(0, 3)
+      .slice(0, 2)
       .map(point => `<li>${escapeHtml(point)}</li>`)
       .join('');
     const statusClass = repo.archived ? 'badge-status--archived' : 'badge-status--active';
-    const statusLabel = repo.archived ? 'Archived' : 'Live repo';
+    const statusLabel = repo.archived ? 'Archived' : (repo.language || 'Repo');
+    const color = langColor(repo.language);
+    const updated = formatDate(repo.updated_at);
 
     card.innerHTML = `
       <figure class="repo-card-media">
-        <img src="${escapeHtml(getRepoArtwork(repo.name))}" alt="${escapeHtml(repo.name)} repository artwork" />
+        <img src="${escapeHtml(getRepoArtwork(repoName))}" alt="${escapeHtml(repoName)} repository artwork" loading="lazy" />
         <figcaption>
           <div>
-            <strong>${escapeHtml(repo.name)}</strong>
-            <span>${escapeHtml(repo.language || 'Documentation')}</span>
+            <strong>${escapeHtml(repoName)}</strong>
+            <span style="display:block;margin-top:2px;">${escapeHtml(repo.description || '')}</span>
           </div>
-          <span class="badge-status ${statusClass}">${statusLabel}</span>
+          <span class="badge-status ${statusClass}">${escapeHtml(statusLabel)}</span>
         </figcaption>
       </figure>
       <div class="project-content compact-content">
         <div class="compact-header">
-          <h4>${escapeHtml(repo.name)}</h4>
+          <h4>${escapeHtml(repoName)}</h4>
         </div>
         <div class="project-meta">
-          <span>Stars: ${repo.stargazers_count}</span>
-          <span>Forks: ${repo.forks_count}</span>
-          <span>${escapeHtml(repo.language || 'Documentation')}</span>
+          <span><span class="lang-dot" style="background:${color};"></span>${escapeHtml(repo.language || 'Docs')}</span>
+          <span>★ ${repo.stargazers_count || 0}</span>
+          <span>${updated}</span>
         </div>
         <div class="readme-preview">
           <span class="readme-kicker">README snapshot</span>
           <p class="readme-summary">${escapeHtml(snapshot.summary)}</p>
           ${previewPoints ? `<ul class="readme-points">${previewPoints}</ul>` : ''}
         </div>
-        <div class="project-footer" style="margin-top: 12px;">
+        <div class="project-footer">
           <div class="project-links">
-            <img src="https://img.shields.io/github/stars/${path}?style=flat-square&color=teal" alt="stars">
-            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub -></a>
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub →</a>
+            <span class="hint">Click card for details</span>
           </div>
         </div>
       </div>
@@ -341,14 +491,10 @@ function renderRepos(results, container) {
     container.appendChild(card);
   });
 }
-
+/* ---------------- education / interests scroll effects ---------------- */
 function setupEducationScrollEffects() {
-  const items = document.querySelectorAll('.timeline-item');
-  const observerOptions = {
-    threshold: 0.5,
-    rootMargin: "-10% 0% -10% 0%"
-  };
-
+  const items = document.querySelectorAll('.timeline-row');
+  const observerOptions = { threshold: 0.5, rootMargin: "-10% 0% -10% 0%" };
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -358,68 +504,168 @@ function setupEducationScrollEffects() {
       }
     });
   }, observerOptions);
-
   items.forEach(item => observer.observe(item));
 }
 
 function setupInterestsScrollEffects() {
   const sections = document.querySelectorAll('.blog-section');
   const navLinks = document.querySelectorAll('.interests-nav a');
-
-  const observerOptions = {
-    threshold: 0.6
-  };
-
+  const observerOptions = { threshold: 0.6 };
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const id = entry.target.getAttribute('id');
         updateInterestsStyle(id);
-
         navLinks.forEach(link => {
           link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
         });
       }
     });
   }, observerOptions);
-
   sections.forEach(section => observer.observe(section));
 }
 
 function updateInterestsStyle(sectionId) {
   const root = document.documentElement;
   const styles = {
-    'gym': {
-      bg: '#1a0b0b',
-      text: '#f87171',
-      font: 'var(--font-family-base)'
-    },
-    'swimming': {
-      bg: '#081e26',
-      text: '#38bdf8',
-      font: 'var(--font-family-serif)'
-    },
-    'muns': {
-      bg: '#130d24',
-      text: '#a78bfa',
-      font: 'var(--font-family-serif)'
-    },
-    'gaming': {
-      bg: '#1a1408',
-      text: '#fbbf24',
-      font: 'var(--font-family-mono)'
-    }
+    'gym': { bg: '#1a0b0b', text: '#f87171' },
+    'swimming': { bg: '#081e26', text: '#38bdf8' },
+    'muns': { bg: '#130d24', text: '#a78bfa' },
+    'gaming': { bg: '#1a1408', text: '#fbbf24' }
   };
-
   const style = styles[sectionId];
   if (style) {
     root.style.setProperty('--color-background', style.bg);
     root.style.setProperty('--color-primary', style.text);
-    document.querySelector('.blog-post').style.fontFamily = style.font;
   }
 }
-
+/* ============================================================
+   PROJECT DETAIL MODAL
+   ============================================================ */
 const projectDetails = {
+  'wing3d': {
+    title: 'Wing3d: Transonic Small-Disturbance Solver',
+    tag: 'Aerospace / CFD / Numerical Methods',
+    status: 'Active Research',
+    timeline: '2026 — ongoing benchmark program',
+    github: 'https://github.com/iamdarshg/wing3d',
+    overview: 'A transonic small-disturbance (TSD) solver program built to benchmark against OpenFOAM on (geometry, Mach) case pairs. The target is 3-5x faster than OpenFOAM at matched accuracy, with every result reported as a CL ± uncertainty band derived from the hyperparameter ensemble.',
+    sections: [
+      {
+        title: 'Core Method',
+        content: `
+          <ul>
+            <li><strong>TSD formulation:</strong> transonic small-disturbance equations for wing flows — the physics/code coupling that keeps solve times a fraction of full Navier-Stokes.</li>
+            <li><strong>Benchmark philosophy:</strong> per-case speed target of 3-5x versus OpenFOAM at matched accuracy, measured on (geometry, Mach) pairs.</li>
+            <li><strong>Uncertainty-bound reporting:</strong> CL reported as a band, not a point — the ensemble drives the claim.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Hyperparameter Ensemble (UQ)',
+        content: `
+          <div class="stats-grid">
+            <div class="stat-item"><div class="stat-label">Grid family</div><div class="stat-value">80 / 120 / 140 / 160</div></div>
+            <div class="stat-item"><div class="stat-label">Epochs</div><div class="stat-value">8 / 16 / 24</div></div>
+            <div class="stat-item"><div class="stat-label">Supersonic mask</div><div class="stat-value">small / large</div></div>
+            <div class="stat-item"><div class="stat-label">k-imprint</div><div class="stat-value">on / off</div></div>
+          </div>
+          <p style="margin-top:14px;">The envelope over these hyperparameters defines the reported uncertainty bound. Ablations from the commit audit populate a sensitivity table, and each measurement feeds the band.</p>
+        `
+      },
+      {
+        title: 'Honesty Rules',
+        content: `
+          <ul>
+            <li>Physically unsupportable fixes that improve scores are logged as <strong>BAD BUT HELPS</strong> with measured cost — never silently kept.</li>
+            <li>Anything whose removal lowers error is removed permanently.</li>
+            <li>Accuracy claims are always relative to OpenFOAM uncertainty, ideally centered on truth.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Technology Stack',
+        content: `
+          <div class="tech-stack">
+            <span class="tech-badge">Python</span>
+            <span class="tech-badge">OpenFOAM (baseline)</span>
+            <span class="tech-badge">Numerical PDE</span>
+            <span class="tech-badge">Hyperparameter ensembles</span>
+          </div>
+        `
+      }
+    ]
+  },
+  'copperline': {
+    title: 'Copperline: Headless PCB Autorouter for Agents',
+    tag: 'C++20 / PCB / Tooling',
+    status: 'Active Development',
+    timeline: '2026 — ongoing',
+    github: 'https://github.com/iamdarshg/copperline',
+    overview: 'A headless C++20 PCB autorouter built for agent-driven workflow: CLI-only, JSON-first. Board routing becomes a scriptable, repeatable operation rather than a GUI session.',
+    sections: [
+      {
+        title: 'Design Goals',
+        content: `
+          <ul>
+            <li><strong>Agent-first interface:</strong> JSON problem definitions in, JSON solutions out.</li>
+            <li><strong>Headless by design:</strong> no GUI dependency — usable from CI, scripts, and agents.</li>
+            <li><strong>C++20 performance:</strong> real board sizes without scripting-language overhead.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Why It Matters',
+        content: `
+          <p>If an agent can read a schematic, it should be able to drive layout too. Copperline is the routing side of that loop — making the last manual step of PCB work automatable.</p>
+        `
+      },
+      {
+        title: 'Technology Stack',
+        content: `
+          <div class="tech-stack">
+            <span class="tech-badge">C++20</span>
+            <span class="tech-badge">JSON</span>
+            <span class="tech-badge">CLI</span>
+            <span class="tech-badge">KiCad ecosystem</span>
+          </div>
+        `
+      }
+    ]
+  },
+  'aero-mpw': {
+    title: 'Aero-Multiphysics Workbench',
+    tag: 'Simulation / Python / Engineering',
+    status: 'In Design',
+    timeline: '2026 — ongoing',
+    github: 'https://github.com/iamdarshg/aero-multiphysics-workbench',
+    overview: 'A local-first, strongly coupled multiphysics engineering workbench. Built for design loops that refuse to live inside a single solver — coupling the physics that actually interact.',
+    sections: [
+      {
+        title: 'Approach',
+        content: `
+          <ul>
+            <li><strong>Strong coupling:</strong> physics modules exchange state every iteration, not just at the end.</li>
+            <li><strong>Local-first:</strong> simulation data and workflows stay on the machine — no cloud lock-in.</li>
+            <li><strong>Workbench philosophy:</strong> open modules instead of black boxes.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Technology Stack',
+        content: `
+          <div class="tech-stack">
+            <span class="tech-badge">Python</span>
+            <span class="tech-badge">SciPy / NumPy</span>
+            <span class="tech-badge">Multiphysics</span>
+            <span class="tech-badge">Local compute</span>
+          </div>
+        `
+      }
+    ]
+  }
+};
+const legacyProjectDetails = {
   'drone-v2': {
     title: 'Drone-v2: Autonomous Aircraft Platform',
     tag: 'Aerospace / RF / Embedded Systems',
@@ -452,18 +698,6 @@ const projectDetails = {
         `
       },
       {
-        title: 'Development Lifecycle',
-        content: `
-          <ul>
-            <li><strong>Schematic Design:</strong> Complete electrical design with component selection and verification</li>
-            <li><strong>PCB Layout:</strong> Multi-layer routing with controlled impedance and thermal management</li>
-            <li><strong>Manufacturing:</strong> Gerber file generation, DRC/ERC validation, fabrication specifications</li>
-            <li><strong>Bring-up Testing:</strong> Systematic validation of power rails, communication buses, sensor interfaces</li>
-            <li><strong>Hardware Iteration:</strong> V1 archived with documented improvements incorporated into V2</li>
-          </ul>
-        `
-      },
-      {
         title: 'Technology Stack',
         content: `
           <div class="tech-stack">
@@ -475,29 +709,6 @@ const projectDetails = {
             <span class="tech-badge">Real-time Systems</span>
           </div>
         `
-      },
-      {
-        title: 'Current Progress',
-        content: `
-          <div class="stats-grid">
-            <div class="stat-item">
-              <div class="stat-label">Hardware</div>
-              <div class="stat-value">V2 Layout</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Firmware</div>
-              <div class="stat-value">Active Dev</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Testing</div>
-              <div class="stat-value">In Progress</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Repository</div>
-              <div class="stat-value">1 Star</div>
-            </div>
-          </div>
-        `
       }
     ]
   },
@@ -507,7 +718,7 @@ const projectDetails = {
     status: 'Board Routing Stage',
     timeline: 'November 2025 to Q1 2026',
     github: 'https://github.com/iamdarshg/Code-SDR',
-    overview: 'High-performance FPGA-accelerated SDR system covering 1 MHz to 10 GHz with real-time processing pipeline. Complete implementation from Verilog HDL through computer interface achieving 105 MSPS throughput with under 10 microseconds latency.',
+    overview: 'High-performance FPGA-accelerated SDR system with a real-time processing pipeline. Complete implementation from Verilog HDL through computer interface, targeting 105 MSPS throughput with sub-10 microsecond latency.',
     sections: [
       {
         title: 'FPGA Processing Pipeline',
@@ -525,62 +736,11 @@ const projectDetails = {
         title: 'Performance Specifications',
         content: `
           <div class="stats-grid">
-            <div class="stat-item">
-              <div class="stat-label">Sample Rate</div>
-              <div class="stat-value">105 MSPS</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Processing Latency</div>
-              <div class="stat-value">&lt;10 microseconds</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Ethernet Throughput</div>
-              <div class="stat-value">750 Mbps</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">FFT Resolution</div>
-              <div class="stat-value">1024-point</div>
-            </div>
+            <div class="stat-item"><div class="stat-label">Sample Rate</div><div class="stat-value">105 MSPS</div></div>
+            <div class="stat-item"><div class="stat-label">Latency</div><div class="stat-value">&lt;10µs</div></div>
+            <div class="stat-item"><div class="stat-label">Ethernet</div><div class="stat-value">750 Mbps</div></div>
+            <div class="stat-item"><div class="stat-label">FFT</div><div class="stat-value">1024-point</div></div>
           </div>
-          <p style="margin-top:16px;">
-            <strong>DC Offset Improvement:</strong> 43.54 dB (217% of requirement)<br>
-            <strong>Processing Power:</strong> 100x improvement over legacy dsPIC33 architecture
-          </p>
-        `
-      },
-      {
-        title: 'System Architecture',
-        content: `
-          <ul>
-            <li><strong>Dual Streaming Modes:</strong> Processed FFT output (750 Mbps) or direct ADC streaming (950 Mbps)</li>
-            <li><strong>Bandwidth Management:</strong> Intelligent limiting to 80% capacity (760 Mbps) prevents packet loss</li>
-            <li><strong>Network Stack:</strong> Complete UDP/IP implementation with MAC layer on Gigabit Ethernet</li>
-            <li><strong>RP2040 Control:</strong> SPI interface for configuration, gain control, and system management</li>
-            <li><strong>Memory Architecture:</strong> Ping-pong buffers (32 M4K blocks) enable continuous streaming</li>
-          </ul>
-        `
-      },
-      {
-        title: 'Software Integration',
-        content: `
-          <ul>
-            <li><strong>GNU Radio Module:</strong> 85% complete - Out-of-tree module with source/sink blocks</li>
-            <li><strong>Windows ExtIO Plugin:</strong> 80% complete - HDSDR and SDR# compatibility</li>
-            <li><strong>Python API:</strong> Production-ready driver with NumPy/SciPy processing pipeline</li>
-            <li><strong>Data Recording:</strong> Professional-grade system with >500K samples/second write speed</li>
-            <li><strong>Calibration Suite:</strong> Automated DC offset correction, frequency calibration (<0.1 ppm)</li>
-          </ul>
-        `
-      },
-      {
-        title: 'Hardware Implementation',
-        content: `
-          <ul>
-            <li><strong>RF Frontend:</strong> Dual TX or TX/RX signal chain with mixers, LO planning, IF/baseband stages</li>
-            <li><strong>PCB Design:</strong> Multi-layer with RF layout best practices, controlled impedance, EMI/EMC considerations</li>
-            <li><strong>Signal Integrity:</strong> High-speed digital design, impedance matching, crosstalk mitigation</li>
-            <li><strong>Power Management:</strong> Multi-rail with thermal design for sustained 105 MSPS operation</li>
-          </ul>
         `
       },
       {
@@ -592,9 +752,7 @@ const projectDetails = {
             <span class="tech-badge">Python/NumPy</span>
             <span class="tech-badge">GNU Radio</span>
             <span class="tech-badge">C++ (Plugins)</span>
-            <span class="tech-badge">DSP</span>
             <span class="tech-badge">Gigabit Ethernet</span>
-            <span class="tech-badge">RF Design</span>
           </div>
         `
       }
@@ -606,7 +764,7 @@ const projectDetails = {
     status: 'Active Research',
     timeline: 'December 2025 to ongoing',
     github: 'https://github.com/iamdarshg/research-paper',
-    overview: 'GPU-accelerated generative design system combining diffusion models with lattice Boltzmann CFD. Progressive training pipeline automatically generates and optimizes aircraft structures for aerodynamic efficiency with structural connectivity constraints.',
+    overview: 'GPU-accelerated generative design system combining hybrid diffusion networks with lattice Boltzmann CFD. Progressive training pipeline automatically generates and optimizes aircraft structures for aerodynamic efficiency with structural connectivity constraints.',
     sections: [
       {
         title: 'Technical Approach',
@@ -623,62 +781,11 @@ const projectDetails = {
         title: 'Performance Characteristics',
         content: `
           <div class="stats-grid">
-            <div class="stat-item">
-              <div class="stat-label">Training Time</div>
-              <div class="stat-value">14-18 hrs</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">GPU Memory</div>
-              <div class="stat-value">8 to 13 GB</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Grid Resolution</div>
-              <div class="stat-value">32 cubed voxels</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">CFD Simulation</div>
-              <div class="stat-value">under 100 microseconds per step</div>
-            </div>
+            <div class="stat-item"><div class="stat-label">Training Time</div><div class="stat-value">14-18 hrs</div></div>
+            <div class="stat-item"><div class="stat-label">GPU Memory</div><div class="stat-value">8 to 13 GB</div></div>
+            <div class="stat-item"><div class="stat-label">Grid Resolution</div><div class="stat-value">32³ voxels</div></div>
+            <div class="stat-item"><div class="stat-label">CFD per step</div><div class="stat-value">&lt;100 µs</div></div>
           </div>
-          <p style="margin-top:16px;">
-            <strong>Hardware:</strong> RTX 3090 (24GB) or A100 (2-3x faster)<br>
-            <strong>Optimization:</strong> Gradient checkpointing, sparse grids, memory-efficient training
-          </p>
-        `
-      },
-      {
-        title: 'System Architecture',
-        content: `
-          <ul>
-            <li><strong>Encoder-Decoder:</strong> U-Net style architecture with skip connections and attention mechanisms</li>
-            <li><strong>Latent Space:</strong> 128-dimensional compressed representation for efficient generation</li>
-            <li><strong>Diffusion Process:</strong> 100 timesteps forward, 250 sampling steps with classifier-free guidance</li>
-            <li><strong>Loss Function:</strong> Combined reconstruction, connectivity penalty, and aerodynamic objective</li>
-            <li><strong>CFD Solver:</strong> D3Q27 lattice with cascaded collision operator for accuracy and stability</li>
-          </ul>
-        `
-      },
-      {
-        title: 'CLI Tool Features',
-        content: `
-          <ul>
-            <li><strong>Training:</strong> Resume-capable with TensorBoard logging, automatic checkpointing, hyperparameter control</li>
-            <li><strong>Generation:</strong> Batch design synthesis with configurable guidance scale and sampling resolution</li>
-            <li><strong>Evaluation:</strong> CFD analysis of drag, lift, structural metrics with JSON export</li>
-            <li><strong>Export:</strong> STL mesh generation with optional simplification for CAD/manufacturing</li>
-            <li><strong>Monitoring:</strong> Real-time loss curves, learning rate schedule, design previews via TensorBoard</li>
-          </ul>
-        `
-      },
-      {
-        title: 'Research Applications',
-        content: `
-          <ul>
-            <li><strong>Design Exploration:</strong> Rapidly generate diverse aircraft configurations for parameter studies</li>
-            <li><strong>Optimization:</strong> Automated search through design space for optimal aerodynamic performance</li>
-            <li><strong>Constraint Satisfaction:</strong> Balance between performance metrics and structural requirements</li>
-            <li><strong>Manufacturing Integration:</strong> Direct STL export enables rapid prototyping and wind tunnel testing</li>
-          </ul>
         `
       },
       {
@@ -688,9 +795,7 @@ const projectDetails = {
             <span class="tech-badge">PyTorch 2.0+</span>
             <span class="tech-badge">CUDA</span>
             <span class="tech-badge">NumPy/SciPy</span>
-            <span class="tech-badge">TensorBoard</span>
             <span class="tech-badge">Trimesh</span>
-            <span class="tech-badge">Scikit-image</span>
             <span class="tech-badge">CFD/LBM</span>
             <span class="tech-badge">Diffusion Models</span>
           </div>
@@ -711,18 +816,8 @@ const projectDetails = {
         content: `
           <ul>
             <li><strong>Core question:</strong> Can trained regressors estimate radar cross-section fast enough to support early-stage UAV stealth design?</li>
-            <li><strong>Engineering framing:</strong> The paper treats ML as a practical surrogate for design exploration, not as a replacement for electromagnetic solvers.</li>
-            <li><strong>RCS scope:</strong> Covers monostatic and bistatic RCS, aspect-angle effects, frequency dependence, polarization, geometry, and material influences.</li>
-          </ul>
-        `
-      },
-      {
-        title: 'Dataset Strategy',
-        content: `
-          <ul>
-            <li><strong>Geometry inputs:</strong> Fuselage length, wing span, wing sweep, nose radius, tail-fin angles, inlet geometry, and other 8-15 parameter design variables.</li>
-            <li><strong>Radar settings:</strong> Frequency sweeps from 1-40 GHz, azimuth coverage from 0-360 degrees, elevation from -30 to +30 degrees, and HH/VV/HV polarization states.</li>
-            <li><strong>Scale target:</strong> Minimum 5,000-10,000 samples for neural-network training, with larger simulation datasets improving generalization.</li>
+            <li><strong>Engineering framing:</strong> ML as a practical surrogate for design exploration, not a replacement for electromagnetic solvers.</li>
+            <li><strong>RCS scope:</strong> Monostatic and bistatic RCS, aspect-angle effects, frequency dependence, polarization, geometry, and material influences.</li>
           </ul>
         `
       },
@@ -730,9 +825,9 @@ const projectDetails = {
         title: 'Modeling Approaches',
         content: `
           <ul>
-            <li><strong>Baselines:</strong> Support vector machines and random forests are discussed for smaller or medium-sized datasets.</li>
-            <li><strong>Neural models:</strong> Dense neural networks, volumetric CNNs, recurrent models for frequency sweeps, and hybrid CNN-transformer architectures are compared.</li>
-            <li><strong>Physics-informed direction:</strong> PINN-style losses are presented as a way to regularize predictions and improve sparse-data behavior when the physics residual is well matched.</li>
+            <li><strong>Baselines:</strong> SVMs and random forests for smaller or medium-sized datasets.</li>
+            <li><strong>Neural models:</strong> Dense networks, volumetric CNNs, recurrent models for frequency sweeps, and hybrid CNN-transformer architectures.</li>
+            <li><strong>Physics-informed:</strong> PINN-style losses as regularization for sparse-data behavior.</li>
           </ul>
         `
       },
@@ -740,33 +835,11 @@ const projectDetails = {
         title: 'Evaluation Plan',
         content: `
           <div class="stats-grid">
-            <div class="stat-item">
-              <div class="stat-label">Split</div>
-              <div class="stat-value">70/15/15</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Target RMSE</div>
-              <div class="stat-value">0.5-2 dB</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Speedup</div>
-              <div class="stat-value">50-100x</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Validation</div>
-              <div class="stat-value">Full-wave EM</div>
-            </div>
+            <div class="stat-item"><div class="stat-label">Split</div><div class="stat-value">70/15/15</div></div>
+            <div class="stat-item"><div class="stat-label">Target RMSE</div><div class="stat-value">0.5-2 dB</div></div>
+            <div class="stat-item"><div class="stat-label">Speedup</div><div class="stat-value">50-100x</div></div>
+            <div class="stat-item"><div class="stat-label">Validation</div><div class="stat-value">Full-wave EM</div></div>
           </div>
-        `
-      },
-      {
-        title: 'Practical Roadmap',
-        content: `
-          <ul>
-            <li><strong>Weeks 1-4:</strong> Build a parametric geometry set and generate 3,000-5,000 EM simulations.</li>
-            <li><strong>Weeks 5-8:</strong> Train baseline DNNs, establish validation/test splits, and compare geometry-aware CNN variants if mesh or voxel inputs are available.</li>
-            <li><strong>Weeks 9-12:</strong> Tune hyperparameters, run multi-objective optimization, and validate the top candidates with full-wave simulation.</li>
-          </ul>
         `
       },
       {
@@ -780,7 +853,6 @@ const projectDetails = {
             <span class="tech-badge">HFSS</span>
             <span class="tech-badge">FEKO</span>
             <span class="tech-badge">gprMax</span>
-            <span class="tech-badge">MEEP</span>
             <span class="tech-badge">FEniCS</span>
           </div>
         `
@@ -789,12 +861,15 @@ const projectDetails = {
   }
 };
 
+/* merge legacy + new so all cards can open detail modals */
+Object.assign(projectDetails, legacyProjectDetails);
 function openProjectDetail(projectId) {
   const details = projectDetails[projectId];
-  
+
   const modal = document.getElementById('detail-modal');
   const body = document.getElementById('detail-body');
-  
+  if (!modal || !body) return;
+
   if (details) {
     const detailSections = (details.sections || []).map(section => `
       <div class="detail-section">
@@ -806,15 +881,15 @@ function openProjectDetail(projectId) {
     const readmeSection = details.github ? `
       <div class="detail-section" id="readme-section">
         <h3>GitHub README</h3>
-        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--line); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
-          Loading repository data...
+        <div id="readme-content" class="readme-content">
+          Loading repository data…
         </div>
       </div>
     ` : '';
 
     const links = [
-      details.github ? `<a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub -></a>` : '',
-      details.document ? `<a href="${details.document}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">Open source document -></a>` : ''
+      details.github ? `<a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:13px;">View on GitHub →</a>` : '',
+      details.document ? `<a href="${details.document}" target="_blank" rel="noopener noreferrer" style="font-size:13px;">Open source document →</a>` : ''
     ].filter(Boolean).join('');
 
     body.innerHTML = `
@@ -829,7 +904,7 @@ function openProjectDetail(projectId) {
 
       <div class="detail-section">
         <h3>Overview</h3>
-        <p id="llm-summary">${details.overview}</p>
+        <p>${details.overview}</p>
       </div>
 
       ${detailSections}
@@ -837,42 +912,35 @@ function openProjectDetail(projectId) {
 
       <div class="detail-section">
         <div class="project-links">
-          <a href="${details.github}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub -></a>
+          ${links}
         </div>
       </div>
     `;
-    const featuredLinks = body.querySelector('.detail-section .project-links');
-    if (featuredLinks) {
-      featuredLinks.innerHTML = links;
-    }
+
     if (details.github) {
       fetchRepoData(details.github, { preserveSummary: true });
     }
   } else {
-    // For non-featured repos
+    /* unknown repo — generic modal with live README */
     body.innerHTML = `
       <div class="detail-header">
-        <h2>${projectId}</h2>
-      </div>
-      <div class="detail-section">
-        <h3>Overview</h3>
-        <p id="llm-summary"><em>Generating technical summary...</em></p>
+        <h2>${escapeHtml(projectId)}</h2>
       </div>
       <div class="detail-section" id="readme-section">
         <h3>GitHub README</h3>
-        <div id="readme-content" class="readme-content" style="font-size: 13px; opacity: 0.8; border: 1px solid var(--line); padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2);">
-          Loading repository data...
+        <div id="readme-content" class="readme-content">
+          Loading repository data…
         </div>
       </div>
       <div class="detail-section">
         <div class="project-links">
-          <a href="https://github.com/iamdarshg/${projectId}" target="_blank" rel="noopener noreferrer" style="font-size:14px;">View on GitHub -></a>
+          <a href="https://github.com/iamdarshg/${encodeURIComponent(projectId)}" target="_blank" rel="noopener noreferrer" style="font-size:13px;">View on GitHub →</a>
         </div>
       </div>
     `;
     fetchRepoData(projectId);
   }
-  
+
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -880,7 +948,7 @@ function openProjectDetail(projectId) {
 async function fetchRepoData(githubUrlOrSlug, options = {}) {
   const repoPath = githubUrlOrSlug.includes('github.com')
     ? githubUrlOrSlug.replace('https://github.com/', '')
-    : `iamdarshg/${githubUrlOrSlug}`;
+    : `${GITHUB_USER}/${githubUrlOrSlug}`;
 
   const readmeContainer = document.getElementById('readme-content');
   const summaryContainer = document.getElementById('llm-summary');
@@ -889,20 +957,19 @@ async function fetchRepoData(githubUrlOrSlug, options = {}) {
     const response = await fetch(`https://api.github.com/repos/${repoPath}/readme`, {
       headers: { 'Accept': 'application/vnd.github.v3.raw' }
     });
-
-    if (!response.ok) {
-      throw new Error(`README fetch failed: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`README fetch failed: ${response.status}`);
     const readmeText = await response.text();
-    readmeContainer.innerHTML = marked.parse(prepareReadmeForDisplay(readmeText));
-
+    if (readmeContainer) {
+      readmeContainer.innerHTML = marked.parse(prepareReadmeForDisplay(readmeText));
+    }
     if (!options.preserveSummary && summaryContainer) {
       const snapshot = extractReadmeSnapshot(readmeText);
       summaryContainer.innerText = snapshot.summary;
     }
   } catch (error) {
-    readmeContainer.innerHTML = '<em>Error loading README. Please check the link.</em>';
+    if (readmeContainer) {
+      readmeContainer.innerHTML = '<em>Error loading README. Please check the link.</em>';
+    }
     if (!options.preserveSummary && summaryContainer) {
       summaryContainer.innerText = 'Technical summary unavailable.';
     }
@@ -911,7 +978,6 @@ async function fetchRepoData(githubUrlOrSlug, options = {}) {
 
 function closeProjectDetail(event) {
   if (event && event.target !== event.currentTarget) return;
-  
   const modal = document.getElementById('detail-modal');
   if (modal) {
     modal.classList.remove('active');
@@ -924,7 +990,9 @@ document.addEventListener('keydown', function(event) {
     closeProjectDetail();
   }
 });
-
+/* ============================================================
+   EASTER EGGS (kept from previous version)
+   ============================================================ */
 function setupEasterEggs() {
   const technoTrigger = document.getElementById('technoblade-trigger');
   if (technoTrigger) {
@@ -941,16 +1009,15 @@ function setupEasterEggs() {
     });
   }
 
-  // Check if eggs are unlocked and allow them on other pages
   if (localStorage.getItem('technoblade_unlocked') === 'true') {
     document.querySelectorAll('.technoblade-text').forEach(el => {
-        el.addEventListener('click', spawnCrownedPig);
+      el.addEventListener('click', spawnCrownedPig);
     });
   }
   if (localStorage.getItem('minecraft_unlocked') === 'true') {
     document.body.classList.add('minecraft-unlocked');
     document.querySelectorAll('.minecraft-text').forEach(el => {
-        el.addEventListener('click', triggerMinecraftEffect);
+      el.addEventListener('click', triggerMinecraftEffect);
     });
   }
 }
@@ -962,54 +1029,46 @@ function triggerMinecraftEffect() {
 }
 
 function spawnCrownedPig() {
-    console.log('Spawning pig...');
-    const pigCount = 5;
-    for (let i = 0; i < pigCount; i++) {
-        setTimeout(() => {
-            const pig = document.createElement('div');
-            // Technoblade pig tribute gif
-            pig.innerHTML = `<img src="https://media.tenor.com/C7YIu5Aonj4AAAAM/technoblade-minecraft-movie.gif" style="width: 100px; height: auto;" alt="Techno Pig">`;
-            pig.style.position = 'fixed';
-            pig.style.bottom = (10 + Math.random() * 80) + '%';
-            pig.style.left = '-150px';
-            pig.style.zIndex = '10000';
-            pig.style.transition = `transform ${4 + Math.random() * 2}s linear`;
-            pig.style.pointerEvents = 'none';
-
-            document.body.appendChild(pig);
-            pig.offsetHeight;
-            pig.style.transform = `translateX(${window.innerWidth + 300}px) rotate(${Math.random() * 20 - 10}deg)`;
-
-            setTimeout(() => pig.remove(), 7000);
-        }, i * 300);
-    }
+  const pigCount = 5;
+  for (let i = 0; i < pigCount; i++) {
+    setTimeout(() => {
+      const pig = document.createElement('div');
+      pig.innerHTML = `<img src="https://media.tenor.com/C7YIu5Aonj4AAAAM/technoblade-minecraft-movie.gif" style="width: 100px; height: auto;" alt="Techno Pig">`;
+      pig.style.position = 'fixed';
+      pig.style.bottom = (10 + Math.random() * 80) + '%';
+      pig.style.left = '-150px';
+      pig.style.zIndex = '10000';
+      pig.style.transition = `transform ${4 + Math.random() * 2}s linear`;
+      pig.style.pointerEvents = 'none';
+      document.body.appendChild(pig);
+      pig.offsetHeight;
+      pig.style.transform = `translateX(${window.innerWidth + 300}px) rotate(${Math.random() * 20 - 10}deg)`;
+      setTimeout(() => pig.remove(), 7000);
+    }, i * 300);
+  }
 }
 
 function createConfetti() {
-    console.log('Creating confetti...');
-    for (let i = 0; i < 100; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.position = 'fixed';
-        confetti.style.width = (Math.random() * 12 + 8) + 'px';
-        confetti.style.height = (Math.random() * 12 + 8) + 'px';
-        confetti.style.backgroundColor = ['#77DD77', '#897451', '#3C2D22', '#BDB76B', '#559955'][Math.floor(Math.random() * 5)];
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.top = '-20px';
-        confetti.style.zIndex = '10000';
-        confetti.style.opacity = Math.random();
-        confetti.style.pointerEvents = 'none';
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-
-        document.body.appendChild(confetti);
-
-        const animation = confetti.animate([
-            { transform: 'translateY(0) rotate(0)', opacity: 1 },
-            { transform: `translateY(100vh) translateX(${Math.random() * 100 - 50}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
-        ], {
-            duration: Math.random() * 3000 + 2000,
-            easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
-        });
-
-        animation.onfinish = () => confetti.remove();
-    }
+  for (let i = 0; i < 100; i++) {
+    const confetti = document.createElement('div');
+    confetti.style.position = 'fixed';
+    confetti.style.width = (Math.random() * 12 + 8) + 'px';
+    confetti.style.height = (Math.random() * 12 + 8) + 'px';
+    confetti.style.backgroundColor = ['#77DD77', '#897451', '#3C2D22', '#BDB76B', '#559955'][Math.floor(Math.random() * 5)];
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.top = '-20px';
+    confetti.style.zIndex = '10000';
+    confetti.style.opacity = Math.random();
+    confetti.style.pointerEvents = 'none';
+    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(confetti);
+    const animation = confetti.animate([
+      { transform: 'translateY(0) rotate(0)', opacity: 1 },
+      { transform: `translateY(100vh) translateX(${Math.random() * 100 - 50}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+    ], {
+      duration: Math.random() * 3000 + 2000,
+      easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+    });
+    animation.onfinish = () => confetti.remove();
+  }
 }

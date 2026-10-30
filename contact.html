@@ -12,10 +12,13 @@
       grid-template-columns: minmax(0, 1fr) minmax(300px, 0.8fr);
       gap: 28px;
       align-items: stretch;
+      min-height: calc(100vh - 200px);
+      align-content: center;
     }
 
     .contact-hero h1 {
-      font-size: clamp(36px, 5.2vw, 64px);
+      font-size: clamp(38px, 5.2vw, 66px);
+      letter-spacing: -0.03em;
       margin-bottom: 20px;
     }
 
@@ -40,7 +43,8 @@
 
     .vision-box h3,
     .references-box h3 {
-      font: 650 20px var(--font-serif);
+      font: 600 20px var(--font-display);
+      letter-spacing: -0.01em;
       margin-bottom: 12px;
     }
 
@@ -115,8 +119,8 @@
       <a href="/" class="logo-mark" style="text-decoration:none;">
         <div class="logo-badge" aria-hidden="true"><span>D</span></div>
         <div>
-          <div style="font-size:13px;font-weight:650;">Darsh Gupta</div>
-          <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono);">Aerospace / RF / Embedded</div>
+          <div class="logo-name">Darsh Gupta</div>
+          <div class="logo-tag">Aerospace / RF / Embedded</div>
         </div>
       </a>
       <div style="display:flex;gap:16px;align-items:center;">
@@ -125,7 +129,7 @@
           <a href="/projects.html">Projects</a>
           <a href="/education.html">Education</a>
           <a href="/interests.html">Interests</a>
-          <a href="/contact.html">Contact</a>
+          <a href="/contact.html" aria-current="page">Contact</a>
         </nav>
         <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><div class="theme-toggle-dot"></div></button>
       </div>

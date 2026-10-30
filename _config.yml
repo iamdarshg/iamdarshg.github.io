@@ -1,5 +1,5 @@
-title: Darsh Gupta | Aerospace, RF & Embedded Systems
-description: Portfolio of aerospace, RF, and embedded systems projects
+title: "Darsh Gupta | Aerospace, RF & Embedded Systems"
+description: "Portfolio of Darsh Gupta: aerospace, RF, embedded systems, UAVs, SDR, and ML-assisted engineering research."
 author: Darsh Gupta
 email: darshgu77@gmail.com
 url: https://iamdarshg.github.io
@@ -11,7 +11,7 @@ exclude:
   - .gitignore
   - README.md
   - LICENSE
+  - output
 
-theme: jekyll-theme-minimal
 plugins:
   - jekyll-seo-tag

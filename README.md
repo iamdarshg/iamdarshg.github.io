@@ -7,93 +7,66 @@
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)]()
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)]()
 
-Professional portfolio website built for GitHub Pages. Multi-page structure with projects, education, and contact information.
+Professional portfolio website for Darsh Gupta — aerospace, RF, and embedded systems builder. Built for GitHub Pages as a multi-page static site with a live repository feed synced from the GitHub API.
 
 ## Site Structure
 
 ```
-├── index.html              Landing page - quick overview
-├── projects.html           Showcase of featured projects
-├── education.html          Technical skills and experience timeline
-├── contact.html            Contact information and references
-├── _config.yml            Jekyll configuration
+├── index.html              Landing page — hero, build pipeline, research threads
+├── projects.html           Featured builds + live GitHub repository feed
+├── education.html          Academic track, research, experience timeline
+├── interests.html          Personal interests (gym, swimming, MUNs, gaming)
+├── contact.html            Contact methods, references, what I'm seeking
+├── _config.yml             Jekyll configuration
 └── assets/
     ├── css/
-    │   └── shared.css     Shared styles and design tokens
+    │   └── shared.css     Design system: tokens, components, both themes
     ├── js/
-    │   └── app.js         Theme toggle and navigation
-    └── images/            Stock photos and project visuals
+    │   └── app.js         Theme toggle, live repo feed, project modal, reveals
+    └── images/            Project visuals and workbench photography
 ```
 
 ## Features
 
-- **Light & Dark Mode**: Toggle theme with switch in header (preference saved to localStorage)
-- **Responsive Design**: Mobile-first approach, tested on all device sizes
-- **No Comments**: Clean HTML/CSS/JS with zero code comments
-- **Minimal Wordcount**: Reduced AI-adjacent language, technical terminology
-- **Multiple Pages**: Split into dedicated pages for projects, education, and contact
-- **GitHub Pages Ready**: Built with Jekyll, served directly from repository
+- **Live GitHub feed** — the Projects page fetches all public repos from `api.github.com/users/iamdarshg/repos`, filters forks and the portfolio repo itself, and renders cards with language colors, star counts, freshness, and README snapshots (fetched in background). Falls back to a static list if the API is unreachable.
+- **Light & Dark Mode** — toggle in the header, preference saved to `localStorage`. The system is token-driven (`data-color-scheme` on `<html>`), so both themes share one component system.
+- **Design system** — Space Grotesk display + IBM Plex Mono data type, single electric-cyan accent, blueprint-grid background, tinted shadows, unified radius scale, scroll-reveal motion (honors `prefers-reduced-motion`).
+- **Project detail modals** — click any repo card to open a modal with curated detail sections plus the live README, rendered via `marked`.
+- **Responsive** — mobile-first collapse for every grid, tested down to 360px.
+- **No build step** — plain HTML/CSS/JS, served directly by GitHub Pages. No comments in the HTML (per project convention).
 
 ## Setup Instructions
 
-1. **Clone Repository**
+1. **Clone**
    ```bash
    git clone https://github.com/iamdarshg/iamdarshg.github.io
    cd iamdarshg.github.io
    ```
 
-2. **Optional: Local Testing with Jekyll**
+2. **Local testing** (any static server works; Python is easiest)
    ```bash
-   gem install jekyll bundler
-   jekyll serve
+   python -m http.server 8000
    ```
-   Visit `http://localhost:4000`
+   Visit `http://localhost:8000`. Jekyll also works (`jekyll serve`) but is not required.
 
-3. **Deploy to GitHub Pages**
-   - Push to `main` branch
-   - GitHub automatically builds and deploys
-   - Site available at `https://iamdarshg.github.io`
+3. **Deploy**
+   - Push to `main` — GitHub Pages builds and deploys automatically.
+   - Site: `https://iamdarshg.github.io`
 
-## Images
+## Keeping the feed current
 
-All images in `assets/images/` are non-licensed stock photos from Unsplash:
+The repo feed is live by design — it reads the GitHub API on page load, so new public repos appear automatically (session-cached to stay well under rate limits). No manual lists to maintain.
 
-- `hero-workspace.jpg` - Workspace with electronics
-- `code-sdr.jpg` - RF development board
-- `drone-v2.svg` - Placeholder for aircraft platform (replace with photo)
-- `physics-sim.svg` - Placeholder for simulation (replace with screenshot)
+Curated content that *does* need manual love:
 
-To replace placeholder SVGs:
-1. Get your own high-contrast photo
-2. Save as JPEG/PNG to `assets/images/`
-3. Update image path in `projects.html`
+- **Featured projects** on `projects.html` and the **status board** on `index.html` — update these when a new project becomes the main thread.
+- **Modal detail sections** in `assets/js/app.js` (`projectDetails`) — add a curated entry for any repo you want a rich detail view for.
+- **Artwork mapping** in `assets/js/app.js` (`repoArtwork`) — point new repos at the right image.
 
-## Customization
+## Content rules
 
-### Colors & Typography
-Edit `assets/css/shared.css` - all design tokens defined as CSS variables
-
-### Content
-Update text in individual HTML files. Each page is self-contained.
-
-### Theme Toggle
-Works automatically - no setup needed. Preference stored in `localStorage`
-
-## Compliance
-
-- ✅ Split into multiple pages
-- ✅ Light & dark mode with toggle
-- ✅ No HTML comments
-- ✅ Reduced AI-adjacent language
-- ✅ Local, non-licensed images
-- ✅ GitHub Pages compatible
-- ✅ Minimal text, focused content
-
-## Browser Support
-
-- Modern browsers (Chrome, Firefox, Safari, Edge)
-- Mobile responsive
-- Graceful degradation without JavaScript
+- Public-facing signal only: projects, education, activity. No private schedules, scores, or planning notes.
+- Every repo card that links to GitHub must exist on the profile — no dead links (this is why the feed is API-driven).
 
 ## License
 

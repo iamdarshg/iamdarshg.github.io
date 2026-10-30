@@ -5,112 +5,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interests | Darsh Gupta</title>
   <meta name="description" content="Personal interests, hobbies, and the stories behind them." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305080f'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='36' font-weight='700' fill='%232ad4ff' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/assets/css/shared.css" />
   <style>
     .interests-nav {
       position: sticky;
-      top: 20px;
+      top: 96px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
       max-width: 200px;
     }
 
     .interests-nav a {
-      font-size: 14px;
-      color: var(--color-text-secondary);
-      padding: 8px 12px;
-      border-radius: 8px;
+      font: 500 13px var(--font-sans);
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
       transition: all 0.2s;
     }
 
     .interests-nav a:hover {
-      background: rgba(var(--color-brown-600-rgb), 0.05);
-      color: var(--color-primary);
+      color: var(--text);
+      border-color: var(--line);
     }
 
     .interests-nav a.active {
-      color: var(--color-primary);
-      background: rgba(var(--color-brown-600-rgb), 0.1);
-      font-weight: 600;
+      color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+      background: var(--surface-soft);
     }
 
     .interests-layout {
       display: grid;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 200px minmax(0, 1fr);
       gap: 60px;
-      margin-top: 40px;
+      margin-top: 12px;
+    }
+
+    .interests-page-head {
+      margin-bottom: 40px;
+    }
+
+    .interests-page-head h1 {
+      font-size: clamp(38px, 5vw, 58px);
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .interests-page-head p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 560px;
+      line-height: 1.65;
     }
 
     .blog-post {
-      max-width: 700px;
-      font-family: var(--font-family-serif);
-      font-size: 15px; /* Dropped from 16px */
+      max-width: 720px;
+      font-size: 15px;
       line-height: 1.7;
-      color: var(--color-text-secondary);
+      color: var(--muted);
     }
 
     .blog-section {
-      margin-bottom: 80px;
-      padding: 32px;
-      border-radius: 20px;
-      border: 1px solid var(--color-border);
-      background: rgba(var(--color-brown-600-rgb), 0.02);
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      margin-bottom: 28px;
+      padding: 30px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
     }
 
     .blog-section:hover {
-      transform: translateY(-4px);
+      transform: translateY(-3px);
+      border-color: var(--line-strong);
+      box-shadow: var(--shadow);
     }
 
     .blog-section h2 {
-      font-size: 28px; /* Dropped from 32px */
-      margin-bottom: 20px;
-      color: var(--color-text);
-      font-family: var(--font-family-serif);
+      font: 600 25px var(--font-display);
+      letter-spacing: -0.01em;
+      margin-bottom: 18px;
+      color: var(--text);
     }
 
     .blog-section p {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+    }
+
+    .blog-section p:last-child {
+      margin-bottom: 0;
     }
 
     .blog-section strong {
-      color: var(--color-text);
+      color: var(--text);
       font-weight: 600;
     }
 
-    /* Adaptive Theme Overrides */
-    .section-gym:hover { border-color: var(--theme-gym-primary); background: var(--theme-gym-bg); }
-    .section-swimming:hover { border-color: var(--theme-water-primary); background: var(--theme-water-bg); }
-    .section-mun:hover { border-color: var(--theme-mun-primary); background: var(--theme-mun-bg); }
-    .section-gaming:hover { border-color: var(--theme-pixel-primary); background: var(--theme-pixel-bg); }
+    .blog-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--accent);
+      font: 600 10.5px var(--font-mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .blog-kicker::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: var(--accent);
+    }
 
     .easter-egg-trigger {
       cursor: pointer;
-      border-bottom: 1px dashed var(--color-primary);
-      color: var(--color-primary);
+      border-bottom: 1px dashed var(--accent);
+      color: var(--accent);
       position: relative;
       display: inline-block;
+    }
+
+    .easter-egg-trigger:hover {
+      color: var(--amber);
+      border-color: var(--amber);
     }
 
     @media (max-width: 960px) {
       .interests-layout {
         grid-template-columns: 1fr;
+        gap: 28px;
       }
       .interests-nav {
         display: none;
       }
     }
 
-    /* Animation classes */
-    .pig-animation {
-        position: fixed;
-        bottom: 20%;
-        left: -150px;
-        width: 100px;
-        z-index: 2000;
-        pointer-events: none;
-        transition: transform 5s linear;
+    @media (max-width: 560px) {
+      .blog-section {
+        padding: 22px;
+      }
     }
   </style>
 </head>
@@ -118,22 +156,18 @@
   <div id="top" class="container">
     <header>
       <a href="/" class="logo-mark" style="text-decoration: none;">
-        <div class="logo-badge" aria-hidden="true">
-          <span>D</span>
-        </div>
+        <div class="logo-badge" aria-hidden="true"><span>D</span></div>
         <div>
-          <div style="font-size:13px;color:rgba(226,232,240,0.9);font-weight:550;">Darsh Gupta</div>
-          <div style="font-size:11px;color:var(--color-text-secondary);">
-            Aerospace, RF & Embedded Systems • Grade 12
-          </div>
+          <div class="logo-name">Darsh Gupta</div>
+          <div class="logo-tag">Aerospace / RF / Embedded</div>
         </div>
       </a>
-      <div style="display: flex; gap: 16px; align-items: center;">
+      <div style="display:flex;gap:16px;align-items:center;">
         <nav class="nav-links">
           <a href="/">Home</a>
           <a href="/projects.html">Projects</a>
           <a href="/education.html">Education</a>
-          <a href="/interests.html">Interests</a>
+          <a href="/interests.html" aria-current="page">Interests</a>
           <a href="/contact.html">Contact</a>
         </nav>
         <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
@@ -143,13 +177,14 @@
     </header>
 
     <main>
-      <div class="section-header" style="margin-bottom: 40px;">
-        <div>
-          <h1 style="font-size: 48px; margin-bottom: 12px;">Beyond the lab</h1>
-          <p class="section-subtitle" style="font-size: 16px; font-family: var(--font-family-serif); font-style: italic;">
-            A few things that keep me busy when I'm not designing circuits.
-          </p>
+      <div class="interests-page-head">
+        <div class="section-title" style="margin-bottom:14px;">
+          <span class="badge-num">00</span>
+          <span>Beyond the lab</span>
         </div>
+        <p>
+          A few things that keep me busy when I'm not designing circuits.
+        </p>
       </div>
 
       <div class="interests-layout">
@@ -163,46 +198,50 @@
         </aside>
 
         <div class="blog-post">
-          <section id="gym" class="blog-section section-gym">
+          <section id="gym" class="blog-section">
+            <div class="blog-kicker">The Gym</div>
             <h2>The "Push" — Biological Overclocking</h2>
             <p>
-              In early 2025, I realized my physical hardware was severely under-optimized for a 16-hour-a-day "staring at a monitor" schedule. I initially hired a trainer, but after three sessions, it felt like I was running a basic `while(true)` loop: repetitive, low-impact, and honestly, a bit boring.
+              In early 2025, I realized my physical hardware was severely under-optimized for a 16-hour-a-day "staring at a monitor" schedule. I initially hired a trainer, but after three sessions, it felt like I was running a basic <strong>while(true)</strong> loop: repetitive, low-impact, and honestly, a bit boring.
             </p>
             <p>
-              So, I did what any engineer does: I became my own coach. I started researching hypertrophy, mechanical tension, and progressive overload with the same intensity I apply to PCB trace routing. Now, the <strong>gym</strong> is my favorite way to debug my own stress. There's something incredibly satisfying about hitting a PR—it's like finally getting a clean build on a complex project. 10/10, would recommend for any fellow code-monkeys.
+              So, I did what any engineer does: I became my own coach. I started researching hypertrophy, mechanical tension, and progressive overload with the same intensity I apply to PCB trace routing. Now the <strong>gym</strong> is my favorite way to debug my own stress. There's something incredibly satisfying about hitting a PR — it's like finally getting a clean build on a complex project.
             </p>
           </section>
 
-          <section id="swimming" class="blog-section section-swimming">
+          <section id="swimming" class="blog-section">
+            <div class="blog-kicker">Swimming</div>
             <h2>Hydrodynamics & Mental Health</h2>
             <p>
-              My family often tells a story from a childhood trip to <strong>Puri, Odisha</strong>. Apparently, I didn't just walk toward <strong>Chilika Lake</strong>; I practically tried to merge with it. My obsession with water has always been... a little extreme.
+              My family often tells a story from a childhood trip to <strong>Puri, Odisha</strong>. Apparently I didn't just walk toward <strong>Chilika Lake</strong> — I practically tried to merge with it. My obsession with water has always been... a little extreme.
             </p>
             <p>
-              Since then, I've turned that obsession into a decent freestyle stroke. <strong>Swimming</strong> is where I do my best thinking. When you're underwater, there are no Slack notifications, no compiler errors—just you and the fluid dynamics of a 25-meter pool. It's the ultimate low-latency environment for the brain. Plus, it's a great excuse to wear goggles and look slightly more like a cyborg.
+              Since then, I've turned that obsession into a decent freestyle stroke. <strong>Swimming</strong> is where I do my best thinking. When you're underwater there are no notifications, no compiler errors — just you and the fluid dynamics of a 25-meter pool. It's the ultimate low-latency environment for the brain.
             </p>
           </section>
 
-          <section id="muns" class="blog-section section-mun">
+          <section id="muns" class="blog-section">
+            <div class="blog-kicker">MUNs</div>
             <h2>MUNs — Competitive Talking</h2>
             <p>
               My MUN (Model United Nations) career is essentially a record of me learning how to sound like I know what I'm talking about. Between <strong>Harvard MUN</strong> (2023 & 2024) and <strong>IIT Techfest MUN</strong>, I've spent an embarrassing amount of time debating things I barely understood at first.
             </p>
             <p>
-              But here's the secret: MUNs are just high-stakes verbal engineering. You have a problem, you have constraints (other countries' interests), and you have to architect a resolution that doesn't cause a global crash. It's where I learned that communication is just another interface to master. If you can explain nuclear non-proliferation to a room of sleep-deprived teenagers, explaining a Kalman filter to a peer is easy.
+              But here's the secret: MUNs are just high-stakes verbal engineering. You have a problem, you have constraints (other countries' interests), and you have to architect a resolution that doesn't cause a global crash. It's where I learned that communication is just another interface to master.
             </p>
           </section>
 
-          <section id="gaming" class="blog-section section-gaming">
+          <section id="gaming" class="blog-section">
+            <div class="blog-kicker">Gaming</div>
             <h2>Digital Sandbox — The Legacy of a Legend</h2>
             <p>
               I firmly believe that <strong>Minecraft</strong> is the greatest engineering tool ever created for children (and adults who refuse to grow up). It's where I first learned about logic gates, resource management, and why "creeper" is synonymous with "unplanned hardware failure."
             </p>
             <p>
-              A huge part of my digital worldview was shaped by <span class="easter-egg-trigger technoblade-text" id="technoblade-trigger">Technoblade</span>. He taught me that being "good" at something—even a block game—requires strategy, dedication, and a healthy amount of self-deprecating humor. He showed us that the internet is a tool for building community and telling stories. May his legend never die.
+              A huge part of my digital worldview was shaped by <span class="easter-egg-trigger technoblade-text" id="technoblade-trigger">Technoblade</span>. He taught me that being "good" at something — even a block game — requires strategy, dedication, and a healthy amount of self-deprecating humor. May his legend never die.
             </p>
             <p>
-              When I'm not in a <span class="easter-egg-trigger minecraft-text" id="minecraft-trigger">Minecraft</span> world, you'll find me playing <strong>Trackmania</strong> (because who doesn't love pixel-perfect driving lines?) or <strong>Overwatch</strong> (because sometimes you just need to blow things up to relax).
+              When I'm not in a <span class="easter-egg-trigger minecraft-text" id="minecraft-trigger">Minecraft</span> world, you'll find me playing <strong>Trackmania</strong> (pixel-perfect driving lines) or <strong>Overwatch</strong> (sometimes you just need to blow things up to relax).
             </p>
           </section>
         </div>
@@ -210,11 +249,11 @@
     </main>
 
     <footer>
-      <span>© <span id="year"></span> Darsh Gupta • Built for GitHub Pages</span>
+      <span>Copyright <span id="year"></span> Darsh Gupta. Built for GitHub Pages.</span>
       <div class="footer-links">
         <a href="mailto:darshgu77@gmail.com">Email</a>
         <a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="#top">Back to top ↑</a>
+        <a href="#top">Back to top</a>
       </div>
     </footer>
   </div>
@@ -223,5 +262,3 @@
   <script src="/assets/js/app.js"></script>
 </body>
 </html>
-
-

@@ -5,32 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects | Darsh Gupta</title>
   <meta name="description" content="Technical portfolio featuring aerospace systems, RF engineering, embedded control, and computational research." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305080f'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='36' font-weight='700' fill='%232ad4ff' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/assets/css/shared.css" />
   <style>
     .projects-hero {
       display: grid;
-      grid-template-columns: minmax(0, 0.94fr) minmax(340px, 1.06fr);
-      gap: 28px;
+      grid-template-columns: minmax(0, 1.02fr) minmax(400px, 0.98fr);
+      gap: 44px;
       align-items: stretch;
-      margin-bottom: 48px;
+      margin-bottom: 56px;
+      min-height: calc(100vh - 140px);
     }
 
     .projects-hero-copy {
       display: grid;
       align-content: center;
-      gap: 18px;
+      gap: 20px;
     }
 
     .projects-hero-copy h1 {
-      max-width: 780px;
-      font-size: clamp(34px, 5vw, 58px);
+      max-width: 720px;
+      font-size: clamp(38px, 5vw, 62px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+    }
+
+    .projects-hero-copy h1 em {
+      font-style: italic;
+      color: var(--accent);
     }
 
     .projects-hero-copy p {
       max-width: 620px;
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.72;
+      font-size: 14.5px;
+      line-height: 1.7;
     }
 
     .hero-chips {
@@ -43,59 +52,79 @@
       display: inline-flex;
       align-items: center;
       min-height: 30px;
-      padding: 0 12px;
-      border: 1px solid rgba(56, 189, 248, 0.28);
+      padding: 0 13px;
+      border: 1px solid var(--line-strong);
       border-radius: 999px;
-      background: rgba(12, 18, 30, 0.84);
-      color: #d7f5fb;
+      background: var(--surface-soft);
+      color: var(--text);
       font: 500 11px var(--font-mono);
+      transition: border-color 180ms ease, color 180ms ease;
+    }
+
+    .hero-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .hero-stat {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+    }
+
+    .hero-stat strong {
+      display: block;
+      font: 600 20px var(--font-mono);
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .hero-stat span {
+      color: var(--muted);
+      font: 500 10.5px var(--font-mono);
     }
 
     .projects-hero-visual {
       display: grid;
-      grid-template-columns: 1.25fr 0.9fr;
+      grid-template-columns: 1.2fr 0.9fr;
+      grid-template-rows: 1fr 1fr;
       gap: 14px;
-      min-height: 420px;
+      min-height: 480px;
     }
 
-    .hero-panel,
-    .hero-stack-card,
-    .project-card,
-    .repo-card-media {
-      overflow: hidden;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      border-radius: var(--radius-lg);
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .hero-panel,
-    .hero-stack-card {
+    .hero-panel {
       position: relative;
-      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
     }
 
-    .hero-panel img,
-    .hero-stack-card img,
-    .project-image,
-    .repo-card-media img {
+    .hero-panel img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .hero-panel::after,
-    .hero-stack-card::after,
-    .repo-card-media::after {
+    .hero-panel::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent 38%, rgba(7, 11, 18, 0.8));
+      background: linear-gradient(180deg, transparent 42%, rgba(5, 8, 15, 0.84));
       pointer-events: none;
     }
 
-    .hero-panel figcaption,
-    .hero-stack-card figcaption {
+    .hero-panel figcaption {
       position: absolute;
       left: 16px;
       right: 16px;
@@ -105,33 +134,52 @@
       gap: 4px;
     }
 
-    .hero-panel figcaption strong,
-    .hero-stack-card figcaption strong {
-      color: #f8fbff;
-      font: 650 14px var(--font-serif);
+    .hero-panel figcaption strong {
+      font: 600 15px var(--font-display);
     }
 
-    .hero-panel figcaption span,
-    .hero-stack-card figcaption span {
-      color: rgba(237, 245, 255, 0.78);
-      font: 500 11px/1.45 var(--font-mono);
+    .hero-panel figcaption span {
+      color: var(--muted);
+      font: 500 11px/1.5 var(--font-mono);
     }
 
-    .hero-stack {
-      display: grid;
-      gap: 14px;
-    }
-
-    .projects-section {
-      margin-bottom: 48px;
+    .hero-panel--full {
+      grid-row: 1 / 3;
     }
 
     .section-divider {
       height: 1px;
-      background: rgba(148, 163, 184, 0.2);
-      margin: 48px 0;
+      background: var(--line);
+      margin: 56px 0;
     }
 
+    /* ---------- scroll-driven project film ---------- */
+    .project-film { position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(320px,.75fr); gap:70px; min-height:230vh; margin:80px calc(50% - 50vw) 0; padding:0 max(20px,calc((100vw - 1200px)/2)); background:linear-gradient(180deg,transparent,rgba(42,212,255,.04),transparent); }
+    .film-sticky { position:sticky; top:12vh; height:76vh; align-self:start; display:grid; place-items:center; }
+    .film-visual { position:absolute; width:min(100%,650px); height:72%; overflow:hidden; border:1px solid var(--line-strong); border-radius:var(--radius-lg); box-shadow:var(--shadow); background:var(--surface); will-change:transform,opacity,clip-path; }
+    .film-visual img { width:100%;height:100%;object-fit:cover;display:block; }
+    .film-visual::after { content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(3,8,15,.85)); }
+    .film-visual span { position:absolute;z-index:1;left:20px;bottom:18px;color:var(--accent);font:600 10px var(--font-mono);letter-spacing:.12em; }
+    .film-visual--one { transform:rotate(-4deg) scale(.82); }
+    .film-visual--two { transform:rotate(3deg) scale(.76); opacity:.7; }
+    .film-visual--three { transform:rotate(-1deg) scale(.7); opacity:.45; }
+    .film-copy { padding-top:16vh;padding-bottom:40vh; }
+    .film-step { min-height:62vh;display:grid;align-content:center;opacity:.25;transition:opacity .3s ease; }
+    .film-step small { color:var(--accent);font:600 10px var(--font-mono);letter-spacing:.15em; }
+    .film-step h2 { font-size:clamp(42px,6vw,78px);letter-spacing:-.055em;margin:12px 0; }
+    .film-step p { max-width:350px;color:var(--muted);font-size:15px;line-height:1.7; }
+    @supports (animation-timeline:view()) {
+      .film-visual--one { animation:film-one linear both;animation-timeline:view();animation-range:entry 0% cover 80%; }
+      .film-visual--two { animation:film-two linear both;animation-timeline:view();animation-range:entry 10% cover 85%; }
+      .film-visual--three { animation:film-three linear both;animation-timeline:view();animation-range:entry 20% cover 90%; }
+      .film-step { animation:film-focus linear both;animation-timeline:view();animation-range:entry 25% cover 70%; }
+    }
+    @keyframes film-one { from{transform:rotate(-10deg) scale(.55);opacity:.2;clip-path:inset(20% 15% round 16px)} to{transform:rotate(-4deg) scale(1);opacity:1;clip-path:inset(0 round 16px)} }
+    @keyframes film-two { from{transform:translate(15%,12%) rotate(12deg) scale(.5);opacity:0} to{transform:translate(0) rotate(3deg) scale(.92);opacity:.78} }
+    @keyframes film-three { from{transform:translate(-15%,18%) rotate(-14deg) scale(.4);opacity:0} to{transform:translate(0) rotate(-1deg) scale(.84);opacity:.62} }
+    @keyframes film-focus { from{opacity:.2;transform:translateY(35px)} 45%,70%{opacity:1;transform:none} to{opacity:.25;transform:translateY(-20px)} }
+
+    /* featured */
     .projects-grid {
       display: grid;
       gap: 20px;
@@ -143,93 +191,77 @@
     }
 
     .all-projects-grid {
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
     }
 
     .project-card {
-      transition: transform 0.24s ease, border-color 0.24s ease;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 0;
+      overflow: hidden;
       cursor: pointer;
+      transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
     }
 
     .project-card:hover {
-      border-color: rgba(56, 189, 248, 0.8);
-      transform: translateY(-2px);
-    }
-
-    .featured-card {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 20px;
+      border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
     }
 
     .project-image {
-      border-right: 1px solid rgba(148, 163, 184, 0.3);
       min-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-right: 1px solid var(--line);
     }
 
     .project-content {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      padding: 20px;
-    }
-
-    .compact-content {
-      padding: 16px;
+      padding: 22px;
     }
 
     .project-header h3 {
-      margin: 0 0 4px 0;
-      color: #e5e7eb;
-      font-size: 18px;
-    }
-
-    .compact-header h4 {
-      margin: 0 0 8px 0;
-      color: #e5e7eb;
-      font-size: 15px;
+      font: 600 19px var(--font-display);
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
     }
 
     .project-tag {
       display: inline-block;
-      padding: 4px 8px;
-      border: 1px solid rgba(56, 189, 248, 0.6);
+      padding: 4px 10px;
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      color: #bae6fd;
-      font-size: 11px;
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--accent);
+      font: 500 10.5px var(--font-mono);
     }
 
     .project-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 11px;
+      gap: 14px;
+      color: var(--faint);
+      font: 500 11px var(--font-mono);
     }
 
     .project-description {
-      color: rgba(209, 213, 219, 0.92);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .compact-description {
-      display: -webkit-box;
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      font-size: 12px;
-      line-height: 1.5;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.65;
     }
 
     .project-highlights ul {
       display: grid;
-      gap: 4px;
+      gap: 5px;
       margin: 0;
       padding-left: 18px;
-      color: rgba(209, 213, 219, 0.95);
-      font-size: 12px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.6;
     }
 
     .project-footer {
@@ -238,106 +270,59 @@
       justify-content: space-between;
       gap: 12px;
       margin-top: auto;
-      padding-top: 12px;
-      border-top: 1px solid rgba(148, 163, 184, 0.3);
-    }
-
-    .badge-status {
-      display: inline-block;
-      padding: 3px 8px;
-      border: 1px solid rgba(248, 250, 252, 0.12);
-      border-radius: 999px;
-      font-size: 10px;
-    }
-
-    .badge-status--active {
-      background: rgba(56, 189, 248, 0.16);
-      border-color: rgba(56, 189, 248, 0.6);
-      color: #e0f2fe;
-    }
-
-    .badge-status--research {
-      background: rgba(129, 140, 248, 0.18);
-      border-color: rgba(129, 140, 248, 0.6);
-      color: #e0e7ff;
-    }
-
-    .badge-status--complete {
-      background: rgba(34, 197, 94, 0.16);
-      border-color: rgba(34, 197, 94, 0.6);
-      color: #dcfce7;
-    }
-
-    .badge-status--archived {
-      background: rgba(148, 163, 184, 0.16);
-      border-color: rgba(148, 163, 184, 0.6);
-      color: #e2e8f0;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
     }
 
     .project-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 14px;
       align-items: center;
     }
 
     .project-links a {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      color: #bfdbfe;
-      font-size: 12px;
-      text-decoration: none;
-      transition: color 0.2s;
+      gap: 6px;
+      color: var(--text);
+      font: 600 12px var(--font-mono);
     }
 
     .project-links a:hover {
-      color: #60a5fa;
+      color: var(--accent);
     }
 
-    .readme-preview {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.22);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.035);
+    .project-links .hint {
+      color: var(--faint);
+      font: 500 11px var(--font-mono);
     }
 
-    .readme-kicker {
-      color: #7dd3fc;
-      font: 600 10px var(--font-mono);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .readme-summary {
-      color: rgba(226, 232, 240, 0.95);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .readme-points {
-      display: grid;
-      gap: 6px;
-      margin: 0;
-      padding-left: 16px;
-      color: rgba(209, 213, 219, 0.9);
-      font-size: 11px;
-      line-height: 1.55;
-    }
-
+    /* repo cards */
     .repo-card {
       display: grid;
-      grid-template-rows: 180px 1fr;
+      grid-template-rows: 170px 1fr;
+      cursor: pointer;
     }
 
     .repo-card-media {
       position: relative;
-      border: none;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-      border-radius: 0;
-      min-height: 180px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .repo-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .repo-card-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(5, 8, 15, 0.86));
+      pointer-events: none;
     }
 
     .repo-card-media figcaption {
@@ -347,26 +332,85 @@
       bottom: 12px;
       z-index: 1;
       display: flex;
-      align-items: end;
+      align-items: flex-end;
       justify-content: space-between;
       gap: 12px;
     }
 
     .repo-card-media strong {
-      color: #f8fbff;
-      font: 650 13px var(--font-serif);
+      color: var(--text);
+      font: 600 14px var(--font-display);
     }
 
     .repo-card-media span {
-      color: rgba(237, 245, 255, 0.74);
+      color: var(--muted);
       font: 500 10px var(--font-mono);
     }
 
-    .repo-card-media .badge-status {
-      backdrop-filter: blur(10px);
-      background: rgba(7, 11, 18, 0.58);
+    .compact-content {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
+    .compact-header h4 {
+      font: 600 16px var(--font-display);
+      letter-spacing: -0.01em;
+    }
+
+    .compact-description {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    .readme-preview {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+    }
+
+    .readme-kicker {
+      color: var(--accent);
+      font: 600 9.5px var(--font-mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .readme-summary {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .readme-points {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      padding-left: 16px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .lang-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    /* modal */
     .detail-modal {
       position: fixed;
       top: 0;
@@ -377,7 +421,9 @@
       display: none;
       overflow-y: auto;
       padding: 40px 20px;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(3, 6, 12, 0.86);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .detail-modal.active {
@@ -389,41 +435,45 @@
     .detail-content {
       position: relative;
       width: 100%;
-      max-width: 900px;
-      padding: 32px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
+      max-width: 880px;
+      padding: 34px;
+      border: 1px solid var(--line-strong);
       border-radius: var(--radius-lg);
-      background: rgba(15, 23, 42, 0.98);
+      background: var(--surface-strong);
+      box-shadow: var(--shadow);
     }
 
     .detail-close {
       position: absolute;
       top: 16px;
       right: 16px;
-      padding: 8px;
-      border: none;
-      background: none;
-      color: #94a3b8;
-      font-size: 24px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 20px;
       line-height: 1;
       cursor: pointer;
-      transition: color 0.2s;
+      transition: color 160ms ease, border-color 160ms ease;
     }
 
     .detail-close:hover {
-      color: #e5e7eb;
+      color: var(--text);
+      border-color: var(--line-strong);
     }
 
     .detail-header {
       margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
     }
 
     .detail-header h2 {
-      margin: 0 0 8px 0;
-      color: #e5e7eb;
-      font-size: 24px;
+      font: 600 26px var(--font-display);
+      letter-spacing: -0.02em;
+      margin: 0 0 10px 0;
     }
 
     .detail-section {
@@ -431,15 +481,14 @@
     }
 
     .detail-section h3 {
+      font: 600 16px var(--font-display);
+      letter-spacing: 0;
       margin: 0 0 12px 0;
-      color: #e5e7eb;
-      font-size: 16px;
-      font-weight: 600;
     }
 
     .detail-section p,
     .detail-section ul {
-      color: rgba(209, 213, 219, 0.95);
+      color: var(--muted);
       font-size: 14px;
       line-height: 1.7;
     }
@@ -453,10 +502,14 @@
       margin-bottom: 6px;
     }
 
+    .detail-section li strong {
+      color: var(--text);
+    }
+
     .readme-content {
       display: grid;
       gap: 12px;
-      color: rgba(226, 232, 240, 0.9);
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
     }
@@ -465,9 +518,8 @@
     .readme-content h2,
     .readme-content h3 {
       margin: 6px 0 0;
-      color: #f8fbff;
-      font-size: 18px;
-      font-family: var(--font-serif);
+      color: var(--text);
+      font: 600 18px var(--font-display);
     }
 
     .readme-content p {
@@ -483,19 +535,31 @@
     }
 
     .readme-content code {
-      padding: 1px 5px;
-      border-radius: 4px;
-      background: rgba(148, 163, 184, 0.12);
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: var(--surface-soft);
       font: 500 11px var(--font-mono);
+      color: var(--accent);
     }
 
     .readme-content pre {
       overflow-x: auto;
       margin: 0;
-      padding: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      border-radius: 8px;
-      background: rgba(2, 6, 23, 0.76);
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(2, 6, 14, 0.6);
+    }
+
+    .readme-content pre code {
+      background: none;
+      color: var(--text);
+    }
+
+    .readme-content a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
 
     .tech-stack {
@@ -505,54 +569,64 @@
       margin-top: 8px;
     }
 
-    .tech-badge {
-      padding: 4px 10px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      border-radius: 4px;
-      background: rgba(30, 41, 59, 0.9);
-      color: #cbd5e1;
-      font-size: 11px;
-    }
-
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
+      gap: 12px;
       margin-top: 12px;
     }
 
     .stat-item {
-      padding: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 8px;
-      background: rgba(30, 41, 59, 0.5);
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-soft);
     }
 
     .stat-label {
       margin-bottom: 4px;
-      color: #94a3b8;
-      font-size: 11px;
+      color: var(--faint);
+      font: 600 10px var(--font-mono);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.08em;
     }
 
     .stat-value {
-      color: #e5e7eb;
-      font-size: 18px;
-      font-weight: 600;
+      color: var(--text);
+      font: 600 18px var(--font-mono);
+      letter-spacing: -0.01em;
     }
 
     @media (max-width: 1024px) {
-      .projects-hero,
-      .projects-hero-visual,
+      .projects-hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .projects-hero-visual {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        min-height: 320px;
+      }
+
+      .hero-panel--full {
+        grid-row: auto;
+        grid-column: 1 / -1;
+      }
+
       .featured-card {
         grid-template-columns: 1fr;
       }
 
+      .project-film { grid-template-columns:1fr; min-height:auto; margin-left:-14px; margin-right:-14px; padding:0 14px; gap:0; }
+      .film-sticky { position:relative;top:auto;height:62vh;min-height:430px; }
+      .film-copy { padding:0 0 10vh; }
+      .film-step { min-height:44vh; }
+
       .project-image {
-        height: 240px;
+        height: 220px;
         border-right: none;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+        border-bottom: 1px solid var(--line);
       }
 
       .all-projects-grid {
@@ -566,7 +640,15 @@
 
     @media (max-width: 640px) {
       .projects-hero-copy h1 {
-        font-size: 30px;
+        font-size: 32px;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .projects-hero-visual {
+        grid-template-columns: 1fr;
       }
 
       .detail-content {
@@ -579,18 +661,16 @@
   <div id="top" class="container">
     <header>
       <a href="/" class="logo-mark" style="text-decoration: none;">
-        <div class="logo-badge" aria-hidden="true">
-          <span>D</span>
-        </div>
+        <div class="logo-badge" aria-hidden="true"><span>D</span></div>
         <div>
-          <div style="font-size:13px;color:rgba(226,232,240,0.9);font-weight:550;">Darsh Gupta</div>
-          <div style="font-size:11px;color:var(--muted);">Aerospace, RF and Embedded Systems / Grade 12</div>
+          <div class="logo-name">Darsh Gupta</div>
+          <div class="logo-tag">Aerospace / RF / Embedded</div>
         </div>
       </a>
       <div style="display:flex;gap:16px;align-items:center;">
         <nav class="nav-links">
           <a href="/">Home</a>
-          <a href="/projects.html">Projects</a>
+          <a href="/projects.html" aria-current="page">Projects</a>
           <a href="/education.html">Education</a>
           <a href="/interests.html">Interests</a>
           <a href="/contact.html">Contact</a>
@@ -604,102 +684,188 @@
     <main>
       <section class="projects-hero">
         <div class="projects-hero-copy">
-          <div class="section-title" style="margin-bottom:0;">
+          <div class="section-title" style="margin-bottom:4px;">
             <span class="badge-num">00</span>
             <span>Build Log</span>
           </div>
-          <h1>Projects that start as notebooks and end up in hardware, tooling, or papers.</h1>
+          <h1>Projects that start as <em>notebooks</em> and end up in hardware, tooling, or papers.</h1>
           <p>
-            This page is the hands-on layer of the portfolio: aircraft electronics, FPGA radio work, simulation-heavy research, and smaller experiments that still teach something worth keeping.
+            The hands-on layer of the portfolio: aircraft electronics, FPGA radio work, simulation-heavy research, and smaller experiments that still teach something worth keeping.
           </p>
           <div class="hero-chips" aria-label="Project themes">
             <span class="hero-chip">Aerospace systems</span>
-            <span class="hero-chip">RF and SDR</span>
+            <span class="hero-chip">RF + SDR</span>
             <span class="hero-chip">Embedded control</span>
-            <span class="hero-chip">CFD and ML</span>
-            <span class="hero-chip">Readable engineering notes</span>
+            <span class="hero-chip">CFD + ML</span>
+            <span class="hero-chip">Electromagnetic sim</span>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat"><strong>31</strong><span>public repositories</span></div>
+            <div class="hero-stat"><strong>4</strong><span>in active development</span></div>
+            <div class="hero-stat"><strong>2</strong><span>research papers drafted</span></div>
           </div>
         </div>
 
         <div class="projects-hero-visual">
-          <figure class="hero-panel">
-            <img src="/assets/images/project-drone.png" alt="Autonomous drone prototype with electronics and workbench lighting" />
+          <figure class="hero-panel hero-panel--full">
+            <img src="/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg" alt="Autonomous drone prototype with electronics and workbench lighting" />
             <figcaption>
               <strong>Autonomy, avionics, iteration</strong>
               <span>Physical systems where routing, firmware, sensing, and testing all matter.</span>
             </figcaption>
           </figure>
-          <div class="hero-stack">
-            <figure class="hero-stack-card">
-              <img src="/assets/images/project-sdr.png" alt="SDR electronics with lab instrumentation and signal analysis display" />
-              <figcaption>
-                <strong>Code-SDR</strong>
-                <span>FPGA signal chain, throughput, and integration.</span>
-              </figcaption>
-            </figure>
-            <figure class="hero-stack-card">
-              <img src="/assets/images/project-research.png" alt="Aerospace research visualization with aerodynamic data overlays" />
-              <figcaption>
-                <strong>Research track</strong>
-                <span>Simulation, surrogate models, and paper-driven exploration.</span>
-              </figcaption>
-            </figure>
-          </div>
+          <figure class="hero-panel">
+            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png" alt="SDR electronics with lab instrumentation and signal analysis display" />
+            <figcaption>
+              <strong>Code-SDR</strong>
+              <span>FPGA signal chain, throughput, integration.</span>
+            </figcaption>
+          </figure>
+          <figure class="hero-panel">
+            <img src="/assets/images/field/smoke_cp.png" alt="Aerospace research visualization with aerodynamic data overlays" />
+            <figcaption>
+              <strong>Research track</strong>
+              <span>Simulation, surrogates, and papers.</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
-      <section class="projects-section">
-        <div class="section-header" style="margin-bottom:32px;">
+      <section class="project-film" aria-label="Project film">
+        <div class="film-sticky">
+          <div class="film-visual film-visual--one"><img src="/assets/images/field/smoke_cp.png" alt="CFD pressure and smoke visualization" loading="lazy" /><span>01 / FLOW</span></div>
+          <div class="film-visual film-visual--two"><img src="/assets/images/field/polar_compare.png" alt="Aerodynamic polar comparison chart" loading="lazy" /><span>02 / VALIDATION</span></div>
+          <div class="film-visual film-visual--three"><img src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png" alt="Rotor hub and blade engineering detail" loading="lazy" /><span>03 / HARDWARE</span></div>
+        </div>
+        <div class="film-copy">
+          <div class="film-step"><small>THE LOOP</small><h2>Model it.</h2><p>A shape is only a hypothesis until the flow gives it an answer.</p></div>
+          <div class="film-step"><small>THE LOOP</small><h2>Measure it.</h2><p>Benchmarks, uncertainty bands, and comparison plots keep the story honest.</p></div>
+          <div class="film-step"><small>THE LOOP</small><h2>Build it.</h2><p>When the numbers survive, the work becomes a board, a rotor, a radio, or a flight.</p></div>
+        </div>
+      </section>
+
+      <section class="projects-section section">
+        <div class="section-header" style="margin-bottom:28px;">
           <div>
-            <div class="section-title" style="margin-bottom:12px;">
+            <div class="section-title" style="margin-bottom:10px;">
               <span class="badge-num">01</span>
               <span>Featured Projects</span>
             </div>
             <p class="section-subtitle">
-              Hardware-software integrated systems from concept to validated prototypes.
+              The current active thread — what I am building and iterating on right now.
             </p>
           </div>
         </div>
 
         <div class="projects-grid featured-grid">
-          <article class="project-card featured-card" onclick="openProjectDetail('drone-v2')">
-            <img src="/assets/images/project-drone.png" alt="Drone-v2 autonomous aircraft platform" class="project-image" />
+          <article class="project-card featured-card reveal" onclick="openProjectDetail('wing3d')">
+            <img src="/assets/images/field/airshow_generated_geometry_g96_topk0075.png" alt="Wing3d transonic solver benchmark work" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
-                  <h3>Drone-v2: Autonomous Aircraft Platform</h3>
+                  <h3>Wing3d: Transonic Small-Disturbance Solver</h3>
                 </div>
-                <span class="project-tag">Aerospace / RF / Embedded</span>
+                <span class="project-tag">Aerospace / CFD / Python</span>
                 <div class="project-meta">
-                  <span>Dec 2024 to Q2 2026</span>
-                  <span>C / Python / AGS Script</span>
-                  <span>Stars: 1</span>
+                  <span>Active — Oct 2026</span>
+                  <span>Python</span>
                 </div>
                 <p class="project-description">
-                  Multi-layer PCB autonomous aircraft with integrated RF front-end and production-ready firmware. Full lifecycle development from schematic design through manufacturing files and bring-up validation.
+                  A transonic small-disturbance (TSD) solver benchmark program: the goal is matching OpenFOAM-scale accuracy for wing flows at a meaningful fraction of the runtime — 3-5x faster per (geometry, Mach) case at matched accuracy.
                 </p>
                 <div class="project-highlights">
                   <ul>
-                    <li>Custom multi-layer PCB with integrated RF front-end and tuned antenna geometry</li>
-                    <li>Complete sensor suite: IMU, GPS, barometric sensing with analog interfaces</li>
-                    <li>Active firmware: sensor fusion, control loops, telemetry streaming</li>
-                    <li>Hardware iteration: v1 archived, v2 incorporating design improvements</li>
+                    <li>Hyperparameter-driven uncertainty quantification: grid family × epochs × supersonic-mask state</li>
+                    <li>Claims a CL ± band from the ensemble instead of a single point</li>
+                    <li>Every ablation and sensitivity measurement feeds the uncertainty bound</li>
                   </ul>
+                </div>
+                <div class="project-links" style="margin-top:6px;">
+                  <a href="https://github.com/iamdarshg/wing3d" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub →</a>
+                  <span class="hint">CL ± bound reporting, ablation audit</span>
                 </div>
               </div>
               <div class="project-footer">
-                <span class="badge-status badge-status--active">In Active Development</span>
+                <span class="badge-status badge-status--active">Active Research</span>
                 <div class="project-links">
-                  <img src="https://img.shields.io/github/stars/iamdarshg/drone-v2?style=flat-square&color=teal" alt="GitHub stars" />
-                  <a href="https://github.com/iamdarshg/drone-v2" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub -></a>
-                  <span style="font-size:12px;color:#94a3b8;">Click for details</span>
+                  <span class="hint">Click for details</span>
                 </div>
               </div>
             </div>
           </article>
 
-          <article class="project-card featured-card" onclick="openProjectDetail('code-sdr')">
-            <img src="/assets/images/project-sdr.png" alt="Code-SDR FPGA board" class="project-image" />
+          <article class="project-card featured-card reveal" onclick="openProjectDetail('copperline')">
+            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png" alt="Copperline headless PCB autorouter" class="project-image" />
+            <div class="project-content">
+              <div>
+                <div class="project-header">
+                  <h3>Copperline: Headless PCB Autorouter for Agents</h3>
+                </div>
+                <span class="project-tag">C++20 / PCB / CLI Tooling</span>
+                <div class="project-meta">
+                  <span>Active — Oct 2026</span>
+                  <span>C++</span>
+                </div>
+                <p class="project-description">
+                  A headless C++20 PCB autorouter designed for agent-driven board layout: CLI-only, JSON-first, and scriptable. Turns routing into a repeatable operation instead of a GUI session.
+                </p>
+                <div class="project-highlights">
+                  <ul>
+                    <li>JSON-first interface — routing problems and solutions as data</li>
+                    <li>C++20 performance for real board sizes</li>
+                    <li>Built for the toolchain: agents and CI can call it</li>
+                  </ul>
+                </div>
+                <div class="project-links" style="margin-top:6px;">
+                  <a href="https://github.com/iamdarshg/copperline" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub →</a>
+                </div>
+              </div>
+              <div class="project-footer">
+                <span class="badge-status badge-status--active">Active Development</span>
+                <div class="project-links">
+                  <span class="hint">Click for details</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card featured-card reveal" onclick="openProjectDetail('aero-mpw')">
+            <img src="/assets/images/field/smoke_cp.png" alt="Aero multiphysics workbench simulation" class="project-image" />
+            <div class="project-content">
+              <div>
+                <div class="project-header">
+                  <h3>Aero-Multiphysics Workbench</h3>
+                </div>
+                <span class="project-tag">Simulation / Engineering / Python</span>
+                <div class="project-meta">
+                  <span>Active — Sep 2026</span>
+                  <span>Python</span>
+                </div>
+                <p class="project-description">
+                  Local-first, strongly coupled multiphysics engineering workbench. Built for design loops that refuse to live inside a single solver.
+                </p>
+                <div class="project-highlights">
+                  <ul>
+                    <li>Strongly coupled multi-physics orchestration</li>
+                    <li>Local-first: no cloud lock-in for simulation data</li>
+                    <li>Engineering-workbench approach, not a black box</li>
+                  </ul>
+                </div>
+                <div class="project-links" style="margin-top:6px;">
+                  <a href="https://github.com/iamdarshg/aero-multiphysics-workbench" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub →</a>
+                </div>
+              </div>
+              <div class="project-footer">
+                <span class="badge-status badge-status--active">In Design</span>
+                <div class="project-links">
+                  <span class="hint">Click for details</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card featured-card reveal" onclick="openProjectDetail('code-sdr')">
+            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png" alt="Code-SDR FPGA board" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -707,35 +873,34 @@
                 </div>
                 <span class="project-tag">FPGA / RF / DSP</span>
                 <div class="project-meta">
-                  <span>Nov 2025 to Q1 2026</span>
-                  <span>Verilog / FPGA / Python</span>
-                  <span>Stars: 1</span>
+                  <span>Nov 2025 → Q1 2026</span>
+                  <span>Verilog / FPGA</span>
                 </div>
                 <p class="project-description">
-                  FPGA-accelerated SDR covering 1 MHz to 10 GHz with a real-time processing pipeline. Complete implementation from Verilog HDL to the computer interface with 105 MSPS throughput.
+                  FPGA-accelerated SDR with a real-time processing pipeline. Complete implementation from Verilog HDL to the computer interface, targeting 105 MSPS throughput.
                 </p>
                 <div class="project-highlights">
                   <ul>
-                    <li>LIF-MD6000-6UMG64I FPGA: 105 MSPS real-time processing, under 10 microseconds latency</li>
-                    <li>Complete DSP pipeline: NCO mixing, 1024-point FFT, digital downconversion</li>
-                    <li>Dual-mode: processed streaming at 750 Mbps or direct ADC streaming at 950 Mbps</li>
-                    <li>Production-ready integrations for GNU Radio and Windows ExtIO workflows</li>
+                    <li>LIF-MD6000 FPGA: 105 MSPS real-time processing, sub-10µs latency</li>
+                    <li>DSP chain: NCO mixing, 1024-point FFT, digital downconversion</li>
+                    <li>Dual-mode streaming: 750 Mbps processed / 950 Mbps raw ADC</li>
                   </ul>
+                </div>
+                <div class="project-links" style="margin-top:6px;">
+                  <a href="https://github.com/iamdarshg/Code-SDR" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub →</a>
                 </div>
               </div>
               <div class="project-footer">
-                <span class="badge-status badge-status--active">Board Routing Stage</span>
+                <span class="badge-status badge-status--active">Board Routing</span>
                 <div class="project-links">
-                  <img src="https://img.shields.io/github/stars/iamdarshg/Code-SDR?style=flat-square&color=teal" alt="GitHub stars" />
-                  <a href="https://github.com/iamdarshg/Code-SDR" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub -></a>
-                  <span style="font-size:12px;color:#94a3b8;">Click for details</span>
+                  <span class="hint">Click for details</span>
                 </div>
               </div>
             </div>
           </article>
 
-          <article class="project-card featured-card" onclick="openProjectDetail('research-paper')">
-            <img src="/assets/images/project-research.png" alt="Aircraft CFD simulation" class="project-image" />
+          <article class="project-card featured-card reveal" onclick="openProjectDetail('research-paper')">
+            <img src="/assets/images/field/smoke_cp.png" alt="Aircraft diffusion CFD simulation" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -743,62 +908,59 @@
                 </div>
                 <span class="project-tag">Research / AI-ML / CFD</span>
                 <div class="project-meta">
-                  <span>Dec 2025 to ongoing</span>
+                  <span>Dec 2025 → ongoing</span>
                   <span>Python / CUDA</span>
-                  <span>Stars: 1</span>
                 </div>
                 <p class="project-description">
-                  GPU-accelerated generative design combining diffusion models with computational fluid dynamics. The training pipeline optimizes aircraft structures for aerodynamic efficiency while preserving structural viability.
+                  GPU-accelerated generative design combining hybrid diffusion networks with computational fluid dynamics, optimizing aircraft structures for aerodynamic efficiency while preserving structural viability.
                 </p>
                 <div class="project-highlights">
                   <ul>
-                    <li>Diffusion model paired with GPU-accelerated LBM CFD for aerodynamic optimization</li>
-                    <li>Progressive grid refinement from 16 cubed to 32 cubed for practical training time</li>
-                    <li>Hierarchical structural constraints keep generated designs connected and manufacturable</li>
-                    <li>CLI workflow covers training, generation, evaluation, and STL export</li>
+                    <li>Diffusion model paired with GPU-accelerated LBM CFD</li>
+                    <li>Progressive grid refinement: 16³ → 32³ voxels</li>
+                    <li>CLI workflow: training, generation, evaluation, STL export</li>
                   </ul>
+                </div>
+                <div class="project-links" style="margin-top:6px;">
+                  <a href="https://github.com/iamdarshg/research-paper" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub →</a>
                 </div>
               </div>
               <div class="project-footer">
                 <span class="badge-status badge-status--research">Active Research</span>
                 <div class="project-links">
-                  <img src="https://img.shields.io/github/stars/iamdarshg/research-paper?style=flat-square&color=teal" alt="GitHub stars" />
-                  <a href="https://github.com/iamdarshg/research-paper" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">GitHub -></a>
-                  <span style="font-size:12px;color:#94a3b8;">Click for details</span>
+                  <span class="hint">Click for details</span>
                 </div>
               </div>
             </div>
           </article>
 
-          <article class="project-card featured-card" onclick="openProjectDetail('research-paper-2')">
-            <img src="/assets/images/project-research.png" alt="Radar cross-section simulation for UAV stealth research" class="project-image" />
+          <article class="project-card featured-card reveal" onclick="openProjectDetail('research-paper-2')">
+            <img src="/assets/images/field/smoke_cp.png" alt="Radar cross-section simulation for UAV stealth research" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
                   <h3>ML-Based Rapid RCS Estimation for UAV Stealth</h3>
                 </div>
-                <span class="project-tag">Research / ML regression / Electromagnetics</span>
+                <span class="project-tag">Research / ML regression / EM</span>
                 <div class="project-meta">
                   <span>Research paper draft</span>
-                  <span>Python / EM simulation / UAV design</span>
-                  <span>Google Drive source</span>
+                  <span>Python / EM sim</span>
                 </div>
                 <p class="project-description">
-                  Research paper exploring how trained regression models can estimate UAV radar cross-section from electromagnetic simulation data, enabling faster stealth-design iteration before full-wave validation.
+                  Research paper exploring how trained regression models estimate UAV radar cross-section from electromagnetic simulation data — a fast screening layer before full-wave validation.
                 </p>
                 <div class="project-highlights">
                   <ul>
-                    <li>Compares dense networks, SVMs, ensembles, volumetric CNNs, transformers, and physics-informed models</li>
-                    <li>Defines practical dataset parameters across geometry, frequency, aspect angle, elevation, and polarization</li>
-                    <li>Frames ML as a fast screening layer, with final candidates verified by high-fidelity EM simulation</li>
-                    <li>Includes metrics, uncertainty guidance, and a 12-week implementation roadmap</li>
+                    <li>Dense nets, volumetric CNNs, transformers, and physics-informed variants compared</li>
+                    <li>Dataset parameters across geometry, frequency, aspect angle, elevation, polarization</li>
+                    <li>12-week implementation roadmap with validation strategy</li>
                   </ul>
                 </div>
               </div>
               <div class="project-footer">
                 <span class="badge-status badge-status--research">Drafted Research</span>
                 <div class="project-links">
-                  <span style="font-size:12px;color:#94a3b8;">Click for details</span>
+                  <span class="hint">Click for details</span>
                 </div>
               </div>
             </div>
@@ -808,102 +970,23 @@
 
       <div class="section-divider"></div>
 
-      <section class="projects-section">
-        <div class="section-header" style="margin-bottom:32px;">
+      <section class="projects-section section">
+        <div class="section-header" style="margin-bottom:28px;">
           <div>
-            <div class="section-title" style="margin-bottom:12px;">
-              <span class="badge-num">01B</span>
-              <span>More Stuff From My Folder</span>
-            </div>
-            <p class="section-subtitle">
-              Extra projects and experiments that show I like building across hardware, code, and analysis.
-            </p>
-          </div>
-        </div>
-
-        <div class="projects-grid all-projects-grid">
-          <article class="project-card">
-            <div class="project-content compact-content">
-              <div class="compact-header">
-                <h4>Drone Arm Control Stack</h4>
-              </div>
-              <div class="project-meta">
-                <span>Embedded / Control</span>
-                <span>C / Python / Meson</span>
-              </div>
-              <p class="project-description compact-description">
-                A modular drone control and management codebase with a safety-first attitude, split between sensor loops and PWM/SPI control loops.
-              </p>
-              <div class="project-footer">
-                <span class="badge-status badge-status--active">Hardware + Software</span>
-                <div class="project-links">
-                  <a href="https://github.com/iamdarshg/drone-arm" target="_blank" rel="noopener noreferrer">GitHub -></a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-content compact-content">
-              <div class="compact-header">
-                <h4>Outrunner Motor Optimizer</h4>
-              </div>
-              <div class="project-meta">
-                <span>Simulation / Optimization</span>
-                <span>Python / CAD</span>
-              </div>
-              <p class="project-description compact-description">
-                A motor design tool that combines electromagnetic, thermal, mechanical, and CFD checks to help size a BLDC outrunner before you make it real.
-              </p>
-              <div class="project-footer">
-                <span class="badge-status badge-status--research">Design Tool</span>
-                <div class="project-links">
-                  <a href="https://github.com/iamdarshg/outrunner-motor-optimizer" target="_blank" rel="noopener noreferrer">GitHub -></a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="project-content compact-content">
-              <div class="compact-header">
-                <h4>AttackSurfaceMapper</h4>
-              </div>
-              <div class="project-meta">
-                <span>Security / OSINT</span>
-                <span>Python</span>
-              </div>
-              <p class="project-description compact-description">
-                A recon tool that expands domains, subdomains, and IPs, then maps what is publicly visible with screenshots, DNS, and passive intelligence.
-              </p>
-              <div class="project-footer">
-                <span class="badge-status badge-status--archived">Tooling</span>
-                <div class="project-links">
-                  <a href="https://github.com/iamdarshg/AttackSurfaceMapper" target="_blank" rel="noopener noreferrer">GitHub -></a>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <div class="section-divider"></div>
-
-      <section class="projects-section">
-        <div class="section-header" style="margin-bottom:32px;">
-          <div>
-            <div class="section-title" style="margin-bottom:12px;">
+            <div class="section-title" style="margin-bottom:10px;">
               <span class="badge-num">02</span>
               <span>All Repositories</span>
             </div>
             <p class="section-subtitle">
-              Live GitHub feed with cleaner README snapshots, so the project text reads like part of the page instead of pasted markdown.
+              Live GitHub feed — synced from my profile, sorted by recent activity. Click any card for the README snapshot.
             </p>
           </div>
         </div>
 
         <div id="repo-feed" class="projects-grid all-projects-grid">
-          <p style="grid-column:1/-1;text-align:center;opacity:0.6;">Loading real-time repository feed from GitHub...</p>
+          <p style="grid-column:1/-1;text-align:center;color:var(--faint);font-family:var(--font-mono);font-size:12px;">
+            Loading live repository feed from GitHub…
+          </p>
         </div>
       </section>
     </main>
