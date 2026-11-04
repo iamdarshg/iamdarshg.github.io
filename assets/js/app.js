@@ -123,12 +123,12 @@ function setupScrollMotion() {
       const bottomCopy = launch.querySelector('.launch-copy--bottom');
       if (object) {
         const objectProgress = clamp(t * 1.35, 0, 1);
-        const x = 14 - objectProgress * 14;
-        const y = 18 - objectProgress * 28;
-        const scale = .52 + objectProgress * .66;
-        const rotate = -7 + objectProgress * 6;
+        const x = 10 - objectProgress * 10;
+        const y = 10 - objectProgress * 22;
+        const scale = .72 + objectProgress * .42;
+        const rotate = -5 + objectProgress * 4;
         object.style.transform = `translateX(calc(-50% + ${x}vw)) translateY(${y}vh) scale(${scale.toFixed(3)}) rotate(${rotate.toFixed(2)}deg)`;
-        object.style.opacity = String(.25 + objectProgress * .75);
+        object.style.opacity = String(.72 + objectProgress * .28);
       }
       if (topCopy) {
         const copyProgress = clamp(t * 1.6, 0, 1);

@@ -397,8 +397,10 @@
     .launch-copy--bottom { bottom:9vh; display:flex; align-items:center; gap:18px; color:#c7d5e2; font:500 12px var(--font-mono); }
     .launch-counter { color:var(--accent); font-weight:600; }.launch-counter i { color:#637589; font-style:normal;margin:0 5px; }.launch-line { width:80px;height:1px;background:var(--accent); }
     .launch-corner { position:absolute; z-index:3; bottom:9vh; color:#617489; font:500 9px/1.6 var(--font-mono); letter-spacing:.1em; }.launch-corner--right { right:max(24px,calc((100vw - 1200px)/2)); text-align:right; }.launch-corner--left { left:max(24px,calc((100vw - 1200px)/2)); }
-    .launch-object { position:absolute; z-index:2; width:min(96vw,1320px); height:min(86vh,860px); top:8%; left:50%; transform:translateX(-50%); }
-    .object-main { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:1; }
+    .launch-object { position:absolute; z-index:2; width:min(68vw,840px); height:min(70vh,660px); top:17%; left:66%; transform:translateX(-50%); }
+    .object-main,.object-detail { position:absolute; object-fit:contain; mix-blend-mode:screen; filter:contrast(1.18) saturate(1.12) brightness(1.08) drop-shadow(0 24px 34px rgba(0,0,0,.46)); }
+    .object-main { inset:0; width:100%; height:100%; opacity:1; }
+    .object-detail { width:30%; height:34%; right:4%; bottom:2%; transform:rotate(5deg); opacity:.95; }
     .object-ring { position:absolute; left:50%;top:50%; border:1px solid rgba(42,212,255,.3);border-radius:50%;transform:translate(-50%,-50%); }.object-ring--one{width:45%;aspect-ratio:1;}.object-ring--two{width:70%;aspect-ratio:1;border-color:rgba(246,179,91,.18);}
     .object-label { position:absolute;color:var(--accent);font:600 9px var(--font-mono);letter-spacing:.12em; }.object-label--a{left:8%;top:24%;}.object-label--b{right:4%;bottom:24%;color:var(--amber);}
     .launch-scene + .flight-story { margin-top:0; }
@@ -493,8 +495,8 @@
       .launch-copy--top { top:14vh; }
       .launch-copy h1 { font-size:46px; max-width:330px; }
       .launch-copy--top p { font-size:14px; max-width:280px; }
-      .launch-object { width:112vw; height:48vh; top:31%; left:50%; }
-      .object-detail { width:39%; height:38%; }
+      .launch-object { width:108vw; height:48vh; top:31%; left:50%; }
+      .object-detail { width:34%; height:36%; }
       .object-label--a { left:2%; top:20%; }
       .object-label--b { right:0; bottom:20%; }
       .launch-copy--bottom { bottom:15vh; }
@@ -561,9 +563,9 @@
           <div class="launch-object" aria-hidden="true">
             <div class="object-ring object-ring--one"></div>
             <div class="object-ring object-ring--two"></div>
-            <img class="object-main" src="/assets/images/field/hero-edf-composite.png" alt="" />
-            <span class="object-label object-label--a">R30 / EDF ASSEMBLY</span>
-            <span class="object-label object-label--b">GEOMETRY → HARDWARE</span>
+            <img class="object-main" src="/assets/images/field/edf-cutout.png" alt="" />
+            <img class="object-detail" src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030-cutout.png" alt="" />
+
           </div>
           <div class="launch-copy launch-copy--bottom">
             <span class="launch-counter">01 <i>/</i> 04</span>
