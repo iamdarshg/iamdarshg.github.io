@@ -91,7 +91,8 @@ html {
   color: var(--text);
   background: var(--bg);
   font: 15px/1.6 var(--font-sans);
-  scroll-behavior: smooth;
+  /* Keep wheel/touch scrolling immediate; anchor links opt into smooth scroll in JS. */
+  scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
