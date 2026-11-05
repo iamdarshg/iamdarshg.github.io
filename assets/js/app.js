@@ -104,9 +104,11 @@ function setupScrollMotion() {
       // Keep the narrative legible when motion is reduced; the page itself
       // remains scrollable and no content is hidden behind animated states.
       [launch, story, film].filter(Boolean).forEach(scene => {
-        scene.querySelectorAll('.launch-object, .launch-copy--top, .launch-copy--bottom, .flight-frame, .film-visual')
+        scene.querySelectorAll('.launch-object, .launch-copy--top, .launch-copy--bottom, .launch-stage-caption, .object-part, .flight-frame, .film-visual')
           .forEach(element => {
-            element.style.opacity = '1';
+            const isCaption = element.classList.contains('launch-stage-caption');
+            const showCaption = element.classList.contains('launch-stage-caption--one');
+            element.style.opacity = isCaption ? (showCaption ? '1' : '0') : '';
             element.style.transform = '';
           });
       });
@@ -119,28 +121,48 @@ function setupScrollMotion() {
       const span = Math.max(1, launch.offsetHeight - window.innerHeight);
       const t = clamp(-rect.top / span, 0, 1);
       const object = launch.querySelector('.launch-object');
+      const parts = [...launch.querySelectorAll('.object-part')];
       const topCopy = launch.querySelector('.launch-copy--top');
       const bottomCopy = launch.querySelector('.launch-copy--bottom');
+      const captions = [...launch.querySelectorAll('.launch-stage-caption')];
+      const ease = value => 1 - Math.pow(1 - value, 4);
+      const phase = (start, end) => ease(clamp((t - start) / (end - start), 0, 1));
       if (object) {
-        const objectProgress = clamp(t * 1.35, 0, 1);
-        const x = 10 - objectProgress * 10;
-        const y = 10 - objectProgress * 22;
-        const scale = .72 + objectProgress * .42;
-        const rotate = -5 + objectProgress * 4;
+        const approach = phase(0, .22);
+        const assembly = phase(.22, .58);
+        const evidence = phase(.58, .84);
+        const x = 10 - approach * 10;
+        const y = 10 - approach * 22;
+        const scale = .72 + approach * .42;
+        const rotate = -5 + approach * 4;
         object.style.transform = `translateX(calc(-50% + ${x}vw)) translateY(${y}vh) scale(${scale.toFixed(3)}) rotate(${rotate.toFixed(2)}deg)`;
-        object.style.opacity = String(.72 + objectProgress * .28);
+        object.style.opacity = String(.72 + approach * .28);
+        if (parts.length >= 3) {
+          parts[1].style.transform = `translate(${assembly * 9}%, ${-assembly * 8}%) rotate(${5 + assembly * 7}deg) scale(${(1 - assembly * .08).toFixed(3)})`;
+          parts[1].style.opacity = String(1 - evidence * .4);
+          parts[2].style.transform = `translate(${-assembly * 10}%, ${assembly * 10}%) rotate(${-8 - assembly * 10}deg) scale(${(1 - assembly * .06).toFixed(3)})`;
+          parts[2].style.opacity = String(.82 + assembly * .18);
+        }
+        launch.style.setProperty('--launch-progress', t.toFixed(4));
+        launch.style.setProperty('--evidence-progress', evidence.toFixed(4));
       }
       if (topCopy) {
-        const copyProgress = clamp(t * 1.6, 0, 1);
+        const copyProgress = phase(.08, .4);
         topCopy.style.transform = `translateY(${-copyProgress * 16}vh)`;
         topCopy.style.opacity = String(1 - copyProgress);
       }
       if (bottomCopy) {
-        const bottomProgress = clamp(t * 2.2, 0, 1);
+        const bottomProgress = phase(.18, .5);
         bottomCopy.style.transform = `translateY(${bottomProgress * 22}px)`;
         bottomCopy.style.opacity = String(1 - bottomProgress);
       }
-      launch.style.setProperty('--launch-progress', t.toFixed(4));
+      captions.forEach((caption, index) => {
+        const ranges = [[.03, .24], [.27, .56], [.6, .86]][index] || [.03, .24];
+        const enter = phase(ranges[0], ranges[0] + .08);
+        const exit = phase(ranges[1] - .08, ranges[1]);
+        caption.style.opacity = String(enter * (1 - exit));
+        caption.style.transform = `translateY(${(1 - enter) * 18 - exit * 10}px)`;
+      });
     }
 
     if (story) {

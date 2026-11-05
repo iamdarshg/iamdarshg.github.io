@@ -397,13 +397,15 @@
     .launch-copy--bottom { bottom:9vh; display:flex; align-items:center; gap:18px; color:#c7d5e2; font:500 12px var(--font-mono); }
     .launch-counter { color:var(--accent); font-weight:600; }.launch-counter i { color:#637589; font-style:normal;margin:0 5px; }.launch-line { width:80px;height:1px;background:var(--accent); }
     .launch-corner { position:absolute; z-index:3; bottom:9vh; color:#617489; font:500 9px/1.6 var(--font-mono); letter-spacing:.1em; }.launch-corner--right { right:max(24px,calc((100vw - 1200px)/2)); text-align:right; }.launch-corner--left { left:max(24px,calc((100vw - 1200px)/2)); }
-    .launch-object { position:absolute; z-index:2; width:min(68vw,840px); height:min(70vh,660px); top:17%; left:66%; transform:translateX(-50%); }
-    .object-main,.object-detail { position:absolute; object-fit:contain; mix-blend-mode:screen; filter:contrast(1.18) saturate(1.12) brightness(1.08) drop-shadow(0 24px 34px rgba(0,0,0,.46)); }
-    .object-main { inset:0; width:100%; height:100%; opacity:1; }
-    .object-detail { width:30%; height:34%; right:4%; bottom:2%; transform:rotate(5deg); opacity:.95; }
+    .launch-object { position:absolute; z-index:2; width:min(68vw,840px); height:min(70vh,660px); top:17%; left:66%; transform:translateX(-50%); transform-origin:center; }
+    .object-part { position:absolute; object-fit:contain; mix-blend-mode:screen; filter:contrast(1.18) saturate(1.12) brightness(1.08) drop-shadow(0 24px 34px rgba(0,0,0,.46)); will-change:transform,opacity; }
+    .object-part--main { inset:0; width:100%; height:100%; opacity:1; }
+    .object-part--detail { width:30%; height:34%; right:4%; bottom:2%; transform:rotate(5deg); opacity:.95; }
+    .object-part--hub { width:24%; height:28%; left:-1%; bottom:7%; transform:rotate(-8deg); opacity:.82; }
     .object-ring { position:absolute; left:50%;top:50%; border:1px solid rgba(42,212,255,.3);border-radius:50%;transform:translate(-50%,-50%); }.object-ring--one{width:45%;aspect-ratio:1;}.object-ring--two{width:70%;aspect-ratio:1;border-color:rgba(246,179,91,.18);}
-    .object-label { position:absolute;color:var(--accent);font:600 9px var(--font-mono);letter-spacing:.12em; }.object-label--a{left:8%;top:24%;}.object-label--b{right:4%;bottom:24%;color:var(--amber);}
-    .launch-scene + .flight-story { margin-top:0; }
+    .object-axis { position:absolute; opacity:.55; background:var(--accent); transform-origin:left center; }.object-axis--x { width:190px; height:1px; left:12%; bottom:15%; }.object-axis--y { width:1px; height:110px; left:12%; bottom:15%; transform:rotate(90deg); }
+    .object-callout { position:absolute; color:var(--accent); font:600 9px var(--font-mono); letter-spacing:.14em; white-space:nowrap; }.object-callout--top { top:12%; right:6%; }.object-callout--bottom { bottom:18%; left:20%; color:var(--amber); }
+    .launch-stage-caption { display:none; }.launch-scene + .flight-story { margin-top:0; }
 
     /* Launch motion is driven by assets/js/app.js so the pinned scene remains deterministic. */
     @keyframes launch-object { from{transform:translateX(-50%) translateY(20vh) scale(.42);opacity:.45} 35%{opacity:1} to{transform:translateX(-50%) translateY(-10vh) scale(1.22);opacity:.75} }
@@ -496,10 +498,14 @@
       .launch-copy h1 { font-size:46px; max-width:330px; }
       .launch-copy--top p { font-size:14px; max-width:280px; }
       .launch-object { width:108vw; height:48vh; top:31%; left:50%; }
-      .object-detail { width:34%; height:36%; }
-      .object-label--a { left:2%; top:20%; }
-      .object-label--b { right:0; bottom:20%; }
+      .object-part--detail { width:34%; height:36%; }
+      .object-part--hub { width:28%; height:30%; left:-6%; }
+      .object-callout--top { right:0; }
+      .object-callout--bottom { left:16%; }
       .launch-copy--bottom { bottom:15vh; }
+      .launch-stage-caption { left:14px; right:14px; bottom:9vh; max-width:260px; }
+      .launch-stage-caption--two { bottom:22vh; }
+      .launch-stage-caption--three { bottom:35vh; }
       .launch-corner { bottom:7vh; font-size:8px; }
       .launch-corner--right { right:14px; }
       .launch-corner--left { left:14px; }
@@ -561,12 +567,19 @@
             <p>Aerospace systems, RF hardware, embedded control, and computational research.</p>
           </div>
           <div class="launch-object" aria-hidden="true">
+            <!-- Swap the three data-src values to change the hero subject without changing the timeline. -->
             <div class="object-ring object-ring--one"></div>
             <div class="object-ring object-ring--two"></div>
-            <img class="object-main" src="/assets/images/field/edf-cutout.png" alt="" />
-            <img class="object-detail" src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030-cutout.png" alt="" />
+            <img class="object-part object-part--main" data-src="/assets/images/field/edf-cutout.png" src="/assets/images/field/edf-cutout.png" alt="" />
+            <img class="object-part object-part--detail" data-src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030-cutout.png" src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030-cutout.png" alt="" />
+            <img class="object-part object-part--hub" data-src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030-cutout.png" src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030-cutout.png" alt="" />
+            <div class="object-axis object-axis--x"></div>
+            <div class="object-axis object-axis--y"></div>
 
           </div>
+          <div class="launch-stage-caption launch-stage-caption--one"><span>01 / FORM</span><strong>Start with the object.</strong><small>Geometry is the first constraint.</small></div>
+          <div class="launch-stage-caption launch-stage-caption--two"><span>02 / ASSEMBLY</span><strong>Then separate the decisions.</strong><small>Every component earns its place.</small></div>
+          <div class="launch-stage-caption launch-stage-caption--three"><span>03 / EVIDENCE</span><strong>Make the model answer back.</strong><small>Simulation is useful when it changes the build.</small></div>
           <div class="launch-copy launch-copy--bottom">
             <span class="launch-counter">01 <i>/</i> 04</span>
             <strong>Scroll to enter the work.</strong>
