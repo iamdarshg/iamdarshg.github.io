@@ -268,8 +268,8 @@ function langColor(lang) {
 
 /* artwork keyed by repo name — falls back to a generic lab shot */
 const repoArtwork = {
-  'wing3d': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'copperline': '/assets/images/field/airshow_generated_geometry_g96_topk0075.png',
+  'wing3d': '/assets/images/field/airshow_generated_geometry_g96_topk0075.png',
+  'copperline': '/assets/images/field/edf-front-projection.png',
   'aero-multiphysics-workbench': '/assets/images/field/polar_compare.png',
   'Code-SDR': '/assets/images/field/airshow_flight_path_metrics_g96_topk0075.png',
   'drone-v2': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
