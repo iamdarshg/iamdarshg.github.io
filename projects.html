@@ -116,6 +116,12 @@
       display: block;
     }
 
+    .hero-panel--full img {
+      object-fit: contain;
+      padding: 22px;
+      background: #07101b;
+    }
+
     .hero-panel::after {
       content: "";
       position: absolute;
@@ -168,12 +174,7 @@
     .film-step small { color:var(--accent);font:600 10px var(--font-mono);letter-spacing:.15em; }
     .film-step h2 { font-size:clamp(42px,6vw,78px);letter-spacing:-.055em;margin:12px 0; }
     .film-step p { max-width:350px;color:var(--muted);font-size:15px;line-height:1.7; }
-    @supports (animation-timeline:view()) {
-      .film-visual--one { animation:film-one linear both;animation-timeline:view();animation-range:entry 0% cover 80%; }
-      .film-visual--two { animation:film-two linear both;animation-timeline:view();animation-range:entry 10% cover 85%; }
-      .film-visual--three { animation:film-three linear both;animation-timeline:view();animation-range:entry 20% cover 90%; }
-      .film-step { animation:film-focus linear both;animation-timeline:view();animation-range:entry 25% cover 70%; }
-    }
+    /* Project film motion is driven once by assets/js/app.js. */
     @keyframes film-one { from{transform:rotate(-10deg) scale(.55);opacity:.2;clip-path:inset(20% 15% round 16px)} to{transform:rotate(-4deg) scale(1);opacity:1;clip-path:inset(0 round 16px)} }
     @keyframes film-two { from{transform:translate(15%,12%) rotate(12deg) scale(.5);opacity:0} to{transform:translate(0) rotate(3deg) scale(.92);opacity:.78} }
     @keyframes film-three { from{transform:translate(-15%,18%) rotate(-14deg) scale(.4);opacity:0} to{transform:translate(0) rotate(-1deg) scale(.84);opacity:.62} }
@@ -688,9 +689,9 @@
             <span class="badge-num">00</span>
             <span>Build Log</span>
           </div>
-          <h1>Projects that start as <em>notebooks</em> and end up in hardware, tooling, or papers.</h1>
+          <h1>A working record of the things I keep coming back to.</h1>
           <p>
-            The hands-on layer of the portfolio: aircraft electronics, FPGA radio work, simulation-heavy research, and smaller experiments that still teach something worth keeping.
+            This is the less polished version of the work: the geometry files, solver runs, boards, notes, and experiments that survive long enough to become projects.
           </p>
           <div class="hero-chips" aria-label="Project themes">
             <span class="hero-chip">Aerospace systems</span>
@@ -708,21 +709,21 @@
 
         <div class="projects-hero-visual">
           <figure class="hero-panel hero-panel--full">
-            <img src="/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg" alt="Autonomous drone prototype with electronics and workbench lighting" />
+            <img src="/assets/images/field/edf-cutout.png" alt="Electric ducted fan assembly geometry" />
             <figcaption>
               <strong>Autonomy, avionics, iteration</strong>
               <span>Physical systems where routing, firmware, sensing, and testing all matter.</span>
             </figcaption>
           </figure>
           <figure class="hero-panel">
-            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png" alt="SDR electronics with lab instrumentation and signal analysis display" />
+            <img src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030-cutout.png" alt="Rotor hub and blade engineering detail" />
             <figcaption>
               <strong>Code-SDR</strong>
               <span>FPGA signal chain, throughput, integration.</span>
             </figcaption>
           </figure>
           <figure class="hero-panel">
-            <img src="/assets/images/field/smoke_cp.png" alt="Aerospace research visualization with aerodynamic data overlays" />
+            <img src="/assets/images/field/polar_compare.png" alt="Aerodynamic comparison plot from solver research" />
             <figcaption>
               <strong>Research track</strong>
               <span>Simulation, surrogates, and papers.</span>
@@ -738,9 +739,9 @@
           <div class="film-visual film-visual--three"><img src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png" alt="Rotor hub and blade engineering detail" loading="lazy" /><span>03 / HARDWARE</span></div>
         </div>
         <div class="film-copy">
-          <div class="film-step"><small>THE LOOP</small><h2>Model it.</h2><p>A shape is only a hypothesis until the flow gives it an answer.</p></div>
-          <div class="film-step"><small>THE LOOP</small><h2>Measure it.</h2><p>Benchmarks, uncertainty bands, and comparison plots keep the story honest.</p></div>
-          <div class="film-step"><small>THE LOOP</small><h2>Build it.</h2><p>When the numbers survive, the work becomes a board, a rotor, a radio, or a flight.</p></div>
+          <div class="film-step"><small>NOTE 01 / GEOMETRY</small><h2>Start with a question.</h2><p>What should the shape do? The first pass is usually a rough model, not a finished answer.</p></div>
+          <div class="film-step"><small>NOTE 02 / CHECKS</small><h2>Keep the evidence.</h2><p>Solver output, comparison plots, and failed assumptions stay close to the work.</p></div>
+          <div class="film-step"><small>NOTE 03 / HARDWARE</small><h2>Make it real.</h2><p>The useful ending is a board, rotor, radio, or testable next step—not a prettier slide.</p></div>
         </div>
       </section>
 

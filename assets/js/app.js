@@ -92,10 +92,13 @@ function setupScrollMotion() {
   const film = document.querySelector('.project-film');
   const beats = [...document.querySelectorAll('.story-beat, .film-step')];
   let ticking = false;
+  let lastScrollY = -1;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const update = () => {
     ticking = false;
+    if (lastScrollY === window.scrollY && document.readyState === 'complete') return;
+    lastScrollY = window.scrollY;
     const scrollable = document.documentElement.scrollHeight - window.innerHeight;
     const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
     root.style.setProperty('--scroll-progress', `${(progress * 100).toFixed(2)}%`);
@@ -266,9 +269,9 @@ function langColor(lang) {
 /* artwork keyed by repo name — falls back to a generic lab shot */
 const repoArtwork = {
   'wing3d': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'copperline': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
-  'aero-multiphysics-workbench': '/assets/images/field/smoke_cp.png',
-  'Code-SDR': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
+  'copperline': '/assets/images/field/airshow_generated_geometry_g96_topk0075.png',
+  'aero-multiphysics-workbench': '/assets/images/field/polar_compare.png',
+  'Code-SDR': '/assets/images/field/airshow_flight_path_metrics_g96_topk0075.png',
   'drone-v2': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
   'drone-arm': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
   'drone_main': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',

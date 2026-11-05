@@ -676,10 +676,30 @@ footer {
     font-size: 14px;
   }
 
-  .nav-links {
-    font-size: 10px;
+  header {
+    align-items: flex-start;
     gap: 10px;
   }
+
+  header > div:last-child {
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    font-size: 10px;
+    gap: 7px 10px;
+  }
+
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { white-space: nowrap; }
 
   .btn {
     min-height: 42px;
