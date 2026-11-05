@@ -151,8 +151,8 @@ function setupScrollMotion() {
       }
       if (topCopy) {
         const copyProgress = phase(.08, .4);
-        topCopy.style.transform = `translateY(${-copyProgress * 16}vh)`;
-        topCopy.style.opacity = String(1 - copyProgress);
+        topCopy.style.transform = `translateY(${-copyProgress * 8}vh)`;
+        topCopy.style.opacity = String(1 - copyProgress * .45);
       }
       if (bottomCopy) {
         const bottomProgress = phase(.18, .5);
