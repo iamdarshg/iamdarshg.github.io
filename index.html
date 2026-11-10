@@ -384,7 +384,8 @@
     }
 
     /* ---------- cinematic launch scene ---------- */
-    .launch-scene { position:relative; height:180vh; margin:0 calc(50% - 50vw); }
+    /* pulled up by --hero-pull (set in app.js) so the scene starts at the viewport top */
+    .launch-scene { position:relative; height:180vh; margin:calc(-1 * var(--hero-pull, 0px)) calc(50% - 50vw) 0; }
     .launch-stage { position:sticky; top:0; height:100svh; min-height:640px; overflow:hidden; display:grid; place-items:center; background:#050b12; isolation:isolate; }
     .launch-grid { position:absolute; inset:0; opacity:.26; background-image:linear-gradient(rgba(42,212,255,.11) 1px,transparent 1px),linear-gradient(90deg,rgba(42,212,255,.11) 1px,transparent 1px); background-size:80px 80px; mask-image:linear-gradient(90deg,transparent 10%,#000 55%,transparent); z-index:-1; }
     .launch-stage::before { content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 73% 48%,rgba(42,212,255,.12),transparent 34%),linear-gradient(90deg,#050b12 0%,rgba(5,11,18,.92) 38%,rgba(5,11,18,.28) 72%,#050b12 100%); z-index:-1; }
@@ -402,7 +403,7 @@
     .hero-spec { display:flex; flex-wrap:wrap; align-items:center; gap:0; margin:34px 0 0; padding:0; list-style:none; font:500 9.5px var(--font-mono); letter-spacing:.13em; text-transform:uppercase; color:#7f90a3; }
     .hero-spec li { display:flex; align-items:center; }
     .hero-spec li + li::before { content:""; width:1px; height:9px; margin:0 13px; background:rgba(255,255,255,.18); }
-    @media (max-width:640px) { .hero-spec { margin-top:24px; font-size:8.5px; letter-spacing:.1em; column-gap:15px; row-gap:7px; } .hero-spec li + li::before { display:none; } }
+    @media (max-width:640px) { .hero-spec { margin-top:24px; font-size:9px; letter-spacing:.08em; column-gap:14px; row-gap:7px; } .hero-spec li + li::before { display:none; } }
     .launch-work-link { display:inline-flex; align-items:center; gap:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid rgba(42,212,255,.6); color:#eff8ff; font:500 12px var(--font-mono); transition:color .2s ease; }
     .launch-work-link:hover { color:var(--accent); }.launch-work-link span { color:var(--accent); font-size:16px; }
     .launch-copy--bottom { left:max(24px,calc((100vw - 1200px)/2)); bottom:8vh; display:flex; align-items:center; gap:14px; color:#c7d5e2; font:500 10.5px/1.5 var(--font-mono); letter-spacing:.04em; }
@@ -556,7 +557,7 @@
       .hero-cta { margin-top:20px; }
       .cta { min-height:42px; padding:0 16px; font-size:10px; }
       .launch-work-link { margin-top:16px; }
-      .launch-object { position:relative; inset:auto; width:min(92vw,400px); height:auto; aspect-ratio:4/3; margin:10px auto 0; transform:none !important; opacity:1 !important; }
+      .launch-object { position:relative; inset:auto; width:min(92vw,400px); height:auto; aspect-ratio:1200 / 1040; margin:10px auto 0; transform:none !important; opacity:1 !important; }
       .object-part--main { inset:0; width:100%; height:100%; }
       .object-part--detail,.object-part--hub { display:none; }
       .object-ring--one { width:82%; }
@@ -618,7 +619,7 @@
           <div class="launch-grid" aria-hidden="true"></div>
           <div class="launch-copy launch-copy--top">
             <span class="launch-eyebrow">DARSH GUPTA · GRADE 12 · BENGALURU</span>
-            <h1>I build it.<br>Then I <em>prove it.</em></h1>
+            <h1>I build it.<br /> Then I <em>prove it.</em></h1>
             <p>Ducted-fan assemblies, FPGA radios, and a transonic solver benchmarked against OpenFOAM. Built before university, to the standard university asks for.</p>
             <div class="hero-cta">
               <a class="cta cta--solid" href="#notes-title">See the evidence <span aria-hidden="true">↓</span></a>

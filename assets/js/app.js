@@ -62,10 +62,34 @@ function setupReveals() {
   items.forEach(el => observer.observe(el));
 }
 
+/* ---------------- hero offset ---------------- */
+/* The hero is a sticky, full-viewport scene. Pull it up so its top edge
+   meets the viewport instead of starting below the sticky header. */
+function setupHeroOffset() {
+  const scene = document.querySelector('.launch-scene');
+  if (!scene) return;
+  const root = document.documentElement;
+  const apply = () => {
+    root.style.setProperty('--hero-pull', '0px');
+    if (window.matchMedia('(max-width: 980px)').matches) {
+      root.style.removeProperty('--hero-pull');
+      return;
+    }
+    const top = scene.getBoundingClientRect().top + window.scrollY;
+    root.style.setProperty('--hero-pull', Math.max(0, Math.round(top)) + 'px');
+  };
+  apply();
+  window.addEventListener('resize', apply);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(apply);
+  }
+}
+
 /* ---------------- boot ---------------- */
 window.addEventListener('DOMContentLoaded', function() {
   document.body.classList.add('is-loaded');
   initTheme();
+  setupHeroOffset();
   setupSmoothScroll();
   setupReveals();
   setupScrollMotion();
