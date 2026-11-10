@@ -407,6 +407,110 @@ Use it **only** for abstract plates (backgrounds, material studies, a lighting
 pass), never to fabricate the student's hardware. A generated "photo" of an EDF he
 built is a lie the admissions reader cannot check and Darsh cannot defend.
 
+### 10.4 Skills — write them, do not shop for them
+
+Skills are directories with a `SKILL.md` carrying YAML frontmatter (`name`,
+`description`). OpenCode auto-discovers `.opencode/skills/`; also register the path
+explicitly so it survives a config rewrite:
+
+```jsonc
+{ "skills": ["./.opencode/skills"] }
+```
+
+Create exactly three. They exist to stop the loop from drifting, not to look busy.
+
+`.opencode/skills/hero-art-direction/SKILL.md`
+```markdown
+---
+name: hero-art-direction
+description: Rules for rendering and judging the EDF hero subject. Use before
+  generating, cropping, compositing or swapping any hero image.
+---
+- Source must be >= 1418 px wide (2x the 709 px object box) of REAL detail, not
+  upscaled pixels. If the source is smaller, the fix is a new render, not a filter.
+- One material story. Anodised aluminium + carbon, neutral white balance. Green
+  rotors + copper vanes + blue rods is CAD default, not a palette; do not ship it
+  unchanged as the hero.
+- Light: one key at ~35 deg camera-left-above, one cool rim from behind-right, one
+  fill at 8%. Contact shadow, slight floor occlusion. No lens flare, no bloom halo.
+- Background: transparent alpha over the hero field. Never composite onto white.
+- Framing: silhouette centred on the hero optical line; the three base rods must
+  terminate above the fold; 8-12% empty margin on the right so the object does not
+  touch the reticles.
+- Honesty: caption says render if it is a render. Never claim a photograph.
+```
+
+`.opencode/skills/critic-rubric/SKILL.md`
+```markdown
+---
+name: critic-rubric
+description: Scoring rubric for judging the rendered page. Use for every critic
+  pass, and for self-review before claiming a pass is done.
+---
+Score 1-5, cite evidence from a screenshot, never from source:
+1. Focal hierarchy - one subject, one statement, two CTAs, in that order.
+2. Craft - resolution, edge quality, material believability, no visible upscaling.
+3. Composition - dead space, optical centre, fold, balance of ink and subject.
+4. Sales read - does the first screen make an admissions reader continue?
+5. Honesty - every claim checkable, every render labelled.
+A P0 is anything scoring 1-2 that a paying client would notice. Max 3 fixes per cycle.
+```
+
+`.opencode/skills/browser-evidence/SKILL.md`
+```markdown
+---
+name: browser-evidence
+description: Collect screenshots and hard measurements from the local preview or the
+  live site. Use for every verification pass.
+---
+- Serve: `python -m http.server 8899 --bind 127.0.0.1` from the repo root.
+- Viewports: 1440x900, 1024x800, 768x900, 390x844. Capture scroll 0 and pinned
+  (~300 px). Save to `output/pass-<n>/`.
+- Assert: scrollWidth === clientWidth; exactly one h1; zero images with
+  `complete && !naturalWidth`; zero responses >= 400; zero console errors.
+- Measure the hero: `.launch-object` and `.launch-copy--bottom` rects, plus
+  `naturalWidth` of `.object-part--main`. Report `naturalWidth / boxWidth`.
+- Open every screenshot before reporting. Unopened evidence is not evidence.
+- Reduced motion: `page.emulate_media(reduced_motion="reduce")` must leave the
+  headline, deck, CTAs and spec strip visible and untransformed.
+```
+
+Do not install third-party skill packs unless the host publishes a real manifest
+at `/.well-known/skills/` and the SKILL.md files parse. A malformed skill silently
+does nothing, which is worse than no skill.
+
+### 10.5 Other tooling
+
+```sh
+python -m pip install --upgrade pillow numpy scipy pyvista trimesh opencv-python
+python -m playwright install chromium          # browser for both Python and MCP
+npx --yes playwright@latest install chromium   # if node-side Playwright is used
+ffmpeg -version                                # screen recordings
+```
+
+Optional, only if already available or trivially installable: Blender (route A),
+ImageMagick (`magick` for fast knockouts/thresholds), `optipng`. Do not install a
+package manager to install a tool you will not use.
+
+**Tooling must not be published.** `_config.yml` currently excludes `.git`,
+`.gitignore`, `README.md`, `LICENSE`, `output`. Add the new working files:
+
+```yaml
+exclude:
+  - .git
+  - .gitignore
+  - README.md
+  - LICENSE
+  - output
+  - tools
+  - node_modules
+  - .opencode
+  - opencode.jsonc
+  - handoff.md
+```
+
+Verify after the next deploy: `https://iamdarshg.github.io/handoff.md` must 404.
+
 ---
 
 ## 11. Execution model: critic → fix swarm, not vibes

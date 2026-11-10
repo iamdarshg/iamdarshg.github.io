@@ -12,6 +12,11 @@ exclude:
   - README.md
   - LICENSE
   - output
+  - tools
+  - node_modules
+  - .opencode
+  - opencode.jsonc
+  - handoff.md
 
 plugins:
   - jekyll-seo-tag
