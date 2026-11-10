@@ -1,173 +1,479 @@
-# Portfolio redesign handoff
+# Handoff — iamdarshg.github.io
 
-## Current state
+**Written:** 2026-11-10 · **Repo:** `iamdarshg/iamdarshg.github.io` · **Live:** https://iamdarshg.github.io/
+**Branch:** `main` (pushes deploy straight to GitHub Pages) · **Last commit:** `git log -3`
 
-This is a static personal portfolio hosted from the repository root at
-`https://iamdarshg.github.io/`. Work in the repository is intentionally
-unfinished but has been pushed to `main` at the user's request as a better-than-
-nothing checkpoint. The public site will update through GitHub Pages after its
-deployment workflow completes; do not report it as live until the Pages
-deployment is green and the public URL has been checked.
+This file is written to be sufficient on its own: no prior conversation needed.
+Read it end to end before touching a file, then follow §10 → §12 in order.
 
-The local preview is `http://localhost:8899/` when the temporary Python preview
-server is running. It serves the repository directory directly and is not a
-Jekyll build. To reproduce locally, run `python -m http.server 8899` from the
-repository root. A Jekyll preview should also be run before any substantial
-deployment change.
+---
 
-## User's original goal
+## 0. The job, in one sentence
 
-Redesign the portfolio so that it feels exceptional, interactive, cinematic,
-polished, and emotionally engaging. The homepage is the highest priority and
-should make an immediate impression. The desired experience is a scroll-led
-product reveal in the spirit of Apple or Gigabyte product launches: an object
-enters, transforms, reveals its engineering detail, then connects to simulation
-evidence and active programs. The user explicitly asked for review as a
-scroll-through video, not just screenshots.
+Make the first viewport of this site look like a **product**, not a CAD export —
+the picture and the object are the ceiling on quality, and the current hero is a
+322-pixel render blown up 2.2×.
 
-The user authorized artistic liberty and trusts the implementer to make design
-decisions. Avoid generic cards, token hover effects, and a routine content-page
-hero. Use compelling real project material, but only when the artifact works as
-visual storytelling. CAD/CFD plots are engineering evidence, not automatically
-hero art. The bleak ESP-32 photo was explicitly rejected as hero imagery.
+Everything else on the site is already in reasonable shape. Do not rebuild it.
 
-## Prior work already in the repository
+---
 
-- `index.html` now has a full-width pinned `launch-scene` and a following
-  `flight-story` section; do not recreate these from scratch without first
-  reviewing them and the user-approved constraints.
-- The launch scene uses `assets/images/field/hero-edf-composite.png`, a locally
-  composited design based on an EDF CAD asset. Other real engineering images
-  and transformed cutouts are in `assets/images/field/`.
-- `assets/js/app.js` drives the launch scene, flight story, and project-film
-  transforms from scroll progress, and also contains shared reveal/portfolio
-  behavior.
-- `assets/css/shared.css` contains the portfolio-wide visual system, reveal
-  effects, and reduced-motion styles.
-- The project, education, interests, contact, README, and configuration files
-  have prior uncommitted/recent redesign edits. Preserve and inspect rather
-  than overwrite them.
-- Historical screenshots and QA captures are under `output/`. Especially
-  inspect `output/scroll-0.png` through `output/scroll-4.png`,
-  `output/current-scroll-0.png`, `output/current-scroll-2.png`,
-  `output/current-state-check.png`, and the earlier `output/qa/` and
-  `output/playwright/` captures. `output/` is excluded from the Jekyll build
-  and should not be treated as production content.
+## 1. What this site is, and what job it does
 
-## Honest visual assessment / known issues
+A static personal site that sells **Darsh Gupta** (Grade 12, NPS HSR, Bengaluru,
+CBSE PCMC) to **university admissions readers**. It is not a link hub and not a
+resume. The homepage is a product launch; the Projects page is an engineering
+journal. Every claim must be traceable to something he actually built.
 
-The current work is a checkpoint, not a finished redesign. The launch image
-still reads too much like a technical CAD screenshot with a dark graphic
-treatment, rather than a premium, art-directed product image. At desktop size,
-the headline, CAD labels, and object compete and overlap. The composited inset
-resembles a window layered onto the scene, metadata overlaps at some scroll
-positions, and the transitions do not yet make a convincing product-reveal
-narrative. Previous scroll captures show the hero's title fading while the
-large visual remains, but that alone is not sufficient choreography.
+| File | Role |
+|---|---|
+| `index.html` | Product launch: pinned hero, evidence, work index, about, reviewer close |
+| `projects.html` | Build log / engineering journal (repo feed + case notes) |
+| `education.html` | Grade 12, coursework, timeline, research rows |
+| `interests.html` | Ruled editorial essay |
+| `contact.html` | Contact |
 
-Do not claim that the hero or overall portfolio meets the requested quality
-bar. Do not publish a polished-design claim based on the current capture.
+Shared: `assets/css/shared.css` (tokens, header, footer, page furniture),
+`assets/js/app.js` (all behaviour), `_config.yml` (Jekyll).
 
-## Scroll / accessibility finding
+**Preview:** `python -m http.server 8899 --bind 127.0.0.1` from the repo root, then
+`http://127.0.0.1:8899/`. There is **no Ruby/Jekyll here** (`bundle`, `jekyll`
+absent, no Gemfile) — local preview is a plain file server and GitHub Pages does
+the real Jekyll build. Never call a local preview "the live site".
 
-The user's report that scrolling “doesn't work anymore” must be taken
-seriously. Earlier captures and browser instrumentation did demonstrate that
-document scrolling and the JavaScript progress transforms were advancing in
-one Chrome session when `prefers-reduced-motion` was explicitly set to
-`no-preference`. A separate automated browser reported reduced motion, and
-`setupScrollMotion()` returned before updating scene transforms. This explains
-why some captures looked frozen, but does not prove that every user's physical
-scroll input or browser configuration is healthy.
+---
 
-A minimal accessibility safety fix was made in `assets/js/app.js`: when reduced
-motion is active, animated elements are restored to visible/untransformed
-states so no content stays hidden, and changes in the media preference are
-observed. Verify this change in both reduced-motion and normal-motion modes.
-Reduced motion must not be “fixed” by ignoring the user's OS preference; make
-content readable and allow ordinary browser scrolling while suppressing
-decorative transitions.
+## 2. Art direction — decided, do not re-litigate
 
-Important implementation caution: sticky scenes need a non-transformed
-ancestor. `setupReveals()` now excludes `.launch-scene` for this reason. Avoid
-adding `.reveal` or transforms to `.launch-scene` or ancestors of sticky scene
-elements. Use the scroll progress already measured by the JS instead of mixing
-native scroll timelines on the same properties, which previously made the
-result hard to diagnose.
+**Technical publication on ink.** A printed engineering brief: paper-white figure
+plates, one cyan accent used only for claims and measures, an editorial serif for
+the human voice, mono for every number.
 
-## Jekyll and GitHub Pages constraints
+- Ink `#05080f` / hero field `#050b12`. Text `#eaf4ff`, muted `#93a4ba`, faint `#5c6b82`.
+- `--accent: #2ad4ff` — used for *prove it.*, counters, rules, hovers. **One accent only.**
+- Type: `Space Grotesk` (display/sans), `Newsreader` (editorial), `IBM Plex Mono`
+  (data). One `@import` at the top of `shared.css`.
+- Container 1200px. Hero copy rail: `left: max(24px, calc((100vw - 1200px)/2))` → 120px at 1440.
+- Headline is fixed positioning, in this exact shape:
+  `I build it.<br /> Then I <em>prove it.</em>` (`<em>` is cyan + `white-space:nowrap`).
+  Do not rewrite it.
+- Motion: one scroll-driven scene, 180vh, pinned; reversible; fully suppressed
+  under `prefers-reduced-motion` while remaining readable.
 
-- This is a static-site repository with a root `_config.yml`, `index.html`,
-  `projects.html`, `education.html`, `interests.html`, and `contact.html`.
-- `_config.yml` declares `jekyll-seo-tag`, `url: https://iamdarshg.github.io`,
-  and an empty `baseurl`, appropriate for a user-site repository named
-  `iamdarshg.github.io`.
-- There is no Jekyll front matter requirement for ordinary static `.html`
-  files; Pages can serve them directly. If using Liquid or Jekyll plugins in a
-  page, add valid front matter and ensure the plugin is supported by the chosen
-  Pages build path.
-- The configured `jekyll-seo-tag` plugin is supported by GitHub Pages' default
-  dependency set, but any build-system change should be verified against the
-  actual Pages workflow and the repository's deployment settings.
-- Root-relative URLs such as `/assets/...` and `/projects.html` are appropriate
-  for this user-site's empty `baseurl`. If this is ever deployed as a project
-  site with a nonempty `baseurl`, convert paths to use `relative_url` or another
-  baseurl-aware approach.
-- Keep `output/` excluded from production. Do not add temporary browser
-  profiles, capture scripts, or debug captures to the published site.
-- Verify links and images in the generated `_site/` output, not just in a
-  Python server that bypasses Jekyll.
+Banned: stat cards, invented metrics, decorative gradients, glassmorphism
+overload, stock photography, dashboard chrome, "passionate developer" copy.
 
-Suggested checks (depending on locally installed tools):
+---
 
-1. `bundle exec jekyll build` (or the repository's GitHub Pages-compatible
-   build command) and inspect build output for errors/warnings.
-2. `bundle exec jekyll serve` and check the five pages plus static assets.
-3. `node --check assets/js/app.js`.
-4. Browser test at desktop and mobile dimensions, with normal motion and
-   reduced motion. Confirm wheel/touch/keyboard scrolling moves the document,
-   sticky scenes progress, no sections become inaccessible, and no assets 404.
-5. Record and inspect a full scroll-through video as requested. Screenshots
-   alone are not the acceptance test.
-6. Check the GitHub Pages Actions/deployment status and the live URL after a
-   push; a successful `git push` is not proof that Pages built or deployed.
+## 3. The hero, mechanically
 
-## Next work, in priority order
+`index.html:617` → `<section class="launch-scene">` > `.launch-stage` (sticky,
+`100svh`, `min-height:640px`, `overflow:hidden`, `isolation:isolate`) containing:
 
-1. Reproduce the reported scroll failure on the user's actual browser/device
-   if possible. Test wheel, trackpad/touch, keyboard, reduced-motion on/off,
-   and normal-motion. Distinguish actual document-scroll failure from motion
-   suppression or a pinned section that merely feels static.
-2. Verify Jekyll build compatibility and local Jekyll preview. Confirm root
-   paths and asset references in generated output.
-3. Fix only concrete scroll/accessibility defects and regressions, with a
-   before/after reproduction. Keep reduced-motion content visible.
-4. Re-art-direct the first viewport based on the screenshots and source
-   project assets. Avoid enlarging CAD annotations or wrapping the CAD image in
-   more faux UI. If no strong genuine visual is available, choose a more
-   restrained typographic/graphic treatment rather than pretending technical
-   output is product photography.
-5. Replace the current linear transform with deliberate staged choreography:
-   clear opening composition; visible object movement that is tied to scroll;
-   meaningful separation/reveal; transition into evidence and project work;
-   controlled pacing and a legible final state. Ensure the transitions are
-   reversible when scrolling back and do not trap the visitor in a long blank
-   pinned interval.
-6. Review the entire page at phone and desktop widths. Check contrast, nav,
-   content order, reduced motion, and image loading.
-7. Make a real-time screen recording of a complete homepage scroll-through,
-   watch it, and iterate until it meets the user's quality bar.
-8. Confirm the Pages deployment status and live website. The user authorized
-   pushing this checkpoint to `main`; do not assume authorization for later
-   changes beyond the explicit request.
+```
+.launch-grid                cyan grid, masked, z-index -1
+.launch-object              absolute, right rail, z-index 2
+  img.object-part--main     THE SUBJECT — the single swap point (line 636)
+  .object-ring--one/two     thin cyan reticles
+.launch-copy--top           eyebrow, h1, deck, 2 CTAs, spec strip
+.launch-copy--bottom        "FIG. 01 — EDF intake study · rotor, stator, split inlet"
+```
 
-## Preserve / avoid
+CSS is inline in `index.html`: scene ≈ lines 384–470, ≤980px flattening ≈ 540–580.
+Measured at 1440×900 today:
 
-- Preserve all existing edits and user work; inspect `git status` and diffs
-  before staging.
-- Do not reset, clean, or discard workspace changes.
-- Do not use the rejected bleak ESP-32 image as the hero.
-- Do not silently keep physically misleading or fabricated project claims.
-- Do not push further changes unless authorized or clearly within the current
-  explicit request.
-- Clearly distinguish local preview (`http://localhost:8899/`) from public
-  deployment (`https://iamdarshg.github.io/`).
+| element | box |
+|---|---|
+| `.launch-stage` | 0 → 900 (pinned) |
+| `.launch-object` | top 168, bottom 840, left 740, **709 × 673** |
+| `h1` | y ≈ 171 |
+| `.hero-spec` | y 594 → 607 |
+| `.launch-copy--bottom` | 812 → 828 |
+
+**Swap point:** `index.html:636`, one `<img data-src="…">` with
+`width="1200" height="1040"`. Change the integers with the asset or the layout
+shifts. `.object-part--main` is `object-fit:contain`,
+`filter: contrast(1.04) saturate(1.04)`.
+
+**Scroll math:** `.launch-scene` is `height:180vh; margin-top:calc(-1 * var(--hero-pull))`.
+`setupHeroOffset()` (`app.js` ≈ line 65) measures the scene's document offset,
+writes `--hero-pull`, and removes it below 981px; it re-measures on `resize` and
+`document.fonts.ready`. That pull is what makes the scene start at y=0 instead of
+y=125 (header + margin). **If the header height changes, this self-corrects — never
+hardcode 125px.**
+
+`setupScrollMotion()` (`app.js` ≈ line 110) derives progress from the scene rect
+and transforms `.launch-copy`, `.launch-object` and the story sections; reduced
+motion early-returns and restores visible/untransformed state. `setupReveals()`
+deliberately **excludes** `.launch-scene` — a transformed ancestor kills
+`position:sticky`. Never add `.reveal` or a transform to the scene or its ancestors.
+
+At ≤980px: `height:auto`, stage static, object becomes
+`position:relative; width:min(92vw,400px); aspect-ratio:1200/1040`, caption hides.
+
+---
+
+## 4. The actual problem: the picture
+
+**The hero is a 322×502 PNG upscaled ~2.2×.** `assets/images/field/hero-edf-stage.webp`
+(1200×1040, 263 KB, alpha) was composited in PIL from
+`assets/images/field/rotor-drum-clean.png`, which is **322 × 502 px**. At 1440 the
+object box is 709 CSS px wide, so the source is resampled upward ~2.2× and then
+smoothed again by the browser. That is why the subject reads soft, plastic and
+slightly fake. Rim light, grain, halo and vignette cannot fix a 322px source.
+**The fix is upstream — a better source image, not more CSS.**
+
+What the subject is: a **five-stage electric ducted fan stack** — five rotor/stator
+discs on a central hub, white casing shells, **green rotor blades**, **copper/brown
+stator vanes**, **three thin blue rods** hanging below (mounting/wiring). A real
+sub-assembly of a real build. There is **no product photograph of it in this repo**.
+
+Inventory, `assets/images/field/` (dimensions verified):
+
+| file | size | what it is |
+|---|---|---|
+| `rotor-drum-clean.png` | **322×502 RGBA** | current hero source; too small |
+| `rotor-stack-clean.png` | 368×555 RGBA | taller stack, same problem |
+| `edf-cutout.png` | **1649×1011 RGBA** | largest single-object cutout, isometric |
+| `05_EDF_A_rotor_stator_closeup_R030-cutout.png` | 1568×1014 RGBA | closeup, transparent |
+| `05_EDF_A_rotor_stator_closeup_R030.png` | 1500×950 RGB | same with **white bg + burned-in CAD title block** |
+| `07_rotor_R1_hub_blade_assembly_detail_R030-cutout.png` | 1570×977 RGBA | detail cutout |
+| `edf-b-rotor-closeup.png` | 1500×950 RGB | white bg, annotation burned in |
+| `edf-front-projection.png` | 1500×950 RGB | orthographic rotor plan — a figure, not a hero |
+| `edf-inlet-side/top.png` | 1500×950 | 2D routing schematics, near-empty |
+| `01_full_assembly_isometric_R030.png` | 1500×950 RGB | whole aircraft, small, on white |
+| `polar_compare.png` | 1210×440 | **CL vs α, Wing3d vs OpenFOAM** — the evidence plot |
+| `smoke_cp.png` | 900×600 | Cp surface, false colour |
+| `IMG_9F899C38-…jpeg` | 1178×1571 | ESP-32 breadboard photo — **rejected as hero** |
+| `airshow_*` | 1473×1213 / 1587×542 | generated geometry + metrics panels |
+
+Rules that fall out of that table:
+
+1. **Never build a hero from a white-background render with a burned-in CAD title
+   block.** The annotation is in the pixels; cropping leaves a tilted object.
+2. **Never present a generated or composited image as a photograph of his
+   hardware.** If the hero is a render, the caption says render. "EDF intake
+   study" stays truthful.
+3. Green/copper/blue is default-CAD, not art direction. Either lean into it as
+   *a parts diagram* (flat, labelled, ink-on-paper) or replace it with one
+   controlled material story. Do not half-do both.
+4. Acceptance is visual at 1440 and 390, at scroll 0 **and** pinned — not "the CSS looks right".
+
+Routes, best first:
+
+- **A. Re-render from the CAD source.** Highest ceiling. The model is *not* in
+  this repo — search `D:\CodeProjects\{cfd, drone-mech, drone-v2, edf-esc,
+  drone_main, maker-portfolio}` (or the other machine's equivalent) for
+  `.step/.stp/.stl/.blend/.obj`. Render ≥2000px, studio key + rim, one material
+  (anodised aluminium + carbon), transparent bg, 3/4 view from just below the
+  intake lip. **Blender is NOT installed** on the reference machine — but
+  `trimesh`, `vtk`, `pyvista`, `moderngl`, `torch` and `opencv` are, so an
+  offscreen PBR render is possible in pure Python:
+  `pv.Plotter(off_screen=True, window_size=(2400,2400))` + `enable_ssao()` +
+  PBR shading + `camera_position` + a 4-light rig, saved with alpha.
+- **B. Real photograph.** One 2400px frame of the printed drum on a dark surface
+  under a single hard light beats every render here. Cost: one `data-src` and
+  two integers.
+- **C. Graphic, not photographic.** If A and B are both impossible, stop
+  pretending: make it a **technical plate** — single-ink + cyan duotone, fine
+  halftone or hard threshold, let the CAD annotation and section lines become the
+  design, and let typography carry the drama. Honest, distinctive, achievable
+  with PIL today. Strictly better than a soft upscaled pseudo-photo.
+
+Whichever route: silhouette on the hero's optical centre line, the three rods
+must not run into the fold, spec strip keeps clear air beneath it.
+
+---
+
+## 5. Machine reality (verified on the reference machine)
+
+| tool | status |
+|---|---|
+| Python 3.12 + PIL 10.3 | **yes** — the workhorse for compositing/knocking out |
+| numpy 2.2, scipy 1.16, matplotlib 3.9 | yes |
+| trimesh 4.10, pyvista 0.46, vtk 9.3, moderngl 5.12 | **yes — offscreen 3D rendering is possible** |
+| torch 2.9 (+cu130), opencv 4.12 | yes |
+| Node 22 | yes — `node --check assets/js/app.js` is a real gate |
+| ffmpeg | yes (screen recordings) |
+| **Blender / ImageMagick / Ruby / Jekyll / Bundler** | **no** |
+
+- The only image *generator* is an OpenCode experimental tool — see §11.3. Do not
+  claim an image was generated unless it actually was.
+- **Playwright MCP is broken on the reference machine**:
+  `ENOTDIR: not a directory, mkdir 'C:\Users\Darsh Gupta\AppData\Local\ms-playwright'`.
+  Workaround there: Python Playwright with system Edge,
+  `executable_path=r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"`.
+  On a fresh machine install Playwright MCP properly (§10) so this workaround is unnecessary.
+- `gh` is authenticated as `iamdarshg` with `repo` scope.
+  **`tannmay-python` has been invited with write (push) permission** — pending
+  acceptance at `https://github.com/iamdarshg/iamdarshg.github.io/invitations`.
+  Nothing else is needed for him to push to `main`.
+- `output/` is gitignored (contains a large Playwright profile dump — ignore it).
+
+---
+
+## 6. Verification protocol — run it, paste the output
+
+All six must pass before any pass is reported done.
+
+1. `node --check assets/js/app.js`
+2. Five pages × two viewports (1440×900, 390×844), asserting:
+   `scrollWidth === clientWidth` (zero horizontal overflow), exactly one `h1`,
+   zero `img[complete && naturalWidth===0]`, zero 4xx responses, zero console errors.
+3. Hero at scroll 0 **and** after ~300px: `.launch-object` fully inside the stage;
+   `.launch-copy--bottom` bottom < viewport height in both states.
+4. Keyboard: tab reaches both hero CTAs with a visible focus ring.
+5. Reduced motion (`page.emulate_media(reduced_motion="reduce")`): headline, deck,
+   CTAs and spec strip visible and untransformed.
+6. **Open the screenshots.** Full page at both widths, plus hero at 1440/1024/768/390.
+   If you did not look at the image, you did not verify it.
+
+Snippet to reuse (Python Playwright, works on any machine with browsers installed):
+
+```python
+from playwright.sync_api import sync_playwright
+with sync_playwright() as p:
+    b = p.chromium.launch()          # reference machine: executable_path=…msedge.exe
+    for w, h in [(1440, 900), (390, 844)]:
+        pg = b.new_page(viewport={"width": w, "height": h})
+        errs, bad = [], []
+        pg.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
+        pg.on("response", lambda r: bad.append((r.status, r.url)) if r.status >= 400 else None)
+        pg.goto("http://127.0.0.1:8899/", wait_until="networkidle")
+        print(w, pg.evaluate("""() => ({
+          ov: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          h1: document.querySelectorAll('h1').length,
+          broken: [...document.images].filter(i => i.complete && !i.naturalWidth).length
+        })"""), errs, bad)
+```
+
+---
+
+## 7. Known defects, in priority order
+
+1. **Hero subject is a 322px source upscaled 2.2×** (§4). *The* defect. Everything
+   else is polish.
+2. **Hero dead space:** ~200px of empty ink between the spec strip (y≈600) and the
+   figure caption (y≈812) at 1440. Resolve with composition (raise the object, add
+   a measure, move the caption), never with filler.
+3. **Mobile drum too small:** at 390 the drum occupies ~269px of a 359px box and
+   does not own the fold.
+4. **`FIG. 01` caption** is `#c7d5e2` at 10.5px — legible, not strong.
+5. **Hero is dark-mode-only** (`#050b12`) while the rest themes to `#f5f8fc` in
+   light mode. Verify the bottom seam still reads as intentional.
+6. **Spec strip at 360px** wraps against the right edge with no separators. Add a
+   wrap rule before adding a fourth item.
+
+---
+
+## 8. Do not
+
+- Do not reset, clean or discard working-tree changes; `git status` first.
+- Do not replace the homepage layout. It was rebuilt deliberately; improve the
+  picture and the composition.
+- Do not use the ESP-32 breadboard photo as hero imagery.
+- Do not claim Wing3d matches OpenFOAM. On the polar plot the OpenFOAM RANS points
+  sit **below every Wing3d curve** and the mesh is coarse. The copy states a gap;
+  the copy stays.
+- Do not invent metrics, awards or numbers. Real facts only: Grade 12 · NPS HSR ·
+  CBSE PCMC; Wing3d (TSD vs OpenFOAM, CL ± band); Copperline (C++20 PCB autorouter);
+  Code-SDR (LIF-MD6000, 105 MSPS); RCS surrogate paper draft; HMUN 2023/2024;
+  IIT Techfest MUN; Astro Space Camp 2023/2024; Skill Titans top-50; Minvayu FabLab
+  internship; cAIpher hackathon.
+- Do not add tracking, frameworks, or a build step. Plain HTML/CSS/JS, Jekyll-safe,
+  root-relative paths (empty `baseurl`).
+- Do not publish `output/` or `reels-notes.md` (both gitignored).
+
+---
+
+## 9. Definition of done
+
+- Hero subject crisp at 1440 on a 2× display (no visible upscaling), reads as one
+  deliberate object, honest about being a render.
+- First viewport: one focal point, one statement, two CTAs, no dead interval
+  longer than ~120px.
+- At 390 the subject owns the upper third and the CTAs sit above 700px.
+- No overflow, no clipped text, no console errors, one `h1` per page.
+- Reduced motion readable; motion reversible.
+- Pushed to `main`, and the live URL re-checked with §6's assertions — a green
+  `git push` is not proof that Pages deployed.
+
+---
+
+## 10. Bootstrap a fresh machine (do this first)
+
+### 10.1 MCP servers
+
+Install globally so the loop works from any directory:
+
+```sh
+opencode mcp add playwright  --global -- bunx @playwright/mcp@latest
+opencode mcp add filesystem  --global -- npx -y @modelcontextprotocol/server-filesystem "$HOME/code"
+opencode mcp add thinking    --global -- npx -y @modelcontextprotocol/server-sequential-thinking
+opencode mcp add context7    --global --url https://mcp.context7.com/mcp
+opencode mcp list
+```
+
+Optional, only if the relevant tool exists locally:
+
+```sh
+# GitHub issues/PRs without shelling out (PAT in env, never in the file)
+opencode mcp add github --global --url https://api.githubcopilot.com/mcp/ \
+  --header 'Authorization=Bearer {env:GITHUB_PAT}'
+
+# Real 3D control, ONLY if Blender is installed and the addon is set up
+uvx blender-mcp        # ahujasid/blender-mcp — verify the repo before installing
+```
+
+Rules: `opencode mcp list` must show every server `connected` **before** the loop
+starts. Remote servers with OAuth need one interactive `/mcps` sign-in — do it now,
+not mid-loop. If a server refuses to connect, disable it with `"disabled": true`
+rather than leaving a half-configured entry. Do not add MCPs you will not call;
+each one costs context.
+
+### 10.2 `opencode.jsonc` — autonomy + swarm
+
+Project file at the repo root. Merge, do not clobber an existing config.
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Never stop to ask. Base policy already allows everything; these three
+  // lines close the only two gaps: the question tool and .env reads.
+  "permissions": [
+    { "action": "question", "resource": "*", "effect": "deny" },
+    { "action": "read", "resource": "*.env", "effect": "allow" },
+    { "action": "read", "resource": "*.env.*", "effect": "allow" }
+  ],
+
+  "experimental": { "subagent_depth": 3, "todo": true },
+
+  "agents": {
+    // Read-only critic. Never edits, never asks; returns findings + severity.
+    "critic": {
+      "description": "Adversarial visual + code critic for the hero and page composition",
+      "mode": "subagent",
+      "system": "You are a hostile design critic. Judge the rendered page, not the source. Report only defects that a paying client would notice, each with file:line, severity (P0/P1/P2), and a one-line fix. Never edit files. Never ask questions. If the render is good, say so and stop.",
+      "permissions": [
+        { "action": "edit", "resource": "*", "effect": "deny" },
+        { "action": "question", "resource": "*", "effect": "deny" }
+      ]
+    },
+    // Narrow implementer. One finding at a time, then verify and report.
+    "fixer": {
+      "description": "Implements exactly one critic finding, then verifies it",
+      "mode": "subagent",
+      "system": "Implement exactly one assigned finding. Touch the minimum number of files. Then run the verification protocol and report the measured before/after. Do not refactor unrelated code. Never ask questions.",
+      "permissions": [
+        { "action": "question", "resource": "*", "effect": "deny" }
+      ]
+    },
+    // Evidence runner: screenshots, console, overflow, live URL.
+    "verifier": {
+      "description": "Runs browser evidence and returns measurements, not opinions",
+      "mode": "subagent",
+      "system": "Collect evidence: screenshots at 1440/1024/768/390, console errors, 4xx, scrollWidth vs clientWidth, h1 count, broken images, hero box geometry at scroll 0 and pinned. Return numbers and image paths. Never edit files. Never ask questions.",
+      "permissions": [
+        { "action": "edit", "resource": "*", "effect": "deny" },
+        { "action": "question", "resource": "*", "effect": "deny" }
+      ]
+    }
+  }
+}
+```
+
+Notes that matter:
+
+- `"action": "question", "effect": "deny"` is what makes "never asks" true — it
+  removes the question tool entirely. **Deny it last** so it overrides anything global.
+- The base policy already allows `shell`, `edit`, `webfetch`, `subagent`, and every
+  MCP tool. Do not add per-tool allow rules; they only create gaps.
+- `experimental.subagent_depth: 3` lets a critic spawn a verifier that spawns a
+  fixer. Without it, depth defaults to 1 and swarms collapse into a single call.
+- The shipped `general` agent denies subagents and questions — build your roster on
+  `build` or on the named agents above, never on `general`.
+
+### 10.3 Optional: real image generation
+
+If the other machine has an image model configured, OpenCode exposes
+`experimental_image_generate`:
+
+```jsonc
+{ "experimental": { "image_generate": { "model": "openai/gpt-image-2" } } }
+```
+
+Use it **only** for abstract plates (backgrounds, material studies, a lighting
+pass), never to fabricate the student's hardware. A generated "photo" of an EDF he
+built is a lie the admissions reader cannot check and Darsh cannot defend.
+
+---
+
+## 11. Execution model: critic → fix swarm, not vibes
+
+Do not "make it look nice" in one pass. Run a loop of *measure → accuse → repair →
+re-measure*, with a hard cap so it terminates.
+
+**One cycle:**
+
+1. **Render.** Capture hero at 1440×900, 1024×800, 768×900, 390×844; scroll 0 and
+   pinned; plus full-page. Save under `output/pass-<n>/`.
+2. **Critic (parallel, 2–3 instances, different lenses).** Same screenshots, distinct
+   briefs — never the same brief twice:
+   - *Composition critic*: focal point, weight, dead space, eye path, fold.
+   - *Craft critic*: resolution, halation, edge quality, material believability,
+     colour cast, "does this look like a product photo or a screenshot".
+   - *Copy/CTA critic*: does the first screen sell in one read; do the CTAs promise
+     something the page actually delivers.
+3. **Merge.** Dedupe, rank P0/P1/P2. Any P0 (illegible, broken, dishonest, overflow)
+   jumps the queue. Cap the batch at **3 P0/P1 fixes per cycle** — more than that and
+   you cannot attribute what worked.
+4. **Fix (parallel where files do not overlap).** One `fixer` per finding. Findings
+   touching `index.html` hero CSS must run **serially** — concurrent edits to the same
+   region corrupt the file.
+5. **Verify.** `verifier` + §6. Compare before/after numerically. If a fix does not
+   measurably improve or is not visible in the screenshot, **revert it**.
+6. **Log.** Append to `output/pass-log.md`: cycle, findings, fix, measurement,
+   verdict (kept / reverted). This file is the audit trail and is gitignored.
+7. **Commit** when the tree is green, with a message naming the measured change.
+
+Stop conditions (any one): zero P0/P1 remaining; three consecutive cycles with no
+measurable improvement; or the hero source resolution ceiling is hit (§4 route A/B
+required and unavailable). Then report and stop — do not keep polishing.
+
+---
+
+## 12. The un-attended loop
+
+Objective function, in priority order. Never lose sight of it:
+**(1) hero looks like a product; (2) nothing is broken; (3) the page is honest.**
+
+Operating rules for the loop:
+
+- **Never ask.** No clarifying questions, no "shall I proceed", no permission
+  negotiation. The `question` permission is denied in config; treat a would-be
+  question as a decision you must make and record in `output/pass-log.md`
+  (decision + rationale + how to reverse).
+- **Never idle.** If a task is blocked (missing asset, broken tool), pick the next
+  item from §7 and proceed. Record the blocker; do not wait for a human.
+- **Never widen scope.** Only §7 defects and §4's picture. Not a redesign.
+- **Never lie.** If the hero is still soft, say so in the final report with the
+  number (source px vs rendered px).
+- **Always verify with your own eyes.** Screenshot, open it, then claim.
+- **Always commit green.** Broken tree at the end of a cycle is a P0.
+
+Cycle shape, repeated:
+
+```
+while (defects remain && cycles < 8):
+    capture  →  3 critics  →  merge+rank  →  ≤3 fixes  →  verify  →  log  →  commit
+    if no measurable change for 2 cycles: change approach (§4 route A→B→C)
+```
+
+Re-entry after a context reset: re-read this file, `git log -3`,
+`output/pass-log.md`, `output/` latest screenshots. Resume at the first unmet
+condition in §9. Do not re-derive the design system.
+
+Termination report must contain: source-image dimensions and rendered display size,
+which §4 route was used, the four hero screenshots, the §6 pass/fail table, the
+commit SHA, and the live-URL re-check result.
