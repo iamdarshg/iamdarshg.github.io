@@ -384,65 +384,112 @@
     }
 
     /* ---------- cinematic launch scene ---------- */
-    .launch-scene { position:relative; height:220vh; margin:0 calc(50% - 50vw); }
-    .launch-stage { position:sticky; top:0; height:100vh; min-height:680px; overflow:hidden; display:grid; place-items:center; background:#02060c; isolation:isolate; }
-    .launch-grid { position:absolute; inset:-20%; opacity:.42; transform:perspective(600px) rotateX(58deg) translateY(22%); background-image:linear-gradient(rgba(42,212,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(42,212,255,.12) 1px,transparent 1px); background-size:72px 72px; mask-image:radial-gradient(ellipse at center,black 10%,transparent 68%); z-index:-1; }
-    .launch-stage::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 42%,rgba(42,212,255,.16),transparent 23%),radial-gradient(circle at 72% 20%,rgba(246,179,91,.1),transparent 20%),linear-gradient(180deg,#02060c 0%,transparent 42%,#02060c 100%); z-index:-1; }
-    .launch-copy { position:absolute; z-index:3; left:max(24px,calc((100vw - 1200px)/2)); right:max(24px,calc((100vw - 1200px)/2)); }
-    .launch-copy--top { top:15vh; max-width:560px; }
-    .launch-eyebrow { color:var(--accent); font:600 10px var(--font-mono); letter-spacing:.18em; }
-    .launch-copy h1 { margin-top:22px; max-width:560px; color:#f4f9ff; font-size:clamp(46px,6.4vw,96px); line-height:.91; letter-spacing:-.065em; text-shadow:0 10px 50px rgba(0,0,0,.45); mix-blend-mode:normal; }
-    .launch-copy h1 em { color:var(--accent); font-style:normal; }
-    .launch-copy--top p { max-width:360px; margin-top:24px; color:#8fa4b8; font-size:16px; line-height:1.6; }
-    .launch-copy--bottom { bottom:9vh; display:flex; align-items:center; gap:18px; color:#c7d5e2; font:500 12px var(--font-mono); }
-    .launch-counter { color:var(--accent); font-weight:600; }.launch-counter i { color:#637589; font-style:normal;margin:0 5px; }.launch-line { width:80px;height:1px;background:var(--accent); }
-    .launch-corner { position:absolute; z-index:3; bottom:9vh; color:#617489; font:500 9px/1.6 var(--font-mono); letter-spacing:.1em; }.launch-corner--right { right:max(24px,calc((100vw - 1200px)/2)); text-align:right; }.launch-corner--left { left:max(24px,calc((100vw - 1200px)/2)); }
-    .launch-object { position:absolute; z-index:2; width:min(68vw,840px); height:min(70vh,660px); top:17%; left:66%; transform:translateX(-50%); transform-origin:center; will-change:transform,opacity; contain:layout paint; }
-    .object-part { position:absolute; object-fit:contain; mix-blend-mode:screen; filter:contrast(1.18) saturate(1.12) brightness(1.08) drop-shadow(0 24px 34px rgba(0,0,0,.46)); will-change:transform,opacity; }
-    .object-part--main { inset:0; width:100%; height:100%; opacity:1; }
-    .object-part--detail { width:30%; height:34%; right:4%; bottom:2%; transform:rotate(5deg); opacity:.95; }
-    .object-part--hub { width:24%; height:28%; left:-1%; bottom:7%; transform:rotate(-8deg); opacity:.82; }
-    .object-ring { position:absolute; left:50%;top:50%; border:1px solid rgba(42,212,255,.3);border-radius:50%;transform:translate(-50%,-50%); }.object-ring--one{width:45%;aspect-ratio:1;}.object-ring--two{width:70%;aspect-ratio:1;border-color:rgba(246,179,91,.18);}
-    .object-axis { position:absolute; opacity:.55; background:var(--accent); transform-origin:left center; }.object-axis--x { width:190px; height:1px; left:12%; bottom:15%; }.object-axis--y { width:1px; height:110px; left:12%; bottom:15%; transform:rotate(90deg); }
-    .object-callout { position:absolute; color:var(--accent); font:600 9px var(--font-mono); letter-spacing:.14em; white-space:nowrap; }.object-callout--top { top:12%; right:6%; }.object-callout--bottom { bottom:18%; left:20%; color:var(--amber); }
-    .launch-stage-caption { display:none; }.launch-scene + .flight-story { margin-top:0; }
+    .launch-scene { position:relative; height:180vh; margin:0 calc(50% - 50vw); }
+    .launch-stage { position:sticky; top:0; height:100svh; min-height:640px; overflow:hidden; display:grid; place-items:center; background:#050b12; isolation:isolate; }
+    .launch-grid { position:absolute; inset:0; opacity:.26; background-image:linear-gradient(rgba(42,212,255,.11) 1px,transparent 1px),linear-gradient(90deg,rgba(42,212,255,.11) 1px,transparent 1px); background-size:80px 80px; mask-image:linear-gradient(90deg,transparent 10%,#000 55%,transparent); z-index:-1; }
+    .launch-stage::before { content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 73% 48%,rgba(42,212,255,.12),transparent 34%),linear-gradient(90deg,#050b12 0%,rgba(5,11,18,.92) 38%,rgba(5,11,18,.28) 72%,#050b12 100%); z-index:-1; }
+    .launch-copy { position:absolute; z-index:3; left:max(24px,calc((100vw - 1200px)/2)); }
+    .launch-copy--top { top:19vh; width:min(46vw,570px); }
+    .launch-eyebrow { color:var(--accent); font:600 10px var(--font-mono); letter-spacing:.14em; }
+    .launch-copy h1 { margin-top:18px; max-width:640px; color:#f4f9ff; font-size:clamp(48px,5.8vw,84px); line-height:.93; letter-spacing:-.045em; text-shadow:0 10px 40px rgba(0,0,0,.4); }
+    .launch-copy h1 em { color:var(--accent); font-style:normal; white-space:nowrap; }
+    .launch-copy--top p { max-width:360px; margin-top:22px; color:#b4c2d0; font-size:15px; line-height:1.6; }
+    .hero-cta { display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+    .cta { display:inline-flex; align-items:center; gap:9px; min-height:46px; padding:0 20px; border:1px solid rgba(234,244,255,.28); border-radius:999px; color:#eaf4ff; font:600 10.5px var(--font-mono); letter-spacing:.1em; text-transform:uppercase; transition:background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease; }
+    .cta:hover { border-color:#eaf4ff; color:#fff; transform:translateY(-1px); }
+    .cta--solid { background:#eaf4ff; border-color:#eaf4ff; color:#050b12; }
+    .cta--solid:hover { background:var(--accent); border-color:var(--accent); color:#03141d; }
+    .hero-spec { display:flex; flex-wrap:wrap; align-items:center; gap:0; margin:34px 0 0; padding:0; list-style:none; font:500 9.5px var(--font-mono); letter-spacing:.13em; text-transform:uppercase; color:#7f90a3; }
+    .hero-spec li { display:flex; align-items:center; }
+    .hero-spec li + li::before { content:""; width:1px; height:9px; margin:0 13px; background:rgba(255,255,255,.18); }
+    @media (max-width:640px) { .hero-spec { margin-top:24px; font-size:8.5px; letter-spacing:.1em; column-gap:15px; row-gap:7px; } .hero-spec li + li::before { display:none; } }
+    .launch-work-link { display:inline-flex; align-items:center; gap:12px; margin-top:24px; padding-bottom:6px; border-bottom:1px solid rgba(42,212,255,.6); color:#eff8ff; font:500 12px var(--font-mono); transition:color .2s ease; }
+    .launch-work-link:hover { color:var(--accent); }.launch-work-link span { color:var(--accent); font-size:16px; }
+    .launch-copy--bottom { left:max(24px,calc((100vw - 1200px)/2)); bottom:8vh; display:flex; align-items:center; gap:14px; color:#c7d5e2; font:500 10.5px/1.5 var(--font-mono); letter-spacing:.04em; }
+    .launch-counter { flex:none; color:var(--accent); font-weight:600; }.launch-counter i { color:#637589; font-style:normal;margin:0 5px; }.launch-line { flex:none; width:52px;height:1px;background:var(--accent); }
+    .launch-corner { position:absolute; z-index:3; bottom:8vh; color:#8b9bab; font:500 9px/1.6 var(--font-mono); letter-spacing:.08em; }.launch-corner--right { right:max(24px,calc((100vw - 1200px)/2)); text-align:right; }.launch-corner--left { display:none; }
+    .launch-object { position:absolute; z-index:2; width:min(56vw,780px); height:min(82vh,760px); top:8%; left:71%; transform:translateX(-50%); transform-origin:center; will-change:transform,opacity; contain:layout paint; }
+    .object-part { position:absolute; object-fit:contain; }
+    .object-part--main { inset:0; width:100%; height:100%; opacity:1; filter:contrast(1.04) saturate(1.04); }
+    .object-ring { position:absolute; left:50%;top:50%; border:1px solid rgba(42,212,255,.22);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none; }.object-ring--one{width:62%;aspect-ratio:1;}.object-ring--two{width:91%;aspect-ratio:1;border-color:rgba(246,179,91,.13);}
+    .launch-scene + .notes { margin-top:0; }
+    .work-index { display:grid; grid-template-columns:.8fr 1.2fr; gap:8vw; align-items:start; padding-top:100px; padding-bottom:110px; }
+    .section-kicker { color:var(--accent); font:600 10px var(--font-mono); letter-spacing:.14em; text-transform:uppercase; }
+    .work-index__intro h2,.notes-head h2 { margin-top:16px; max-width:420px; font:600 clamp(34px,4.2vw,54px)/1 var(--font-display); letter-spacing:-.04em; }
+    .work-index__intro h2 { padding-bottom:4px; }
+
+    /* ---------- field notes ---------- */
+    .notes { padding-top:110px; }
+    .notes-head { display:grid; grid-template-columns:.9fr 1.1fr; gap:8vw; align-items:end; padding-bottom:36px; border-bottom:1px solid var(--line-strong); }
+    .notes-head p { max-width:46ch; margin-top:0; color:var(--muted); font-size:15px; line-height:1.75; }
+    .note { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr); gap:min(7vw,88px); align-items:center; padding:76px 0; border-bottom:1px solid var(--line); }
+    .note--flip .note__plate { grid-column:2; grid-row:1; }
+    .note--flip .note__copy { grid-column:1; grid-row:1; }
+    .note__plate { margin:0; min-width:0; }
+    .note__plate img { display:block; width:100%; aspect-ratio:16/10.5; object-fit:contain; border:1px solid var(--line); border-radius:var(--radius); background:radial-gradient(ellipse at 50% 35%,#101c29,#060c14 78%); }
+    .note__plate--paper img { padding:14px 18px; background:#f4f6f7; border-color:rgba(255,255,255,.16); }
+    .note__plate figcaption { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 18px; margin-top:11px; color:var(--faint); font:500 9.5px var(--font-mono); letter-spacing:.08em; text-transform:uppercase; }
+    .note__plate figcaption span:last-child { color:var(--muted); }
+    .note__num { color:var(--accent); font:600 10px var(--font-mono); letter-spacing:.14em; text-transform:uppercase; }
+    .note h3 { max-width:17ch; margin-top:16px; font:600 clamp(26px,2.7vw,36px)/1.1 var(--font-display); letter-spacing:-.03em; }
+    .note p { max-width:42ch; margin-top:16px; color:var(--muted); font-size:14.5px; line-height:1.78; }
+    .note__meta { display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:22px; color:var(--faint); font:500 10px var(--font-mono); letter-spacing:.06em; }
+    .note__meta span::before { content:"·"; margin-right:8px; color:var(--accent); }
+    .note__meta span:first-child::before { content:none; margin:0; }
+
+    .work-index__list { border-top:1px solid var(--line-strong); }
+    .work-row { display:grid; grid-template-columns:110px minmax(120px,.7fr) minmax(180px,1fr) 20px; gap:16px; align-items:baseline; padding:22px 0; border-bottom:1px solid var(--line); transition:padding .22s ease,color .22s ease; }
+    .work-row:hover { padding-left:10px; color:var(--accent); }
+    .work-row__type { color:var(--accent); font:500 10px var(--font-mono); letter-spacing:.08em; }
+    .work-row strong { font:600 20px var(--font-display); }
+    .work-row > span:nth-last-child(2) { color:var(--muted); font-size:13px; }
+    .work-row__arrow { color:var(--accent); }
+    .about-panel { padding:0; border:0; border-radius:0; background:none; box-shadow:none; }
+    .about-panel h2 { max-width:15ch; font:600 clamp(30px,3.6vw,46px)/1.02 var(--font-display); letter-spacing:-.04em; }
+    .about-panel p { max-width:44ch; margin-top:18px; color:var(--muted); font-size:15px; line-height:1.72; }
+    .stack { display:grid; gap:36px; align-content:start; }
+    .stack .card { padding:20px 0 0; border:0; border-top:1px solid var(--line-strong); border-radius:0; background:none; box-shadow:none; }
+    .stack .card h3 { color:var(--accent); font:600 10px var(--font-mono); letter-spacing:.14em; text-transform:uppercase; }
+    .chips { display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:14px; }
+    .chip { padding:0; border:0; border-radius:0; background:none; color:#c9d6e2; font:500 13px var(--font-mono); }
+    .chip::after { content:"/"; margin-left:14px; color:#42576b; }
+    .chip:last-child::after { content:none; }
 
     /* Launch motion is driven by assets/js/app.js so the pinned scene remains deterministic. */
     @keyframes launch-object { from{transform:translateX(-50%) translateY(20vh) scale(.42);opacity:.45} 35%{opacity:1} to{transform:translateX(-50%) translateY(-10vh) scale(1.22);opacity:.75} }
     @keyframes launch-copy { from{transform:translateY(0);opacity:1} 45%{opacity:1} to{transform:translateY(-15vh);opacity:0} }
     @keyframes launch-bottom { from{opacity:1;transform:translateY(0)} 55%{opacity:1} to{opacity:0;transform:translateY(20px)} }
 
-    /* ---------- scroll story ---------- */
-    .flight-story {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
-      gap: 56px;
-      min-height: 210vh;
-      margin: 100px calc(50% - 50vw) 0;
-      padding: 0 max(20px, calc((100vw - 1200px) / 2));
-      background: linear-gradient(180deg, transparent, rgba(42,212,255,.035) 20%, rgba(42,212,255,.015) 80%, transparent);
-    }
-    .flight-story__media { position: sticky; top: 10vh; height: 80vh; align-self: start; display: grid; place-items: center; }
-    .flight-frame { position: absolute; overflow: hidden; border: 1px solid var(--line-strong); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); transform-origin: center center; will-change: transform, opacity, clip-path; }
-    .flight-frame img { display:block; width:100%; height:100%; object-fit:cover; }
-    .flight-frame::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,transparent 48%,rgba(3,8,15,.84)); pointer-events:none; }
-    .flight-frame figcaption { position:absolute; z-index:1; left:22px; right:22px; bottom:20px; display:grid; gap:4px; }
-    .flight-frame figcaption span { color:var(--accent); font:600 10px var(--font-mono); letter-spacing:.12em; }
-    .flight-frame figcaption strong { font:600 20px var(--font-display); }
-    .flight-frame--main { width:min(100%, 690px); height:min(68vh, 620px); transform:rotate(-2deg) scale(.78); }
-    .flight-frame--detail { width:48%; height:36%; right:0; bottom:2%; transform:rotate(5deg) scale(.65); z-index:2; }
-    .flight-story__copy { padding-top:20vh; padding-bottom:40vh; }
-    .story-kicker { color:var(--accent); font:600 11px var(--font-mono); letter-spacing:.16em; text-transform:uppercase; margin-bottom:26px; }
-    .story-beat { min-height:60vh; display:grid; grid-template-columns:52px 1fr; gap:18px; align-content:center; opacity:.3; transition:opacity .35s ease; }
-    .story-beat h2 { max-width:400px; font-size:clamp(30px,4vw,52px); letter-spacing:-.04em; }
-    .story-beat p { max-width:370px; color:var(--muted); margin-top:14px; font-size:15px; line-height:1.7; }
-    .story-index { color:var(--accent); font:600 11px var(--font-mono); padding-top:9px; }
-    .flight-story__copy:has(.story-beat:hover) .story-beat:hover { opacity:1; }
-    /* Flight-story motion is driven once by assets/js/app.js. */
-    @keyframes frame-arrival { from { transform:rotate(-8deg) scale(.58); opacity:.2; clip-path:inset(18% 12% 8% 12% round 16px); } to { transform:rotate(0) scale(1); opacity:1; clip-path:inset(0 round 16px); } }
-    @keyframes detail-arrival { from { transform:translate(25%,18%) rotate(14deg) scale(.45); opacity:0; } to { transform:translate(0) rotate(5deg) scale(1); opacity:1; } }
-    @keyframes beat-focus { from { opacity:.24; transform:translateY(30px); } 45%,70% { opacity:1; transform:none; } to { opacity:.28; transform:translateY(-15px); } }
+    /* ---------- about ---------- */
+    .about { padding-bottom:20px; }
+    .about-grid { display:grid; grid-template-columns:.85fr 1.15fr; gap:8vw; align-items:start; padding-bottom:52px; border-bottom:1px solid var(--line-strong); }
+    .about-grid h2 { max-width:19ch; margin-top:16px; font:600 clamp(30px,3.5vw,46px)/1.04 var(--font-display); letter-spacing:-.04em; }
+    .about-body p { color:var(--muted); font-size:15px; line-height:1.78; }
+    .about-body p + p { margin-top:16px; }
+    .about-lede { color:var(--text); font:400 clamp(19px,1.7vw,22px)/1.5 var(--font-editorial); letter-spacing:-.005em; }
+    .about-lede em { font-style:italic; color:var(--accent); }
+    .now { display:grid; margin:30px 0 0; padding:0; }
+    .now > div { display:grid; grid-template-columns:104px minmax(0,1fr); gap:18px; padding:11px 0; border-top:1px solid var(--line); }
+    .now dt { padding-top:2px; color:var(--accent); font:600 9.5px var(--font-mono); letter-spacing:.12em; text-transform:uppercase; }
+    .now dd { margin:0; color:var(--text); font-size:13.5px; line-height:1.6; }
+    .about-lists { display:grid; grid-template-columns:1fr 1fr; gap:8vw; padding-top:44px; }
+
+    /* ---------- reviewer close ---------- */
+    .reviewer { display:grid; grid-template-columns:.78fr 1.22fr; gap:7vw; align-items:start; margin:100px calc(50% - 50vw) 0; padding:64px max(24px,calc((100vw - 1200px)/2)) 76px; border-top:1px solid var(--line-strong); background:linear-gradient(180deg,rgba(42,212,255,.055),transparent 72%); }
+    .reviewer h2 { max-width:11ch; margin-top:14px; font:600 clamp(36px,4.4vw,58px)/.98 var(--font-display); letter-spacing:-.045em; }
+    .reviewer p { max-width:34ch; margin-top:16px; color:var(--muted); font-size:14px; line-height:1.7; }
+    .reviewer-steps { margin:0; padding:0; list-style:none; border-top:1px solid var(--line-strong); }
+    .reviewer-steps a { display:grid; grid-template-columns:38px minmax(0,1fr) minmax(0,1fr); gap:16px; align-items:baseline; padding:18px 0; border-bottom:1px solid var(--line); color:var(--text); }
+    .reviewer-steps span { color:var(--accent); font:600 10px var(--font-mono); letter-spacing:.1em; }
+    .reviewer-steps strong { font:600 19px var(--font-display); letter-spacing:-.01em; }
+    .reviewer-steps small { color:var(--muted); font-size:12.5px; line-height:1.5; }
+    .reviewer-steps a:hover strong { color:var(--accent); }
+    .reviewer-steps a:hover { padding-left:6px; }
+    .reviewer-steps a { transition:padding .2s ease; }
+    .reviewer-cta { display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-top:28px; }
+    .reviewer-cta .cta { border-color:var(--line-strong); color:var(--text); }
+    .reviewer-cta .cta--solid { background:var(--text); border-color:var(--text); color:var(--bg); }
+    .reviewer-cta small { color:var(--faint); font:500 11px var(--font-mono); }
 
     /* ---------- responsive ---------- */
     @media (max-width: 980px) {
@@ -468,18 +515,29 @@
         gap: 14px;
       }
 
-      .flight-story { grid-template-columns: 1fr; min-height: auto; margin-left:-14px; margin-right:-14px; padding:0 14px; gap:0; }
-      .flight-story__media { position:relative; top:auto; height:70vh; min-height:460px; }
-      .flight-story__copy { padding:0 0 12vh; }
-      .story-beat { min-height:46vh; }
-      .flight-frame--main { width:88%; height:58%; }
-      .flight-frame--detail { width:46%; height:32%; }
-    }
+      .work-index { grid-template-columns:1fr; gap:30px; padding-top:70px; padding-bottom:70px; }
+      .work-row { grid-template-columns:75px 1fr 20px; gap:10px; padding:16px 0; }
+      .work-row > span:nth-last-child(2) { grid-column:2; grid-row:2; }
+      .work-row__arrow { grid-column:3; grid-row:1 / span 2; }
 
-      .research-item figure {
-        aspect-ratio: 16 / 8;
-        max-height: 220px;
-      }
+      .notes { padding-top:70px; }
+      .notes-head { grid-template-columns:1fr; gap:20px; padding-bottom:26px; }
+      .notes-head p { max-width:52ch; }
+      .note { grid-template-columns:1fr; gap:22px; padding:44px 0; }
+      .note--flip .note__plate,
+      .note--flip .note__copy { grid-column:1; grid-row:auto; }
+      .note h3 { max-width:24ch; }
+      .note p { max-width:56ch; }
+
+      .about-grid { grid-template-columns:1fr; gap:22px; padding-bottom:36px; }
+      .about-grid h2 { max-width:22ch; }
+      .now > div { grid-template-columns:84px minmax(0,1fr); gap:12px; }
+      .about-lists { grid-template-columns:1fr; gap:30px; padding-top:32px; }
+
+      .reviewer { grid-template-columns:1fr; gap:32px; margin-top:70px; padding-top:48px; padding-bottom:56px; }
+      .reviewer h2 { max-width:14ch; }
+      .reviewer-steps a { grid-template-columns:30px minmax(0,1fr); }
+      .reviewer-steps small { grid-column:2; }
     }
 
     @media (max-width: 560px) {
@@ -488,23 +546,24 @@
         padding-top: 8px;
       }
 
-      .launch-scene { height:170vh; }
-      .launch-stage { min-height:640px; }
-      .launch-copy--top { top:14vh; }
-      .launch-copy h1 { width:min(100%, 330px); max-width:330px; font-size:42px; line-height:.95; overflow-wrap:normal; }
-      .launch-copy--top p { font-size:14px; max-width:280px; }
-      .launch-object { width:108vw; height:48vh; top:31%; left:50%; }
-      .object-part--detail { width:34%; height:36%; }
-      .object-part--hub { width:28%; height:30%; left:-6%; }
-      .object-callout--top { right:0; }
-      .object-callout--bottom { left:16%; }
-      .launch-copy--bottom { bottom:15vh; }
-      .launch-stage-caption { left:14px; right:14px; bottom:9vh; max-width:260px; }
-      .launch-stage-caption--two { bottom:22vh; }
-      .launch-stage-caption--three { bottom:35vh; }
-      .launch-corner { bottom:7vh; font-size:8px; }
-      .launch-corner--right { right:14px; }
-      .launch-corner--left { left:14px; }
+      .launch-scene { height:auto; margin-top:-12px; }
+      .launch-stage { position:relative; top:auto; height:auto; min-height:0; display:flex; flex-direction:column; align-items:stretch; padding:42px 18px 28px; overflow:hidden; }
+      .launch-stage::before { background:radial-gradient(ellipse at 70% 76%,rgba(42,212,255,.10),transparent 44%),linear-gradient(180deg,#050b12 0%,#07101a 100%); }
+      .launch-copy--top { position:relative; inset:auto; width:100%; max-width:none; }
+      .launch-eyebrow { font-size:9px; line-height:1.7; }
+      .launch-copy h1 { width:100%; max-width:380px; font-size:clamp(42px,11.4vw,54px); line-height:.98; letter-spacing:-.04em; }
+      .launch-copy--top p { font-size:14px; max-width:310px; margin-top:14px; }
+      .hero-cta { margin-top:20px; }
+      .cta { min-height:42px; padding:0 16px; font-size:10px; }
+      .launch-work-link { margin-top:16px; }
+      .launch-object { position:relative; inset:auto; width:min(92vw,400px); height:auto; aspect-ratio:4/3; margin:10px auto 0; transform:none !important; opacity:1 !important; }
+      .object-part--main { inset:0; width:100%; height:100%; }
+      .object-part--detail,.object-part--hub { display:none; }
+      .object-ring--one { width:82%; }
+      .object-ring--two { width:108%; }
+      .object-callout,.object-axis { display:none; }
+      .launch-copy--bottom,.launch-corner { display:none; }
+      .launch-grid { opacity:.16; }
 
       .hero h1 {
         font-size: 34px;
@@ -554,104 +613,117 @@
     </header>
 
     <main>
-      <section class="launch-scene" aria-label="Darsh Gupta aerospace systems portfolio introduction">
+      <section class="launch-scene" aria-label="Darsh Gupta aerospace systems introduction">
         <div class="launch-stage">
           <div class="launch-grid" aria-hidden="true"></div>
           <div class="launch-copy launch-copy--top">
-            <span class="launch-eyebrow">DARSH GUPTA / SYSTEMS IN PROGRESS</span>
-            <h1>I build the distance between <em>simulation</em> and flight.</h1>
-            <p>Aerospace systems, RF hardware, embedded control, and computational research.</p>
+            <span class="launch-eyebrow">DARSH GUPTA · GRADE 12 · BENGALURU</span>
+            <h1>I build it.<br>Then I <em>prove it.</em></h1>
+            <p>Ducted-fan assemblies, FPGA radios, and a transonic solver benchmarked against OpenFOAM. Built before university, to the standard university asks for.</p>
+            <div class="hero-cta">
+              <a class="cta cta--solid" href="#notes-title">See the evidence <span aria-hidden="true">↓</span></a>
+              <a class="cta" href="mailto:darshgu77@gmail.com">Email me</a>
+            </div>
+            <ul class="hero-spec" aria-label="At a glance">
+              <li>105 MSPS RF front end</li>
+              <li>OpenFOAM benchmark</li>
+              <li>C++20 autorouter</li>
+            </ul>
           </div>
           <div class="launch-object" aria-hidden="true">
-            <!-- Swap the three data-src values to change the hero subject without changing the timeline. -->
-            <div class="object-ring object-ring--one"></div>
-            <div class="object-ring object-ring--two"></div>
-            <img class="object-part object-part--main" data-src="/assets/images/field/edf-cutout.png" src="/assets/images/field/edf-cutout.png" alt="" />
-            <img class="object-part object-part--detail" data-src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030-cutout.png" src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030-cutout.png" alt="" />
-            <img class="object-part object-part--hub" data-src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030-cutout.png" src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030-cutout.png" alt="" />
-            <div class="object-axis object-axis--x"></div>
-            <div class="object-axis object-axis--y"></div>
-
+            <!-- Swap this one data-src to change the featured assembly. -->
+            <img class="object-part object-part--main" data-src="/assets/images/field/hero-edf-stage.webp" src="/assets/images/field/hero-edf-stage.webp" alt="" width="1200" height="1040" />
           </div>
-          <div class="launch-stage-caption launch-stage-caption--one"><span>01 / FORM</span><strong>Start with the object.</strong><small>Geometry is the first constraint.</small></div>
-          <div class="launch-stage-caption launch-stage-caption--two"><span>02 / ASSEMBLY</span><strong>Then separate the decisions.</strong><small>Every component earns its place.</small></div>
-          <div class="launch-stage-caption launch-stage-caption--three"><span>03 / EVIDENCE</span><strong>Make the model answer back.</strong><small>Simulation is useful when it changes the build.</small></div>
           <div class="launch-copy launch-copy--bottom">
-            <span class="launch-counter">01 <i>/</i> 04</span>
-            <strong>Scroll to enter the work.</strong>
+            <span class="launch-counter">FIG. 01</span>
             <span class="launch-line"></span>
+            <span>EDF intake study · rotor, stator, split inlet</span>
           </div>
-          <div class="launch-corner launch-corner--left">12.9716° N<br>77.5946° E</div>
-          <div class="launch-corner launch-corner--right">NPS HSR / BENGALURU<br>BUILD LOG 2021—</div>
+          <div class="launch-corner launch-corner--right">ELECTRIC DUCTED FAN / ASSEMBLY STUDY</div>
         </div>
       </section>
 
-      <section class="flight-story" aria-label="How the work moves from idea to aircraft">
-        <div class="flight-story__media">
-          <figure class="flight-frame flight-frame--main">
-            <img src="/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg" alt="Full electric ducted fan aerospace assembly CAD view" loading="lazy" />
-            <figcaption><span>FIELD NOTE 01</span><strong>Geometry becomes hardware.</strong></figcaption>
-          </figure>
-          <figure class="flight-frame flight-frame--detail">
-            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030-cutout.png" alt="Rotor and stator engineering detail" loading="lazy" />
-            <figcaption><span>DETAIL / EDF-A</span><strong>Every surface has a job.</strong></figcaption>
-          </figure>
-        </div>
-        <div class="flight-story__copy">
-          <div class="story-kicker">Scroll the work</div>
-          <article class="story-beat"><span class="story-index">01</span><div><h2>Start with the shape.</h2><p>CAD, geometry, and constraints establish the question before the code gets to answer it.</p></div></article>
-          <article class="story-beat"><span class="story-index">02</span><div><h2>Interrogate the flow.</h2><p>CFD, pressure fields, and solver comparisons turn an attractive model into evidence.</p></div></article>
-          <article class="story-beat"><span class="story-index">03</span><div><h2>Make it survive reality.</h2><p>PCB routing, embedded control, RF, and test loops close the distance between simulation and flight.</p></div></article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-header">
+      <section class="notes" aria-labelledby="notes-title">
+        <div class="notes-head">
           <div>
-            <div class="section-title"><span class="badge-num">01</span><span>Current Build Pipeline</span></div>
-            <p class="section-subtitle">What is on the bench right now — synthesis of the GitHub activity and current planning docs.</p>
+            <span class="section-kicker">Field notes</span>
+            <h2 id="notes-title">Where the drawings stopped being enough.</h2>
           </div>
+          <p>Three moments from this year's work that changed how I build. The images are the actual files, including the ones that make my results look worse.</p>
         </div>
-        <div class="pipeline">
-          <article class="pipeline-card reveal">
-            <div class="step">hardware × software</div>
-            <h3>Copperline</h3>
-            <p>Headless C++20 PCB autorouter built for agents: CLI-only, JSON-first routing that turns board layout into a scriptable operation.</p>
-            <div class="pipe-stat"><span class="status-dot status-dot--pulse"></span>active · updated this week</div>
-          </article>
-          <article class="pipeline-card reveal" style="--reveal-delay:80ms;">
-            <div class="step">research</div>
-            <h3>Wing3d TSD</h3>
-            <p>Transonic small-disturbance solver benchmarks — the long game: matching OpenFOAM accuracy at a meaningful fraction of the runtime.</p>
-            <div class="pipe-stat"><span class="status-dot status-dot--pulse"></span>active · benchmark loop</div>
-          </article>
-          <article class="pipeline-card reveal" style="--reveal-delay:160ms;">
-            <div class="step">simulation</div>
-            <h3>Aero-MPW</h3>
-            <p>Local-first, strongly coupled multiphysics workbench for engineering design loops that refuse to live inside a single solver.</p>
-            <div class="pipe-stat"><span class="status-dot status-dot--pulse"></span>in design</div>
-          </article>
-          <article class="pipeline-card reveal" style="--reveal-delay:240ms;">
-            <div class="step">rf + fpga</div>
-            <h3>Code-SDR</h3>
-            <p>High-speed software-defined radio: Verilog DSP, ADC interface, Ethernet streaming, and GNU Radio integration.</p>
-            <div class="pipe-stat"><span class="status-dot status-dot--amber"></span>board routing stage</div>
-          </article>
+
+        <article class="note">
+          <figure class="note__plate">
+            <img src="/assets/images/field/rotor-drum-clean.png" alt="Isometric view of three EDF rotor and stator rows" loading="lazy" />
+            <figcaption><span>Fig. 02</span><span>EDF B · three stages</span></figcaption>
+          </figure>
+          <div class="note__copy">
+            <span class="note__num">01 — Geometry</span>
+            <h3>The duct decides everything else.</h3>
+            <p>The fan is the easy part to draw. The duct and the inlet decide the pressure the rotor actually sees, so the assembly gets designed around the airflow — not the other way round. Change a stator row and the rotor that "worked" stops working.</p>
+            <div class="note__meta"><span>Fusion 360</span><span>Rotor / stator / duct</span></div>
+          </div>
+        </article>
+
+        <article class="note note--flip">
+          <figure class="note__plate note__plate--paper">
+            <img src="/assets/images/field/edf-inlet-top.png" alt="Top-view projection of the split inlet routing at 50 mm scale" loading="lazy" />
+            <figcaption><span>Fig. 03</span><span>Inlet routing · top view, 50 mm scale</span></figcaption>
+          </figure>
+          <div class="note__copy">
+            <span class="note__num">02 — Drawing</span>
+            <h3>A drawing is an argument you can check.</h3>
+            <p>Both inlet legs have to reach the rotor face with the same total pressure, or the fan eats a distortion it was never sized for. The centerline and scale bar are there so the claim can be measured by someone who doesn't trust me.</p>
+            <div class="note__meta"><span>Projection</span><span>Symmetry / mass flow</span></div>
+          </div>
+        </article>
+
+        <article class="note">
+          <figure class="note__plate note__plate--paper">
+            <img src="/assets/images/field/polar_compare.png" alt="Wing3d lift curve and drag polar plotted against OpenFOAM RANS results" loading="lazy" />
+            <figcaption><span>Fig. 04</span><span>NACA0012 AR6 · wing3d vs OpenFOAM</span></figcaption>
+          </figure>
+          <div class="note__copy">
+            <span class="note__num">03 — Test</span>
+            <h3>I don't have one CL number yet. That's the point.</h3>
+            <p>My TSD solver doesn't land on the OpenFOAM RANS points, and the mesh behind those points is still coarse. Until that gap closes, Wing3d reports a lift band across its hyperparameters instead of a single flattering value. This is the plot I'd show first.</p>
+            <div class="note__meta"><span>Wing3d</span><span>NACA0012 AR6</span><span>CL ± band</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="work-index section" aria-labelledby="work-index-title">
+        <div class="work-index__intro">
+          <span class="section-kicker">Selected work</span>
+          <h2 id="work-index-title">Different problems.<br>Same urge to make them work.</h2>
+        </div>
+        <div class="work-index__list">
+          <a class="work-row" href="https://github.com/iamdarshg/wing3d" target="_blank" rel="noopener noreferrer"><span class="work-row__type">01 / CFD</span><strong>Wing3d</strong><span>Transonic solver and OpenFOAM comparisons</span><span class="work-row__arrow" aria-hidden="true">↗</span></a>
+          <a class="work-row" href="https://github.com/iamdarshg/copperline" target="_blank" rel="noopener noreferrer"><span class="work-row__type">02 / PCB</span><strong>Copperline</strong><span>Headless C++ autorouter, JSON in and out</span><span class="work-row__arrow" aria-hidden="true">↗</span></a>
+          <a class="work-row" href="https://github.com/iamdarshg/Code-SDR" target="_blank" rel="noopener noreferrer"><span class="work-row__type">03 / RF</span><strong>Code-SDR</strong><span>FPGA signal chain and SDR tooling</span><span class="work-row__arrow" aria-hidden="true">↗</span></a>
+          <a class="work-row" href="/projects.html"><span class="work-row__type">04 / INDEX</span><strong>All projects</strong><span>More builds, notes, and research</span><span class="work-row__arrow" aria-hidden="true">↗</span></a>
         </div>
       </section>
 
-      <section class="section grid-2">
-        <div class="card about-panel reveal">
-          <h2>Builder first, theory close behind.</h2>
-          <p>
-            I like projects where physics and code have to negotiate with real hardware: PCBs that need to be manufacturable, firmware that has to survive noisy sensors, and simulations that should help decisions rather than just make pretty plots.
-          </p>
-          <p>
-            The through-line is simple: learn the underlying math, build a working artifact, document the failure modes, then iterate. That loop currently runs across aerospace, RF, embedded control, and ML-assisted design.
-          </p>
+      <section class="about section" aria-labelledby="about-title">
+        <div class="about-grid">
+          <div>
+            <span class="section-kicker">About</span>
+            <h2 id="about-title">Last year of school, most of it spent on things that fly, transmit, or fail on a bench.</h2>
+          </div>
+          <div class="about-body">
+            <p class="about-lede">I'm Darsh. School gives me the maths; the projects are where I find out whether I actually understood it — usually by discovering I didn't, then reading until the failure makes sense.</p>
+            <p>I'd rather show the plot where my solver is wrong than the one where it looks tidy. That habit is most of this site: the measurement next to the render, the stated uncertainty next to the claim.</p>
+            <dl class="now">
+              <div><dt>School</dt><dd>Grade 12, NPS HSR · CBSE PCMC, Bengaluru</dd></div>
+              <div><dt>Building</dt><dd>Wing3d (TSD solver vs OpenFOAM), Copperline (PCB autorouter), Code-SDR board bring-up</dd></div>
+              <div><dt>Writing</dt><dd>RCS surrogate paper draft — regression models as a screening layer before full-wave EM</dd></div>
+              <div><dt>Next</dt><dd>Aerospace engineering at university. I'd rather arrive with parts that flew.</dd></div>
+            </dl>
+          </div>
         </div>
-        <div class="stack">
-          <div class="card reveal">
+        <div class="about-lists stack">
+          <div class="card">
             <h3>Technical range</h3>
             <div class="chips">
               <span class="chip">Python</span>
@@ -662,11 +734,10 @@
               <span class="chip">KiCad / PCB</span>
               <span class="chip">RF matching</span>
               <span class="chip">DSP / FPGA</span>
-              <span class="chip">CLI tools</span>
-              <span class="chip">OOP / DSA</span>
+              <span class="chip">CLI tooling</span>
             </div>
           </div>
-          <div class="card reveal" style="--reveal-delay:80ms;">
+          <div class="card">
             <h3>Public achievements</h3>
             <div class="chips">
               <span class="chip">Skill Titans top-50 finalist</span>
@@ -676,56 +747,31 @@
               <span class="chip">cAIpher AI hackathon</span>
             </div>
           </div>
-          <div class="safe-note reveal" style="--reveal-delay:160ms;">
-            Public-facing signal only: projects, education, and activity. Private schedules, scores, and planning notes stay off the page.
-          </div>
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-header">
-          <div>
-            <div class="section-title"><span class="badge-num">02</span><span>Research Threads</span></div>
-            <p class="section-subtitle">Simulation, surrogate models, and paper-driven exploration.</p>
-          </div>
+      <section class="reviewer" aria-labelledby="reviewer-title">
+        <div>
+          <span class="section-kicker">For admissions reviewers</span>
+          <h2 id="reviewer-title">Two minutes, in order.</h2>
+          <p>Everything here is work I can explain line by line — including the parts that didn't converge.</p>
         </div>
-        <div class="research-list">
-          <article class="research-item reveal">
-            <div class="date">completed draft</div>
-            <figure>
-              <img src="/assets/images/field/smoke_cp.png" alt="Aerospace CFD and machine-learning research visualization" />
-            </figure>
-            <div>
-              <h3>ML-Based Rapid RCS Estimation for UAV Stealth</h3>
-              <p>Machine-learning surrogate models for estimating radar cross-section from EM simulation data — dense nets, volumetric CNNs, transformers, PINN-style constraints, and full-wave validation strategy.</p>
-            </div>
-          </article>
-          <article class="research-item reveal">
-            <div class="date">active</div>
-            <figure>
-              <img src="/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg" alt="Engineering workspace with aircraft blueprint and RF instrumentation" />
-            </figure>
-            <div>
-              <h3>Aircraft Diffusion CFD</h3>
-              <p>Generative aircraft design and CFD exploration: hybrid diffusion networks optimizing aerodynamic shape, with honest notes on which debugging paths get closed when a system stops being tractable.</p>
-            </div>
-          </article>
-          <article class="research-item reveal">
-            <div class="date">next rough draft</div>
-            <figure>
-              <img src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030-cutout.png" alt="Prototype aerospace hardware on a technical workbench" />
-            </figure>
-            <div>
-              <h3>Hybrid-Electric Propulsion Sizing</h3>
-              <p>Multi-objective evolutionary algorithms for balancing mass, efficiency, and emissions in aircraft propulsion design.</p>
-            </div>
-          </article>
+        <div>
+          <ol class="reviewer-steps">
+            <li><a href="/projects.html"><span>01</span><strong>The build log</strong><small>Geometry, solver plots, and the checks behind each claim</small></a></li>
+            <li><a href="/education.html"><span>02</span><strong>The record</strong><small>School, FabLab internship, research drafts</small></a></li>
+            <li><a href="/interests.html"><span>03</span><strong>The person</strong><small>Gym, pool, MUNs, and the games that taught me systems</small></a></li>
+          </ol>
+          <div class="reviewer-cta">
+            <a class="cta cta--solid" href="mailto:darshgu77@gmail.com">Start a conversation</a>
+            <small>Bengaluru · IST · replies within a day</small>
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
-      <span>Copyright <span id="year"></span> Darsh Gupta. Built for GitHub Pages.</span>
+      <span>Copyright <span id="year"></span> Darsh Gupta · Bengaluru, India</span>
       <div class="footer-links">
         <a href="mailto:darshgu77@gmail.com">Email</a>
         <a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">GitHub</a>

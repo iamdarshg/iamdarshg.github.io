@@ -93,11 +93,11 @@
     }
 
     .projects-hero-visual {
-      display: grid;
-      grid-template-columns: 1.2fr 0.9fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 14px;
-      min-height: 480px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:minmax(280px,2fr) minmax(140px,1fr);
+      gap:14px;
+      min-height:440px;
     }
 
     .hero-panel {
@@ -117,17 +117,19 @@
     }
 
     .hero-panel--full img {
-      object-fit: contain;
-      padding: 22px;
-      background: #07101b;
-      filter: saturate(1.08) contrast(1.06);
+      object-fit:contain;
+      padding:26px;
+      background:#07101b;
+      filter:saturate(1.08) contrast(1.06);
     }
 
     .hero-panel:not(.hero-panel--full) img {
-      object-fit: contain;
-      padding: 12px;
-      background: #07101b;
+      object-fit:contain;
+      padding:14px;
+      background:#07101b;
     }
+
+    .hero-panel--full::after { background:linear-gradient(180deg,transparent 58%,rgba(5,8,15,.92)); }
 
     .hero-panel::after {
       content: "";
@@ -156,9 +158,10 @@
       font: 500 11px/1.5 var(--font-mono);
     }
 
-    .hero-panel--full {
-      grid-row: 1 / 3;
-    }
+    .hero-panel--full { grid-column:1 / 3; grid-row:1; }
+    .projects-journal-link { display:inline-flex; align-items:center; gap:12px; width:max-content; padding-bottom:7px; border-bottom:1px solid var(--line-strong); color:var(--text); font:500 12px var(--font-mono); }
+    .projects-journal-link span { color:var(--accent); }
+    #featured-projects { scroll-margin-top:90px; }
 
     .section-divider {
       height: 1px;
@@ -167,7 +170,7 @@
     }
 
     /* ---------- scroll-driven project film ---------- */
-    .project-film { position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(320px,.75fr); gap:70px; min-height:230vh; margin:80px calc(50% - 50vw) 0; padding:0 max(20px,calc((100vw - 1200px)/2)); background:linear-gradient(180deg,transparent,rgba(42,212,255,.04),transparent); }
+    .project-film { position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.75fr); gap:clamp(24px,5vw,70px); min-height:230vh; margin:80px calc(50% - 50vw) 0; padding:0 max(20px,calc((100vw - 1200px)/2)); background:linear-gradient(180deg,transparent,rgba(42,212,255,.04),transparent); }
     .film-sticky { position:sticky; top:12vh; height:76vh; align-self:start; display:grid; place-items:center; }
     .film-visual { position:absolute; width:min(100%,650px); height:72%; overflow:hidden; border:1px solid var(--line-strong); border-radius:var(--radius-lg); box-shadow:var(--shadow); background:var(--surface); will-change:transform,opacity,clip-path; }
     .film-visual img { width:100%;height:100%;object-fit:cover;display:block; }
@@ -199,8 +202,15 @@
     }
 
     .all-projects-grid {
-      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
     }
+
+    .project-art-placeholder { min-height:220px; display:grid; align-content:space-between; padding:24px; border-right:1px solid var(--line); background:linear-gradient(145deg,#101d2b,#070c14 70%); }
+    .project-art-placeholder strong { color:var(--accent); font:600 12px var(--font-mono); letter-spacing:.12em; }
+    .project-art-placeholder span { max-width:22ch; color:var(--muted); font:500 12px/1.6 var(--font-mono); }
+    .featured-card:has(.project-art-placeholder) { cursor:default; }
+    .featured-card:has(.project-art-placeholder):hover { transform:none; box-shadow:none; }
+    .featured-card:has(.project-art-placeholder) .project-content { cursor:auto; }
 
     .project-card {
       display: grid;
@@ -355,7 +365,14 @@
       font: 500 10px var(--font-mono);
     }
 
+    .repo-card-media--empty { display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at 50% 0%,rgba(42,212,255,.09),transparent 62%),#080e17; }
+    .repo-art-note { display:grid; gap:6px; text-align:center; padding:18px 22px; max-width:100%; }
+    .repo-art-note span { color:var(--accent); font:600 9px var(--font-mono); letter-spacing:.16em; }
+    .repo-art-note strong { color:var(--text); font:600 17px/1.15 var(--font-display); overflow-wrap:anywhere; }
+    .repo-art-note small { color:var(--faint); font:500 10px/1.5 var(--font-mono); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .repo-card-media--empty figcaption { left:auto; right:14px; }
     .compact-content {
+      min-width:0;
       padding: 18px;
       display: flex;
       flex-direction: column;
@@ -622,9 +639,19 @@
         grid-column: 1 / -1;
       }
 
-      .featured-card {
-        grid-template-columns: 1fr;
+      .featured-card,
+      .repo-card {
+        grid-template-columns:minmax(0,1fr);
+        min-width:0;
       }
+
+      .project-content,
+      .compact-content,
+      .readme-preview { min-width:0; overflow-wrap:anywhere; }
+      .repo-card-media { min-width:0; }
+      .project-film { grid-template-columns:minmax(0,1fr); }
+      .film-sticky { width:100%; min-width:0; overflow:hidden; }
+      .film-visual { width:min(100%,650px); max-width:100%; }
 
       .project-film { grid-template-columns:1fr; min-height:auto; margin-left:-14px; margin-right:-14px; padding:0 14px; gap:0; }
       .film-sticky { position:relative;top:auto;height:62vh;min-height:430px; }
@@ -696,9 +723,9 @@
             <span class="badge-num">00</span>
             <span>Build Log</span>
           </div>
-          <h1>A working record of the things I keep coming back to.</h1>
+          <h1>Designs, tests, revisions.</h1>
           <p>
-            This is the less polished version of the work: the geometry files, solver runs, boards, notes, and experiments that survive long enough to become projects.
+            Project notes, engineering drawings, and the checks behind the finished view. This page is a record of what was made and what still needs proving.
           </p>
           <div class="hero-chips" aria-label="Project themes">
             <span class="hero-chip">Aerospace systems</span>
@@ -707,33 +734,29 @@
             <span class="hero-chip">CFD + ML</span>
             <span class="hero-chip">Electromagnetic sim</span>
           </div>
-          <div class="hero-stats">
-            <div class="hero-stat"><strong>31</strong><span>public repositories</span></div>
-            <div class="hero-stat"><strong>4</strong><span>in active development</span></div>
-            <div class="hero-stat"><strong>2</strong><span>research papers drafted</span></div>
-          </div>
+          <a class="projects-journal-link" href="#featured-projects">Browse the build log <span aria-hidden="true">↓</span></a>
         </div>
 
         <div class="projects-hero-visual">
           <figure class="hero-panel hero-panel--full">
-            <img src="/assets/images/field/edf-front-projection.png" alt="Front projection of the electric ducted fan assembly" />
+            <img src="/assets/images/field/edf-front-cutout.png" alt="Electric ducted fan assembly, frontal rendering" />
             <figcaption>
-              <strong>Autonomy, avionics, iteration</strong>
-              <span>Physical systems where routing, firmware, sensing, and testing all matter.</span>
+              <strong>EDF / front section</strong>
+              <span>Rotor, stator and two inlet paths in one assembly.</span>
             </figcaption>
           </figure>
           <figure class="hero-panel">
-            <img src="/assets/images/field/edf-inlet-top.png" alt="Top view of EDF inlet routing geometry" />
+            <img src="/assets/images/field/edf-inlet-top.png" alt="Top projection of the EDF inlet routing" />
             <figcaption>
-              <strong>Code-SDR</strong>
-              <span>FPGA signal chain, throughput, integration.</span>
+              <strong>Inlet routing</strong>
+              <span>Split paths / top view</span>
             </figcaption>
           </figure>
           <figure class="hero-panel">
-            <img src="/assets/images/field/polar_compare.png" alt="Aerodynamic comparison plot from solver research" />
+            <img src="/assets/images/field/polar_compare.png" alt="Aerodynamic polar comparison plot" />
             <figcaption>
-              <strong>Research track</strong>
-              <span>Simulation, surrogates, and papers.</span>
+              <strong>Wing solver</strong>
+              <span>Comparison plot / research</span>
             </figcaption>
           </figure>
         </div>
@@ -741,9 +764,9 @@
 
       <section class="project-film" aria-label="Project film">
         <div class="film-sticky">
-          <div class="film-visual film-visual--one"><img src="/assets/images/field/smoke_cp.png" alt="CFD pressure and smoke visualization" loading="lazy" /><span>01 / FLOW</span></div>
-          <div class="film-visual film-visual--two"><img src="/assets/images/field/polar_compare.png" alt="Aerodynamic polar comparison chart" loading="lazy" /><span>02 / VALIDATION</span></div>
-          <div class="film-visual film-visual--three"><img src="/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png" alt="Rotor hub and blade engineering detail" loading="lazy" /><span>03 / HARDWARE</span></div>
+          <div class="film-visual film-visual--one"><img src="/assets/images/field/edf-front-cutout.png" alt="EDF front section showing two duct paths" loading="lazy" /><span>EDF / FRONT SECTION</span></div>
+          <div class="film-visual film-visual--two"><img src="/assets/images/field/edf-inlet-top.png" alt="Split inlet routing in top projection" loading="lazy" /><span>INLET / TOP PROJECTION</span></div>
+          <div class="film-visual film-visual--three"><img src="/assets/images/field/polar_compare.png" alt="Wing solver polar comparison plot" loading="lazy" /><span>WING3D / COMPARISON</span></div>
         </div>
         <div class="film-copy">
           <div class="film-step"><small>NOTE 01 / GEOMETRY</small><h2>Start with a question.</h2><p>What should the shape do? The first pass is usually a rough model, not a finished answer.</p></div>
@@ -767,7 +790,7 @@
 
         <div class="projects-grid featured-grid">
           <article class="project-card featured-card reveal" onclick="openProjectDetail('wing3d')">
-            <img src="/assets/images/field/airshow_generated_geometry_g96_topk0075.png" alt="Wing3d transonic solver benchmark work" class="project-image" />
+            <img src="/assets/images/field/polar_compare.png" alt="Wing3d aerodynamic polar comparison" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -802,8 +825,8 @@
             </div>
           </article>
 
-          <article class="project-card featured-card reveal" onclick="openProjectDetail('copperline')">
-            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png" alt="Copperline headless PCB autorouter" class="project-image" />
+          <article class="project-card featured-card reveal">
+            <div class="project-art-placeholder" role="img" aria-label="No Copperline board-layout artifact is published yet"><strong>COPPERLINE / PCB</strong><span>No board-layout image published yet. The project is a CLI routing tool, not this EDF nesting study.</span></div>
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -838,7 +861,7 @@
           </article>
 
           <article class="project-card featured-card reveal" onclick="openProjectDetail('aero-mpw')">
-            <img src="/assets/images/field/smoke_cp.png" alt="Aero multiphysics workbench simulation" class="project-image" />
+            <img src="/assets/images/field/smoke_cp.png" alt="Pressure and smoke visualization from aerodynamic simulation work" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -872,8 +895,8 @@
             </div>
           </article>
 
-          <article class="project-card featured-card reveal" onclick="openProjectDetail('code-sdr')">
-            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png" alt="Code-SDR FPGA board" class="project-image" />
+          <article class="project-card featured-card reveal">
+            <div class="project-art-placeholder" role="img" aria-label="No Code-SDR board or signal-chain artifact is published yet"><strong>CODE-SDR / FPGA + RF</strong><span>No board or signal-chain image published yet. Aircraft analysis imagery is intentionally not used here.</span></div>
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -908,7 +931,7 @@
           </article>
 
           <article class="project-card featured-card reveal" onclick="openProjectDetail('research-paper')">
-            <img src="/assets/images/field/smoke_cp.png" alt="Aircraft diffusion CFD simulation" class="project-image" />
+            <img src="/assets/images/field/airshow_generated_geometry_g96_topk0075.png" alt="Generated aircraft geometry shown with validation projections" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -943,7 +966,7 @@
           </article>
 
           <article class="project-card featured-card reveal" onclick="openProjectDetail('research-paper-2')">
-            <img src="/assets/images/field/smoke_cp.png" alt="Radar cross-section simulation for UAV stealth research" class="project-image" />
+            <img src="/assets/images/field/smoke_cp.png" alt="Smoke and pressure visualization from aerodynamic research" class="project-image" />
             <div class="project-content">
               <div>
                 <div class="project-header">
@@ -1000,7 +1023,7 @@
     </main>
 
     <footer>
-      <span>Copyright <span id="year"></span> Darsh Gupta. Built for GitHub Pages.</span>
+      <span>Copyright <span id="year"></span> Darsh Gupta · Bengaluru, India</span>
       <div class="footer-links">
         <a href="mailto:darshgu77@gmail.com">Email</a>
         <a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">GitHub</a>

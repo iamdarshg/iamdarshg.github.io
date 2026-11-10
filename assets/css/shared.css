@@ -4,7 +4,7 @@
    Fonts: Space Grotesk (display/body) + IBM Plex Mono (data)
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
   /* surfaces — ink navy, layered */
@@ -47,6 +47,7 @@
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
   --font-sans: "Space Grotesk", "Segoe UI", sans-serif;
   --font-serif: "Space Grotesk", Georgia, serif; /* legacy alias */
+  --font-editorial: "Newsreader", "Iowan Old Style", Georgia, serif;
   --font-mono: "IBM Plex Mono", "Cascadia Code", Consolas, monospace;
 }
 
@@ -194,6 +195,12 @@ img {
 
 .mono { font-family: var(--font-mono); }
 .muted { color: var(--muted); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
 
 .sr-only {
   position: absolute;
@@ -677,29 +684,38 @@ footer {
   }
 
   header {
-    align-items: flex-start;
-    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    padding-bottom: 0;
   }
 
+  /* deliberate two-row mobile header: identity, then a full-width nav rule */
   header > div:last-child {
-    flex: 1;
-    min-width: 0;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    flex: 1 0 100%;
+    width: 100%;
+    margin-top: 10px;
+    padding: 9px 0 10px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px !important;
   }
 
   .nav-links {
-    width: 100%;
-    justify-content: flex-start;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    justify-content: space-between;
     flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
+    overflow: visible;
     font-size: 10px;
-    gap: 7px 10px;
+    gap: 0;
   }
 
-  .nav-links::-webkit-scrollbar { display: none; }
-  .nav-links a { white-space: nowrap; }
+  .nav-links a { white-space: nowrap; padding: 2px 0; }
 
   .btn {
     min-height: 42px;

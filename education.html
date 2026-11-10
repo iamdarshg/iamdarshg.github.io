@@ -241,11 +241,17 @@
       box-shadow: var(--shadow);
     }
 
-    .track-card img {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
+    .track-card img,
+    .track-art-placeholder {
+      display:grid;
+      width:100%;
+      aspect-ratio:16 / 10;
+      object-fit:cover;
     }
+    .track-art-placeholder { align-content:center; gap:8px; padding:24px; background:radial-gradient(ellipse at 50% 0%,rgba(42,212,255,.1),transparent 66%),#09131f; }
+    .track-art-placeholder span { color:var(--accent); font:600 9px var(--font-mono); letter-spacing:.16em; }
+    .track-art-placeholder strong { color:var(--text); font:600 20px var(--font-serif); }
+    .track-art-placeholder small { color:var(--muted); font:500 10px var(--font-mono); }
 
     .track-copy {
       padding: 16px;
@@ -576,7 +582,7 @@
             </div>
           </article>
           <article class="track-card">
-            <img src="/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png" alt="Software defined radio hardware test setup" />
+            <div class="track-art-placeholder" role="img" aria-label="No Code-SDR hardware photograph is published yet"><span>CODE-SDR</span><strong>FPGA / RF / DSP</strong><small>Signal-chain artifact not published</small></div>
             <div class="track-copy">
               <h3>Code-SDR</h3>
               <p>FPGA pipelines, RF front-end thinking, ADC throughput, measurement workflows, and how signal-processing ideas become hardware constraints.</p>
@@ -728,7 +734,7 @@
     </main>
 
     <footer>
-      <span>Copyright <span id="year"></span> Darsh Gupta. Built for GitHub Pages.</span>
+      <span>Copyright <span id="year"></span> Darsh Gupta · Bengaluru, India</span>
       <div class="footer-links">
         <a href="mailto:darshgu77@gmail.com">Email</a>
         <a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">GitHub</a>

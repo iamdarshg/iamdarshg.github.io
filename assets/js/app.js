@@ -119,7 +119,16 @@ function setupScrollMotion() {
       return;
     }
 
-    if (launch) {
+    if (launch && window.innerWidth <= 560) {
+      const object = launch.querySelector('.launch-object');
+      const topCopy = launch.querySelector('.launch-copy--top');
+      if (object) { object.style.transform = 'translateX(-50%)'; object.style.opacity = '1'; }
+      if (topCopy) { topCopy.style.transform = ''; topCopy.style.opacity = '1'; }
+      launch.querySelectorAll('.object-part').forEach((part, index) => {
+        part.style.transform = '';
+        part.style.opacity = index === 0 ? '1' : '0';
+      });
+    } else if (launch) {
       const rect = launch.getBoundingClientRect();
       const span = Math.max(1, launch.offsetHeight - window.innerHeight);
       const t = clamp(-rect.top / span, 0, 1);
@@ -128,23 +137,24 @@ function setupScrollMotion() {
       const topCopy = launch.querySelector('.launch-copy--top');
       const bottomCopy = launch.querySelector('.launch-copy--bottom');
       const captions = [...launch.querySelectorAll('.launch-stage-caption')];
+      const workLink = launch.querySelector('.launch-work-link');
       const ease = value => 1 - Math.pow(1 - value, 4);
       const phase = (start, end) => ease(clamp((t - start) / (end - start), 0, 1));
       if (object) {
-        const approach = phase(0, .22);
-        const assembly = phase(.22, .58);
-        const evidence = phase(.58, .84);
-        const x = 10 - approach * 10;
-        const y = 10 - approach * 22;
-        const scale = .72 + approach * .42;
-        const rotate = -5 + approach * 4;
+        const approach = phase(0, .24);
+        const assembly = phase(.24, .64);
+        const evidence = phase(.64, .9);
+        const x = 5 - approach * 5;
+        const y = 7 - approach * 12;
+        const scale = .88 + approach * .2;
+        const rotate = -2 + approach * 2;
         object.style.transform = `translateX(calc(-50% + ${x}vw)) translateY(${y}vh) scale(${scale.toFixed(3)}) rotate(${rotate.toFixed(2)}deg)`;
-        object.style.opacity = String(.72 + approach * .28);
+        object.style.opacity = String(.88 + approach * .12);
         if (parts.length >= 3) {
           parts[1].style.transform = `translate(${assembly * 9}%, ${-assembly * 8}%) rotate(${5 + assembly * 7}deg) scale(${(1 - assembly * .08).toFixed(3)})`;
-          parts[1].style.opacity = String(1 - evidence * .4);
+          parts[1].style.opacity = String(assembly * (1 - evidence * .35));
           parts[2].style.transform = `translate(${-assembly * 10}%, ${assembly * 10}%) rotate(${-8 - assembly * 10}deg) scale(${(1 - assembly * .06).toFixed(3)})`;
-          parts[2].style.opacity = String(.82 + assembly * .18);
+          parts[2].style.opacity = String(assembly * .86);
         }
         launch.style.setProperty('--launch-progress', t.toFixed(4));
         launch.style.setProperty('--evidence-progress', evidence.toFixed(4));
@@ -158,6 +168,11 @@ function setupScrollMotion() {
         const bottomProgress = phase(.18, .5);
         bottomCopy.style.transform = `translateY(${bottomProgress * 22}px)`;
         bottomCopy.style.opacity = String(1 - bottomProgress);
+      }
+      if (workLink) {
+        const linkProgress = phase(.16, .42);
+        workLink.style.opacity = String(1 - linkProgress * .7);
+        workLink.style.transform = `translateY(${-linkProgress * 6}px)`;
       }
       captions.forEach((caption, index) => {
         const ranges = [[.03, .24], [.27, .56], [.6, .86]][index] || [.03, .24];
@@ -266,39 +281,9 @@ function langColor(lang) {
   return langColors[lang] || '#8b949e';
 }
 
-/* artwork keyed by repo name — falls back to a generic lab shot */
-const repoArtwork = {
-  'wing3d': '/assets/images/field/airshow_generated_geometry_g96_topk0075.png',
-  'copperline': '/assets/images/field/edf-front-projection.png',
-  'aero-multiphysics-workbench': '/assets/images/field/polar_compare.png',
-  'Code-SDR': '/assets/images/field/airshow_flight_path_metrics_g96_topk0075.png',
-  'drone-v2': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
-  'drone-arm': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
-  'drone_main': '/assets/images/field/07_rotor_R1_hub_blade_assembly_detail_R030.png',
-  'research-paper': '/assets/images/field/smoke_cp.png',
-  'quantum-sim-python': '/assets/images/field/smoke_cp.png',
-  'quantum-atoms': '/assets/images/field/smoke_cp.png',
-  'Nuclear_collision': '/assets/images/field/smoke_cp.png',
-  'PyFoilOptimize': '/assets/images/field/smoke_cp.png',
-  'esp-radar': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
-  'edf-esc': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
-  'KestrelVL-7B': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'llm-schmeatic': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
-  'pcb-skill': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
-  'dev-board': '/assets/images/field/05_EDF_A_rotor_stator_closeup_R030.png',
-  'planets-hubble': '/assets/images/field/smoke_cp.png',
-  'rustymd': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'Epilepscreen': '/assets/images/field/smoke_cp.png',
-  'whatsapp-reader': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'better-ai': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'Trading-Algo': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'outrunner-motor-optimizer': '/assets/images/field/smoke_cp.png',
-  'tcs-quiz': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'Game-1': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'FIS-Interstellar': '/assets/images/field/smoke_cp.png',
-  'oxford-hack-NPSHSR': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg',
-  'college-essay-corpus': '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg'
-};
+/* The live repo index is typographic on purpose: this repository has no
+   per-repository images, so mismatched lab shots are not used as decoration. */
+const repoArtwork = {};
 
 const fallbackRepoData = [
   { name: 'wing3d', description: 'Transonic small-disturbance (TSD) wing solver benchmark program — target: OpenFOAM-matched accuracy at 3-5x lower runtime.', language: 'Python', updated_at: '2026-10-28', html_url: 'https://github.com/iamdarshg/wing3d', archived: false },
@@ -320,7 +305,7 @@ function escapeHtml(value) {
 }
 
 function getRepoArtwork(repoName) {
-  return repoArtwork[repoName] || '/assets/images/field/IMG_9F899C38-89DF-446E-BFB1-46FE287B91C3.jpeg';
+  return repoArtwork[repoName] || '';
 }
 
 function formatDate(iso) {
@@ -480,9 +465,9 @@ function renderRepos(results, container) {
     const color = langColor(repo.language);
     const updated = formatDate(repo.updated_at);
 
-    card.innerHTML = `
-      <figure class="repo-card-media">
-        <img src="${escapeHtml(getRepoArtwork(repoName))}" alt="${escapeHtml(repoName)} repository artwork" loading="lazy" />
+    const artwork = getRepoArtwork(repoName);
+    const media = artwork
+      ? `<figure class="repo-card-media"><img src="${escapeHtml(artwork)}" alt="${escapeHtml(repoName)} project artifact" loading="lazy" />
         <figcaption>
           <div>
             <strong>${escapeHtml(repoName)}</strong>
@@ -490,7 +475,16 @@ function renderRepos(results, container) {
           </div>
           <span class="badge-status ${statusClass}">${escapeHtml(statusLabel)}</span>
         </figcaption>
-      </figure>
+      </figure>`
+      : `<figure class="repo-card-media repo-card-media--empty">
+        <div class="repo-art-note"><span>${escapeHtml(repo.language || 'CODE')}</span><strong>${escapeHtml(repoName)}</strong><small>${escapeHtml(repo.description || 'Repository on GitHub')}</small></div>
+        <figcaption>
+          <span class="badge-status ${statusClass}">${escapeHtml(statusLabel)}</span>
+        </figcaption>
+      </figure>`;
+
+    card.innerHTML = `
+      ${media}
       <div class="project-content compact-content">
         <div class="compact-header">
           <h4>${escapeHtml(repoName)}</h4>
@@ -533,14 +527,13 @@ function setupEducationScrollEffects() {
 }
 
 function setupInterestsScrollEffects() {
-  const sections = document.querySelectorAll('.blog-section');
+  const sections = document.querySelectorAll('.entry');
   const navLinks = document.querySelectorAll('.interests-nav a');
-  const observerOptions = { threshold: 0.6 };
+  const observerOptions = { threshold: 0.35 };
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const id = entry.target.getAttribute('id');
-        updateInterestsStyle(id);
         navLinks.forEach(link => {
           link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
         });
@@ -548,21 +541,6 @@ function setupInterestsScrollEffects() {
     });
   }, observerOptions);
   sections.forEach(section => observer.observe(section));
-}
-
-function updateInterestsStyle(sectionId) {
-  const root = document.documentElement;
-  const styles = {
-    'gym': { bg: '#1a0b0b', text: '#f87171' },
-    'swimming': { bg: '#081e26', text: '#38bdf8' },
-    'muns': { bg: '#130d24', text: '#a78bfa' },
-    'gaming': { bg: '#1a1408', text: '#fbbf24' }
-  };
-  const style = styles[sectionId];
-  if (style) {
-    root.style.setProperty('--color-background', style.bg);
-    root.style.setProperty('--color-primary', style.text);
-  }
 }
 /* ============================================================
    PROJECT DETAIL MODAL

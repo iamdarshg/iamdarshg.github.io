@@ -8,118 +8,131 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305080f'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='36' font-weight='700' fill='%232ad4ff' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/assets/css/shared.css" />
   <style>
+    .interests-head {
+      max-width: 64ch;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .interests-head h1 {
+      margin: 16px 0 20px;
+      font: 400 clamp(42px, 6.4vw, 82px)/0.98 var(--font-editorial);
+      letter-spacing: -0.03em;
+    }
+
+    .interests-head h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .interests-head p {
+      max-width: 54ch;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
     .interests-nav {
       position: sticky;
-      top: 96px;
+      top: 110px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      max-width: 200px;
+      gap: 2px;
     }
 
     .interests-nav a {
-      font: 500 13px var(--font-sans);
+      display: flex;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
       color: var(--muted);
-      padding: 9px 12px;
-      border-radius: var(--radius);
-      border: 1px solid transparent;
-      transition: all 0.2s;
+      font: 500 12px var(--font-mono);
+      transition: color 180ms ease, border-color 180ms ease;
     }
 
-    .interests-nav a:hover {
-      color: var(--text);
-      border-color: var(--line);
+    .interests-nav a::before {
+      content: attr(data-num);
+      color: var(--faint);
     }
 
+    .interests-nav a:hover,
     .interests-nav a.active {
+      color: var(--text);
+      border-color: var(--line-strong);
+    }
+
+    .interests-nav a.active::before {
       color: var(--accent);
-      border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-      background: var(--surface-soft);
     }
 
     .interests-layout {
       display: grid;
-      grid-template-columns: 200px minmax(0, 1fr);
-      gap: 60px;
-      margin-top: 12px;
+      grid-template-columns: 176px minmax(0, 1fr);
+      gap: clamp(40px, 6vw, 88px);
+      margin-top: 52px;
+      align-items: start;
     }
 
-    .interests-page-head {
-      margin-bottom: 40px;
+    .entry {
+      padding: 46px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 110px;
     }
 
-    .interests-page-head h1 {
-      font-size: clamp(38px, 5vw, 58px);
-      letter-spacing: -0.03em;
-      margin-bottom: 14px;
+    .entry:first-child {
+      padding-top: 0;
     }
 
-    .interests-page-head p {
-      color: var(--muted);
-      font-size: 15px;
-      max-width: 560px;
-      line-height: 1.65;
+    .entry:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
     }
 
-    .blog-post {
-      max-width: 720px;
-      font-size: 15px;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-
-    .blog-section {
-      margin-bottom: 28px;
-      padding: 30px;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--line);
-      background: var(--surface);
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
-    }
-
-    .blog-section:hover {
-      transform: translateY(-3px);
-      border-color: var(--line-strong);
-      box-shadow: var(--shadow);
-    }
-
-    .blog-section h2 {
-      font: 600 25px var(--font-display);
-      letter-spacing: -0.01em;
-      margin-bottom: 18px;
-      color: var(--text);
-    }
-
-    .blog-section p {
-      margin-bottom: 16px;
-    }
-
-    .blog-section p:last-child {
-      margin-bottom: 0;
-    }
-
-    .blog-section strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .blog-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
+    .entry__label {
       color: var(--accent);
-      font: 600 10.5px var(--font-mono);
-      letter-spacing: 0.1em;
+      font: 600 10px var(--font-mono);
+      letter-spacing: 0.14em;
       text-transform: uppercase;
     }
 
-    .blog-kicker::before {
-      content: "";
-      width: 18px;
-      height: 1px;
-      background: var(--accent);
+    .entry h2 {
+      max-width: 20ch;
+      margin-top: 14px;
+      font: 400 clamp(27px, 3.2vw, 38px)/1.15 var(--font-editorial);
+      letter-spacing: -0.015em;
+    }
+
+    .entry p {
+      max-width: 66ch;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.78;
+    }
+
+    .entry p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .interests-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 44px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .interests-foot a {
+      font: 500 12px var(--font-mono);
+      border-bottom: 1px solid var(--line-strong);
+      padding-bottom: 3px;
     }
 
     .easter-egg-trigger {
@@ -138,16 +151,30 @@
     @media (max-width: 960px) {
       .interests-layout {
         grid-template-columns: 1fr;
-        gap: 28px;
+        gap: 30px;
       }
       .interests-nav {
-        display: none;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0 22px;
+      }
+      .interests-nav a {
+        border-bottom: 0;
+        padding: 6px 0;
       }
     }
 
     @media (max-width: 560px) {
-      .blog-section {
-        padding: 22px;
+      .interests-head h1 {
+        font-size: clamp(38px, 11vw, 48px);
+      }
+      .interests-head p,
+      .entry p {
+        font-size: 15px;
+      }
+      .entry {
+        padding: 34px 0;
       }
     }
   </style>
@@ -177,76 +204,64 @@
     </header>
 
     <main>
-      <div class="interests-page-head">
-        <div class="section-title" style="margin-bottom:14px;">
-          <span class="badge-num">00</span>
-          <span>Beyond the lab</span>
+      <div class="interests-head">
+        <div class="section-title">
+          <span class="badge-num">05</span>
+          <span>Interests</span>
         </div>
-        <p>
-          The things I do away from the workbench—and what they give back to the work.
-        </p>
+        <h1>The rest of <em>the week</em>.</h1>
+        <p>Four things I do that aren't aerospace. They're the reason I can still sit at a desk for the other five days.</p>
       </div>
 
       <div class="interests-layout">
         <aside>
-          <nav class="interests-nav">
-            <a href="#gym">The Gym</a>
-            <a href="#swimming">Swimming</a>
-            <a href="#muns">MUNs</a>
-            <a href="#gaming">Gaming</a>
+          <nav class="interests-nav" aria-label="Interests">
+            <a href="#gym" data-num="01">Gym</a>
+            <a href="#swimming" data-num="02">Swimming</a>
+            <a href="#muns" data-num="03">MUNs</a>
+            <a href="#gaming" data-num="04">Gaming</a>
           </nav>
         </aside>
 
-        <div class="blog-post">
-          <section id="gym" class="blog-section">
-            <div class="blog-kicker">The Gym</div>
-            <h2>Training for a longer day</h2>
-            <p>
-              I started going to the gym because long hours at a screen were making the rest of the day feel smaller. The routine is simple: show up, add a little weight when it makes sense, and keep going when progress is not obvious.
-            </p>
-            <p>
-              It gives me a useful break from projects. Training is physical, repetitive, and honest. A missed lift does not need a complicated explanation; it just tells me what to work on next.
-            </p>
-          </section>
+        <div>
+          <article id="gym" class="entry">
+            <div class="entry__label">01 / Gym</div>
+            <h2>The only scoreboard I can't argue with.</h2>
+            <p>I started in the middle of a stretch where most of my day was a screen. Training is the opposite of that: physical, repetitive, and completely uninterested in my opinion.</p>
+            <p>A missed lift doesn't need a theory. It tells me what to work on next week. Then I go home and sleep properly, which turns out to be most of the programme.</p>
+          </article>
 
-          <section id="swimming" class="blog-section">
-            <div class="blog-kicker">Swimming</div>
-            <h2>A quieter kind of focus</h2>
-            <p>
-              Swimming is the place where the noise drops away. There is a fixed distance, a repeated stroke, and enough time between lengths to let a problem rearrange itself.
-            </p>
-            <p>
-              I usually come back from the pool with a clearer next step—not necessarily a solution, but a better question to take back to the desk.
-            </p>
-          </section>
+          <article id="swimming" class="entry">
+            <div class="entry__label">02 / Swimming</div>
+            <h2>An hour with no notifications.</h2>
+            <p>Swimming is the quietest part of my week. Fixed distance, repeated stroke, nothing to check and no way to answer a message.</p>
+            <p>I usually come out with a better question than the one I went in with. Most days that's more useful than an answer.</p>
+          </article>
 
-          <section id="muns" class="blog-section">
-            <div class="blog-kicker">MUNs</div>
-            <h2>Learning to make a case</h2>
-            <p>
-              Model United Nations taught me to prepare properly, listen for the constraint underneath an argument, and explain a position without hiding behind jargon. I took part in Harvard MUN in 2023 and 2024, along with IIT Techfest MUN.
-            </p>
-            <p>
-              The useful part was not winning every room. It was learning how to turn a complicated position into something another person could actually respond to.
-            </p>
-          </section>
+          <article id="muns" class="entry">
+            <div class="entry__label">03 / MUNs</div>
+            <h2>Learning to make a case in plain language.</h2>
+            <p>Harvard MUN in 2023 and 2024, plus IIT Techfest MUN. The part that stuck wasn't winning the room. It was learning to turn a complicated position into something another person could actually respond to.</p>
+            <p>I use it every time I have to explain a design decision to someone who wasn't sitting in the CAD file with me.</p>
+          </article>
 
-          <section id="gaming" class="blog-section">
-            <div class="blog-kicker">Gaming</div>
-            <h2>Games as a place to experiment</h2>
-            <p>
-              Minecraft was one of the first places I learned to build systems without a worksheet telling me what the answer should look like. You gather materials, test an idea, break something, and try again.
-            </p>
-            <p>
-              I still play <span class="easter-egg-trigger technoblade-text" id="technoblade-trigger">Minecraft</span>, Trackmania, and Overwatch. They are different kinds of play, but all three reward attention: planning a build, finding a faster line, or making a decision under pressure.
-            </p>
-          </section>
+          <article id="gaming" class="entry">
+            <div class="entry__label">04 / Gaming</div>
+            <h2>Where I learned to build systems.</h2>
+            <p>Minecraft was the first place I built something with no worksheet telling me the answer. Gather materials, test the idea, break it, try again. The loop felt familiar long before I had a name for it.</p>
+            <p>I still play <span class="easter-egg-trigger technoblade-text" id="technoblade-trigger">Minecraft</span>, Trackmania, and Overwatch. Different kinds of attention: planning a build, finding a faster line, making a call when the round is already going badly.</p>
+          </article>
+
+          <div class="interests-foot">
+            <span>The technical side lives on the <a href="/projects.html">projects page</a>.</span>
+            <a href="/contact.html">Say hello →</a>
+          </div>
         </div>
       </div>
     </main>
 
     <footer>
-      <span>Copyright <span id="year"></span> Darsh Gupta. Built for GitHub Pages.</span>
+      <span>Copyright <span id="year"></span> Darsh Gupta · Bengaluru, India</span>
       <div class="footer-links">
         <a href="mailto:darshgu77@gmail.com">Email</a>
         <a href="https://github.com/iamdarshg" target="_blank" rel="noopener noreferrer">GitHub</a>
